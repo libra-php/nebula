@@ -8,7 +8,7 @@ use StellarRouter\{Get, Group};
 #[Group(middleware: ["auth"])]
 class AppController extends Controller
 {
-    #[Get("/dashboard", "dashboard.index", ["push-url"])]
+    #[Get("/dashboard", "app.index", ["push-url"])]
     public function index(): string
     {
         return latte("dashboard/index.latte");

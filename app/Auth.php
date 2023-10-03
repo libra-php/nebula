@@ -76,7 +76,7 @@ class Auth
             "reset_token" => null,
             "reset_expires_at" => null,
         ]);
-        return redirectRoute("dashboard.index");
+        return redirectRoute("app.index");
     }
 
     public static function twoFactorAuthentication(User $user)
