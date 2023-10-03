@@ -7,7 +7,7 @@ use StellarRouter\Get;
 
 final class SignOutController extends Controller
 {
-    #[Get("/sign-out", "sign-out.index")]
+    #[Get("/sign-out", "sign-out.index", ["push-url=/sign-in"])]
     public function index(): mixed
     {
         session()->destroy();
