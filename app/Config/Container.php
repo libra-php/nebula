@@ -58,6 +58,8 @@ return [
         $latte->setLoader(new \Latte\Loaders\FileLoader($config["view_path"]));
         $latte->setTempDirectory($config["cache_path"]);
         $latte->addFunction("csrf", fn() => csrf());
+        $latte->addFunction("route", fn(string $name) => route($name));
+        $latte->addFunction("buildRoute", fn(string $name, ...$replacements) => buildRoute($name, ...$replacements));
         return $latte;
     },
 ];

@@ -21,7 +21,7 @@ use Nebula\Mail\EmailSMTP;
  */
 function dump(...$args)
 {
-    $out = array_map(fn($arg) => print_r($arg, true), $args);
+    $out = array_map(fn ($arg) => print_r($arg, true), $args);
     printf("<pre>%s</pre>", implode("\n\n", $out));
 }
 
@@ -75,6 +75,26 @@ function redirect(string $url, int $code = 301, int $delay = 0): never
         header("Location: $url", response_code: $code);
     }
     exit();
+}
+
+function route(string $name)
+{
+    $route = app()
+        ->use()
+        ->router->findRouteByName($name);
+    return $route->getPath();
+}
+
+function buildRoute(string $name, ...$replacements)
+{
+    $route_path = route($name);
+    if ($route_path) {
+        foreach ($replacements as $val) {
+            $route_path = preg_replace("/\{[A-z_]+\}/", $val, $route_path, 1);
+        }
+        return $route_path;
+    }
+    return null;
 }
 
 function redirectRoute(string $name, int $code = 301, int $delay = 0)
@@ -238,6 +258,8 @@ function twig(string $path, array $data = []): string
     $twig = app()->get(\Twig\Environment::class);
     $form_errors = Validate::$errors;
     $data["form_errors"] = $form_errors;
+    $data["form_error_keys"] = array_keys($form_errors);
+    $data["app"] = config("app");
     return $twig->render($path, $data);
 }
 
@@ -250,5 +272,6 @@ function latte(string $path, array $data = [], ?string $block = null): string
     $form_errors = Validate::$errors;
     $data["form_errors"] = $form_errors;
     $data["form_error_keys"] = array_keys($form_errors);
+    $data["app"] = config("app");
     return $latte->renderToString($path, $data, $block);
 }
