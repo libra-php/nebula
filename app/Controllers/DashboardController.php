@@ -13,4 +13,10 @@ class DashboardController extends Controller
     {
         return latte("dashboard/index.latte");
     }
+
+    #[Get("/benchmark", "dashboard.benchmark", ["quick-exit"])]
+    public function benchmark(): string
+    {
+        return "hello, world";
+    }
 }

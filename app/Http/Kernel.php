@@ -11,6 +11,7 @@ final class Kernel extends HttpKernel
     // they are defined (top to bottom for request,
     // bottom to top for response)
     protected array $middleware = [
+        \Nebula\Middleware\Http\QuickExit::class,
         \Nebula\Middleware\Http\CSRF::class,
         \Nebula\Middleware\Http\RateLimit::class,
         \Nebula\Middleware\Admin\Authentication::class,
