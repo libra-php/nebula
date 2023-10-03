@@ -1,0 +1,7 @@
+{layout "../layout/base.latte"}
+
+{block body}
+<p>You are now signed in!</p>
+<div class="mt-2 d-flex flex-column" hx-boost="true" hx-target="#body">
+  <a class="p-2" href="{route('sign-out.index')}">Sign out</a>
+{/block}
