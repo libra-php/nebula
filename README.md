@@ -54,6 +54,9 @@ Follow these steps to kickstart your Nebula journey:
    ```
 
 ## Documentation
+
+Note: documentation is currently being updated.
+
 - [Config](docs/CONFIG.md)
 - [Console](docs/CONSOLE.md)
 - [Helpers](docs/HELPERS.md)
