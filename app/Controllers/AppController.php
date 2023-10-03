@@ -8,15 +8,21 @@ use StellarRouter\{Get, Group};
 #[Group(middleware: ["auth"])]
 class AppController extends Controller
 {
-    #[Get("/dashboard", "app.index", ["push-url"])]
+    #[Get("/home", "app.home", ["push-url"])]
     public function index(): string
     {
         return latte("dashboard/index.latte");
     }
 
-    // Svelte app
-    // #[Get("/app", "app.index", ["push-url"])]
-    // public function index(): string
+    //Svelte app
+    // #[Get("/home", "app.home", ["push-url"])]
+    // public function home(): string
+    // {
+    //     return latte("app/index.latte");
+    // }
+    //
+    // #[Get("/about", "app.about", ["push-url"])]
+    // public function about(): string
     // {
     //     return latte("app/index.latte");
     // }

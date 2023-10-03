@@ -16,7 +16,7 @@ function runRollup() {
   rollupProcess.on('close', (code) => {
     if (code === 0) {
       console.log('Rollup build successful.');
-      livereloadServer.refresh('/');
+      livereloadServer.refresh();
     } else {
       console.error(`Rollup build failed with code ${code}.`);
     }
