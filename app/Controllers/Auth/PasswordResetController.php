@@ -4,10 +4,11 @@ namespace App\Controllers\Auth;
 
 use App\Auth;
 use App\Models\User;
-use StellarRouter\{Get, Post};
+use StellarRouter\{Get, Post, Group};
 use Nebula\Controller\Controller;
 use Nebula\Traits\Http\Response as NebulaResponse;
 
+#[Group(prefix: "/admin")]
 final class PasswordResetController extends Controller
 {
     use NebulaResponse;

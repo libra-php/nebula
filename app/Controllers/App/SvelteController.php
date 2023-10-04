@@ -1,20 +1,14 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controllers\App;
 
 use Nebula\Controller\Controller;
 use StellarRouter\{Get, Group};
 
 #[Group(middleware: ["auth"])]
-class AppController extends Controller
+class SvelteController extends Controller
 {
-    #[Get("/home", "app.home", ["push-url"])]
-    public function index(): string
-    {
-        return latte("dashboard/index.latte");
-    }
-
-    //Svelte app
+	// Change App\Config\Auth.php sign_in_route to "app.home"
     // #[Get("/home", "app.home", ["push-url"])]
     // public function home(): string
     // {

@@ -6,8 +6,9 @@ use App\Auth;
 use App\Models\User;
 use Nebula\Controller\Controller;
 use Nebula\Validation\Validate;
-use StellarRouter\{Get, Post};
+use StellarRouter\{Get, Post, Group};
 
+#[Group(prefix: "/admin")]
 final class TwoFactorRegisterController extends Controller
 {
     private User $user;
@@ -34,7 +35,7 @@ final class TwoFactorRegisterController extends Controller
         Get(
             "/two-factor-authentication/register/part",
             "two-factor-register.part",
-            ["push-url=/two-factor-authentication/register"]
+            ["push-url=/admin/two-factor-authentication/register"]
         )
     ]
     public function part(): string

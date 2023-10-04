@@ -6,8 +6,9 @@ use App\Auth;
 use App\Models\User;
 use Nebula\Controller\Controller;
 use Nebula\Validation\Validate;
-use StellarRouter\{Get, Post};
+use StellarRouter\{Get, Post, Group};
 
+#[Group(prefix: "/admin")]
 final class SignInController extends Controller
 {
     #[Get("/sign-in", "sign-in.index")]
@@ -18,7 +19,7 @@ final class SignInController extends Controller
         ]);
     }
 
-    #[Get("/sign-in/part", "sign-in.part", ["push-url=/sign-in"])]
+    #[Get("/sign-in/part", "sign-in.part", ["push-url=/admin/sign-in"])]
     public function part(): string
     {
         return latte(
@@ -32,7 +33,7 @@ final class SignInController extends Controller
     }
 
     #[Post("/sign-in", "sign-in.post", ["rate_limit"])]
-    public function post(): string
+    public function post(): ?string
     {
         if (
             $this->validate([

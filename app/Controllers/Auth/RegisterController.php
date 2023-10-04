@@ -5,8 +5,9 @@ namespace App\Controllers\Auth;
 use Nebula\Controller\Controller;
 use Nebula\Validation\Validate;
 use App\Auth;
-use StellarRouter\{Get, Post};
+use StellarRouter\{Get, Post, Group};
 
+#[Group(prefix: "/admin")]
 final class RegisterController extends Controller
 {
     public function __construct()

@@ -77,7 +77,7 @@ function redirect(string $url, int $code = 301, int $delay = 0): never
     exit();
 }
 
-function route(string $name)
+function route(string $name): ?string
 {
     $route = app()
         ->use()
@@ -85,7 +85,7 @@ function route(string $name)
     return $route->getPath();
 }
 
-function buildRoute(string $name, ...$replacements)
+function buildRoute(string $name, ...$replacements): ?string
 {
     $route_path = route($name);
     if ($route_path) {
@@ -97,7 +97,7 @@ function buildRoute(string $name, ...$replacements)
     return null;
 }
 
-function redirectRoute(string $name, int $code = 301, int $delay = 0)
+function redirectRoute(string $name, int $code = 301, int $delay = 0): never
 {
     $route = app()
         ->use()
@@ -105,6 +105,23 @@ function redirectRoute(string $name, int $code = 301, int $delay = 0)
     if ($route) {
         redirect($route->getPath(), $code, $delay);
     }
+}
+
+function moduleRoute(string $module, ?string $id = null): string
+{
+    if (!is_null($id)) {
+        $route_path = route("module.edit");
+        $route_path = str_replace("{id}", $id, $route_path);
+    } else {
+        $route_path = route("module.index");
+    }
+    return str_replace("{module}", $module, $route_path);
+}
+
+function redirectModule(string $name, ?string $id = null): never
+{
+    $route_path = moduleRoute($name, $id);
+    redirect($route_path);
 }
 
 function initLogger()

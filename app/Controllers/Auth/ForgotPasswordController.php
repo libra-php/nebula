@@ -4,9 +4,10 @@ namespace App\Controllers\Auth;
 
 use App\Auth;
 use App\Models\User;
-use StellarRouter\{Get, Post};
+use StellarRouter\{Get, Post, Group};
 use Nebula\Controller\Controller;
 
+#[Group(prefix: "/admin")]
 final class ForgotPasswordController extends Controller
 {
     #[Get("/forgot-password", "forgot-password.index")]
@@ -15,7 +16,7 @@ final class ForgotPasswordController extends Controller
         return latte("auth/forgot-password.latte");
     }
 
-    #[Get("/forgot-password/part", "forgot-password.part", ["push-url=/forgot-password"])]
+    #[Get("/forgot-password/part", "forgot-password.part", ["push-url=/admin/forgot-password"])]
     public function part($show_success = false): string
     {
         return latte(
