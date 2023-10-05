@@ -56,6 +56,12 @@ class ModuleController extends Controller
         return $this->module->index();
     }
 
+    #[Get("/{module}/part", "module.index.part")]
+    public function index_part(string $module)
+    {
+        return $this->module->index_part();
+    }
+
     /**
      * Show create module form
      */
