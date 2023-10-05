@@ -28,6 +28,12 @@ class PushUrl implements Middleware
             ) {
                 $params = $request->route->getParameters();
                 $uri = moduleRoute(...$params);
+                $uri = match($request->route->getName()) {
+                    'module.index.part' => $uri,
+                    'module.create.part' => $uri . "/create",
+                    'module.edit.part' => $uri,
+                    default => $uri
+                };
             } elseif ($uri === "push-url") {
                 $uri = $request->route->getPath();
             }
