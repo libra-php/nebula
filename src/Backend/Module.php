@@ -266,7 +266,7 @@ class Module
             $data = !is_null($qb)
                 ? db()
                     ->run($qb->build(), $qb->values())
-                    ->fetchAll()
+                    ->fetch()
                 : [];
         } catch (PDOException) {
             $data = [];
