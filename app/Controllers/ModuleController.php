@@ -62,7 +62,7 @@ class ModuleController extends Controller
         return $this->module->index();
     }
 
-    #[Get("/{module}/part", "module.index.part")]
+    #[Get("/{module}/part", "module.index.part", ["push-url"])]
     public function index_part(string $module)
     {
         return $this->module->indexPartial();
@@ -92,7 +92,7 @@ class ModuleController extends Controller
         return $this->module->edit($id);
     }
 
-    #[Get("/{module}/{id}/edit/part", "module.edit.part")]
+    #[Get("/{module}/{id}/edit/part", "module.edit.part", ["push-url"])]
     public function edit_part(string $module, string $id)
     {
         return $this->module->editPartial($id);

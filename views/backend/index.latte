@@ -6,7 +6,7 @@
 		{getFlashMessages()|noescape}
 	</div>
 	<div id="actions" class="p-1">
-		<a class="btn btn-sm btn-success" href="{moduleRoute($module_name)}/create/part" hx-boost="true" hx-target="#module" hx-replace-url="{moduleRoute($module_name)}/create">Create</a>
+		<a class="btn btn-sm btn-success" href="{moduleRoute($module_name)}/create/part" hx-boost="true" hx-target="#module" hx-replace-url="{moduleRoute($module_name)}/create" hx-push-url="true">Create</a>
 	</div>
 	<div class="table-container mt-3">
 		<table class="table table-sm table-hover">
@@ -27,7 +27,7 @@
 					{/foreach}
 					<td>
 						<div class="d-flex justify-content-end">
-							<a class="btn btn-sm btn-primary m-1" href="{moduleRoute($module_name, $datum[id])}/part" hx-boost="true" hx-target="#module" hx-replace-url="{moduleRoute($module_name, $datum[id])}">Edit</a>
+							<a class="btn btn-sm btn-primary m-1" href="{moduleRoute($module_name, $datum[id])}/part" hx-boost="true" hx-target="#module">Edit</a>
 							<a class="btn btn-sm btn-danger m-1" hx-delete="{moduleRoute($module_name)}/{$datum[id]}/destroy" hx-target="#module">Delete</a>
 						</div>
 					</td>		
