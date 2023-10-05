@@ -14,6 +14,11 @@ class Users extends Module
         "created_at" => "Created At",
     ];
 
+    protected array $form_columns = [
+        "name" => "Name",
+        "email" => "Email",
+    ];
+
     public function __construct()
     {
         parent::__construct("users", "users");

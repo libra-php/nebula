@@ -6,16 +6,16 @@
 		<table class="table table-sm table-hover">
 			<thead>
 				<tr>
-				{foreach $headers as $head}
-					<th scope="col">{$head}</th>
+				{foreach $table[columns] as $column => $title}
+					<th scope="col">{$title}</th>
 				{/foreach}
 				</tr>
 			</thead>	
 			<tbody>
-			{foreach $data as $datum}
+			{foreach $table[data] as $datum}
 				<tr>
-					{foreach $datum as $payload}
-						<td>{$payload}</td>
+					{foreach $table[columns] as $column => $title}
+						<td>{$datum[$column]}</td>
 					{/foreach}
 				</tr>
 			{/foreach}
