@@ -62,7 +62,7 @@ class Module
 	return latte($this->getTableTemplate(), $this->getTableData());
     }
 
-    public function index_part(): string
+    public function indexPartial(): string
     {
 	return latte($this->getTableTemplate(), $this->getTableData(), "content");
     }

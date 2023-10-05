@@ -59,7 +59,7 @@ class ModuleController extends Controller
     #[Get("/{module}/part", "module.index.part")]
     public function index_part(string $module)
     {
-        return $this->module->index_part();
+        return $this->module->indexPartial();
     }
 
     /**
