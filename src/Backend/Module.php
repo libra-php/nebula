@@ -50,7 +50,7 @@ class Module
         die();
     }
 
-    protected function getTableTemplate(): string
+    protected function getIndexTemplate(): string
     {
         return "backend/index.latte";
     }
@@ -67,14 +67,14 @@ class Module
 
     public function index(): string
     {
-        return latte($this->getTableTemplate(), $this->getTableData());
+        return latte($this->getIndexTemplate(), $this->getIndexData());
     }
 
     public function indexPartial(): string
     {
         return latte(
-            $this->getTableTemplate(),
-            $this->getTableData(),
+            $this->getIndexTemplate(),
+            $this->getIndexData(),
             "content"
         );
     }
@@ -191,7 +191,7 @@ class Module
         return $result;
     }
 
-    protected function getTableQuery(): ?QueryBuilder
+    protected function getIndexQuery(): ?QueryBuilder
     {
         if (is_null($this->table_name)) {
             return null;
@@ -215,9 +215,9 @@ class Module
     /**
      * @return array<string,mixed>
      */
-    protected function getTableData(): array
+    protected function getIndexData(): array
     {
-        $qb = $this->getTableQuery();
+        $qb = $this->getIndexQuery();
         try {
             $data = !is_null($qb)
                 ? db()

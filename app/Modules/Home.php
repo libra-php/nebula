@@ -11,7 +11,7 @@ class Home extends Module
         parent::__construct("home");
     }
 
-    protected function getTableTemplate(): string
+    protected function getIndexTemplate(): string
     {
         return "backend/home.latte";
     }
