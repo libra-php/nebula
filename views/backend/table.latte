@@ -1,0 +1,26 @@
+{layout "../layout/module.latte"}
+
+{block content}
+<section id="table">
+	<div class="table-container">
+		<table class="table table-sm table-hover">
+			<thead>
+				<tr>
+				{foreach $headers as $head}
+					<th scope="col">{$head}</th>
+				{/foreach}
+				</tr>
+			</thead>	
+			<tbody>
+			{foreach $data as $datum}
+				<tr>
+					{foreach $datum as $payload}
+						<td>{$payload}</td>
+					{/foreach}
+				</tr>
+			{/foreach}
+			</tbody>
+		</table>
+	</div>
+</section>
+{/block}

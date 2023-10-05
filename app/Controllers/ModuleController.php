@@ -36,14 +36,14 @@ class ModuleController extends Controller
 
     private function moduleNotFound(): never
     {
-        echo $this->response(404, "Module not found");
+        echo $this->response(404, "Module not found")->send();
         die;
     }
 
     #[Get("/{module}", "module.index", ["push-url"])]
     public function index(string $module)
     {
-        echo $this->module->getModuleName();
+        return $this->module->table();
     }
 
     #[Post("/{module}", "module.post")]
@@ -59,7 +59,7 @@ class ModuleController extends Controller
     #[Get("/{module}/{id}/edit", "module.edit", ["push-url"])]
     public function edit(string $module, string $id)
     {
-        echo $this->module->getModuleName();
+        return $this->module->form();
     }
 
     #[Post("/{module}/store", "module.store")]
