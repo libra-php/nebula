@@ -10,4 +10,9 @@ class Home extends Module
     {
         parent::__construct("home");
     }
+
+    protected function getTableTemplate(): string
+    {
+        return "backend/home.latte";
+    }
 }

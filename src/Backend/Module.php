@@ -30,9 +30,14 @@ class Module
 		return $this->table_name;
 	}
 
+	protected function getTableTemplate(): string
+	{
+		return "backend/table.latte";
+	}
+
 	public function table(): string
 	{
-		return latte("backend/table.latte", $this->getTableData());
+		return latte($this->getTableTemplate(), $this->getTableData());
 	}
 
 	protected function getTableQuery(): ?QueryBuilder
@@ -57,9 +62,15 @@ class Module
 		];
 	}
 
+	protected function getFormTemplate(): string
+	{
+		return "backend/form.latte";
+	}
+
+
 	public function form(): string
 	{
-		return latte("backend/form.latte", $this->getTableData());
+		return latte($this->getFormTemplate(), $this->getTableData());
 	}
 
 	protected function getFormQuery(): QueryBuilder
