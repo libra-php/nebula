@@ -16,7 +16,7 @@ class Request implements NebulaRequest
 
     public function __construct()
     {
-        $this->load($this->request() + $this->files());
+        $this->load($this->request() + $this->input() + $this->files());
     }
 
     public function getMethod(): string
@@ -27,6 +27,14 @@ class Request implements NebulaRequest
     public function getUri(): string
     {
         return $this->server("REQUEST_URI");
+    }
+
+    public function input(): mixed
+    {
+        $input = file_get_contents('php://input');
+        $data = [];
+        parse_str($input, $data);
+        return $data;
     }
 
     public function server(?string $name = null): mixed

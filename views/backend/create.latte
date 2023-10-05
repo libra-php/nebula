@@ -1,17 +1,20 @@
 {layout "../layout/module.latte"}
 
 {block content}
+<div class="alerts">
+	{getFlashMessages()|noescape}
+</div>
 <form>
 {csrf()|noescape}
 {foreach $form['columns'] as $column => $title}
-	<div>
-	<label for="{$column}" class="form-label">{$title}</label>
-	<input type="text" class="form-control" id="{$column}" value="{$form['data'][$column]}" placeholder="...">
+	<div class="p-2">
+		<label for="{$column}" class="form-label">{$title}</label>
+		<input type="text" class="form-control" id="{$column}" value="{$form['data'][$column]}" placeholder="...">
 	</div>
 {/foreach}
-	<div class="mt-3">
+	<div class="mt-3 p-2">
 		<button type="submit" class="btn btn-success">Create</button>
-		<a class="btn btn-warning" href='{moduleRoute($module_name)}/part' hx-target="#module" hx-boost="true" hx-replace-url="{moduleRoute($module_name)}">Back</a>
+		<a class="btn btn-warning ms-1" href='{moduleRoute($module_name)}/part' hx-target="#module" hx-boost="true" hx-replace-url="{moduleRoute($module_name)}">Back</a>
 	</div>
 </form>
 {/block}

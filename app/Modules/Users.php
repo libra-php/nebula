@@ -19,6 +19,11 @@ class Users extends Module
         "email" => "Email",
     ];
 
+    protected array $validation = [
+        "name" => ["required"],
+        "email" => ["required", "email"],
+    ];
+
     public function __construct()
     {
         parent::__construct("users", "users");

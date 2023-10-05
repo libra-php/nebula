@@ -2,21 +2,30 @@
 
 {block content}
 <section id="table">
-	<div class="table-container">
+	<div id="actions" class="p-1">
+		<a class="btn btn-sm btn-success disabled" href="{moduleRoute($module_name)}/create" hx-boost="true" hx-target="#module">Create</a>
+	</div>
+	<div class="table-container mt-3">
 		<table class="table table-sm table-hover">
 			<thead>
 				<tr>
 				{foreach $table[columns] as $column => $title}
-					<th scope="col">{$title}</th>
+					<th scope="col" class="p-2">{$title}</th>
 				{/foreach}
+					<th></th>
 				</tr>
 			</thead>	
 			<tbody>
 			{foreach $table[data] as $datum}
-				<tr>
+				<tr class="align-middle">
 					{foreach $table[columns] as $column => $title}
-						<td>{$datum[$column]}</td>
+						<td class="p-2">{$datum[$column]}</td>
 					{/foreach}
+					<td>
+						<div class="d-flex justify-content-end">
+							<a class="btn btn-sm btn-primary m-1" href="{moduleRoute($module_name, $datum[id])}/part" hx-boost="true" hx-target="#module">Edit</a>
+						</div>
+					</td>		
 				</tr>
 			{/foreach}
 			</tbody>

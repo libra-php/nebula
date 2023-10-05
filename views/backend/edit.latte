@@ -1,17 +1,20 @@
 {layout "../layout/module.latte"}
 
 {block content}
-<form>
-{csrf()|noescape}
+<div class="alerts">
+	{getFlashMessages()|noescape}
+</div>
+<form method="POST">
 {foreach $form['columns'] as $column => $title}
-	<div>
-	<label for="{$column}" class="form-label">{$title}</label>
-	<input type="text" class="form-control" id="{$column}" value="{$form['data'][$column]}" placeholder="...">
+	<div class="p-2">
+		<label for="{$column}" class="form-label"><strong>{$title}</strong></label>
+		<input type="text" class="form-control" id="{$column}" name="{$column}" value="{$form['data'][$column]}" placeholder="...">
+		{include '../layout/components/validation.latte', name: $column}
 	</div>
 {/foreach}
-	<div class="mt-3">
-		<button type="submit" class="btn btn-success">Update</button>
-		<a class="btn btn-warning" href='{moduleRoute($module_name)}/part' hx-target="#module" hx-boost="true" hx-replace-url="{moduleRoute($module_name)}">Back</a>
+	<div class="mt-3 p-2">
+		<button type="submit" class="btn btn-primary" hx-patch="{moduleRoute($module_name)}/{$id}/update" hx-target="#module">Update</button>
+		<a class="btn btn-warning ms-1" href='{moduleRoute($module_name)}/part' hx-target="#module" hx-boost="true" hx-replace-url="{moduleRoute($module_name)}">Back</a>
 	</div>
 </form>
 {/block}

@@ -1,5 +1,10 @@
 {layout "../layout/base.latte"}
 
+{block head} 
+  {include parent}
+  <link rel="stylesheet" href="/assets/css/module.css">
+{/block}
+
 {block body}
 <section id="module">
   {block content}

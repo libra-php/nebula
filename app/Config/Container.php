@@ -3,6 +3,7 @@
 namespace App\Config;
 
 use App\Http\Kernel as HttpKernel;
+use Nebula\Alerts\Flash;
 use Nebula\Http\Request;
 use Nebula\UI\Twig\Extension;
 
@@ -61,6 +62,7 @@ return [
         $latte->addFunction("route", fn(string $name) => route($name));
         $latte->addFunction("buildRoute", fn(string $name, ...$replacements) => buildRoute($name, ...$replacements));
         $latte->addFunction("moduleRoute", fn(string $module_name, ?string $id = null) => moduleRoute($module_name, $id));
+        $latte->addFunction("getFlashMessages", fn() => Flash::getSessionFlash());
         return $latte;
     },
 ];

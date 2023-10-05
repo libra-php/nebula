@@ -80,27 +80,36 @@ class ModuleController extends Controller
         return $this->module->edit($id);
     }
 
+    #[Get("/{module}/{id}/edit/part", "module.edit.part")]
+    public function edit_part(string $module, string $id)
+    {
+        return $this->module->editPartial($id);
+    }
+
     /**
      * Store module in db
      */
-    #[Post("/{module}/store", "module.store")]
+    #[Post("/{module}/store", "module.store", ["api"])]
     public function store(string $module)
     {
+       return $this->module->store();
     }
 
     /**
      * Update a module
      */
-    #[Patch("/{module}/{id}/update", "module.save")]
+    #[Patch("/{module}/{id}/update", "module.save", ["api"])]
     public function update(string $module, string $id)
     {
+       return $this->module->update($id);
     }
 
     /**
      * Destroy a module
      */
-    #[Delete("/{module}/{id}/destroy", "module.destroy")]
+    #[Delete("/{module}/{id}/destroy", "module.destroy", ["api"])]
     public function destroy(string $module, string $id)
     {
+       return $this->module->destroy($id);
     }
 }
