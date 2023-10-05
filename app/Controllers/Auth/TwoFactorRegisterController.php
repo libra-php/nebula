@@ -24,7 +24,13 @@ final class TwoFactorRegisterController extends Controller
         $this->user = $user;
     }
 
-    #[Get("/two-factor-authentication/register", "two-factor-register.index", ["push-url"])]
+    #[
+        Get(
+            "/two-factor-authentication/register",
+            "two-factor-register.index",
+            ["push-url"]
+        )
+    ]
     public function index(): string
     {
         $url = Auth::urlQR($this->user);

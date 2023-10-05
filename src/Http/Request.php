@@ -31,7 +31,7 @@ class Request implements NebulaRequest
 
     public function input(): mixed
     {
-        $input = file_get_contents('php://input');
+        $input = file_get_contents("php://input");
         $data = [];
         parse_str($input, $data);
         return $data;

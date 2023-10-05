@@ -18,18 +18,18 @@ class PushUrl implements Middleware
         $response = $next($request);
 
         $route_middleware = $request->route?->getMiddleware();
-        if (
-            $route_middleware &&
-            preg_grep("/push-url/", $route_middleware)
-        ) {
+        if ($route_middleware && preg_grep("/push-url/", $route_middleware)) {
             // Get the cache duration from the route middleware
             $index = middlewareIndex($route_middleware, "push-url");
             $uri = str_replace("push-url=", "", $route_middleware[$index]);
-            if ($uri === "push-url" && preg_grep("/module/", $route_middleware)) {
+            if (
+                $uri === "push-url" &&
+                preg_grep("/module/", $route_middleware)
+            ) {
                 $params = $request->route->getParameters();
-                $uri =  moduleRoute(...$params);
-            } else if ($uri === "push-url") {
-                $uri =  $request->route->getPath();
+                $uri = moduleRoute(...$params);
+            } elseif ($uri === "push-url") {
+                $uri = $request->route->getPath();
             }
             $response->setHeader("HX-Push-Url", $uri);
         }

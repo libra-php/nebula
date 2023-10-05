@@ -24,7 +24,6 @@ class Module
     protected bool $edit_view = true;
     protected bool $create_view = true;
 
-
     public function __construct(string $module_name, ?string $table_name = null)
     {
         $this->module_name = $module_name;
@@ -43,9 +42,12 @@ class Module
 
     private function moduleNotFound(): never
     {
-        Flash::addFlash("warning", "Oops! The requested record could not be found");
+        Flash::addFlash(
+            "warning",
+            "Oops! The requested record could not be found"
+        );
         echo $this->response(404, latte("backend/alert.latte"))->send();
-        die;
+        die();
     }
 
     protected function getTableTemplate(): string
@@ -70,7 +72,11 @@ class Module
 
     public function indexPartial(): string
     {
-        return latte($this->getTableTemplate(), $this->getTableData(), "content");
+        return latte(
+            $this->getTableTemplate(),
+            $this->getTableData(),
+            "content"
+        );
     }
 
     public function edit(string $id): string
@@ -80,7 +86,11 @@ class Module
 
     public function editPartial(string $id): string
     {
-        return latte($this->getEditTemplate(), $this->getEditData($id), "content");
+        return latte(
+            $this->getEditTemplate(),
+            $this->getEditData($id),
+            "content"
+        );
     }
 
     public function create(): string
@@ -90,25 +100,34 @@ class Module
 
     public function createPartial(): string
     {
-        return latte($this->getCreateTemplate(), $this->getCreateData(), "content");
+        return latte(
+            $this->getCreateTemplate(),
+            $this->getCreateData(),
+            "content"
+        );
     }
 
     public function store(): string
     {
-        if (
-            $this->validate($this->validation)
-        ) {
-            $qb = QueryBuilder::insert($this->table_name)
-                ->columns(request()->data());
+        if ($this->validate($this->validation)) {
+            $qb = QueryBuilder::insert($this->table_name)->columns(
+                request()->data()
+            );
             try {
                 $result = db()->run($qb->build(), $qb->values());
                 if ($result) {
                     Flash::addFlash("success", "Record created successfully");
                 } else {
-                    Flash::addFlash("danger", "Oops! An unknown issue occurred while creating new record");
+                    Flash::addFlash(
+                        "danger",
+                        "Oops! An unknown issue occurred while creating new record"
+                    );
                 }
             } catch (PDOException $ex) {
-                Flash::addFlash("database", "Oops! A database error occurred while creating new record");
+                Flash::addFlash(
+                    "database",
+                    "Oops! A database error occurred while creating new record"
+                );
             }
         }
         return $this->createPartial();
@@ -116,9 +135,7 @@ class Module
 
     public function update(string $id): string
     {
-        if (
-            $this->validate($this->validation)
-        ) {
+        if ($this->validate($this->validation)) {
             $qb = QueryBuilder::update($this->table_name)
                 ->columns(request()->data())
                 ->where(["id", $id]);
@@ -127,10 +144,16 @@ class Module
                 if ($result) {
                     Flash::addFlash("success", "Record updated successfully");
                 } else {
-                    Flash::addFlash("danger", "Oops! An unknown issue occurred while updating record");
+                    Flash::addFlash(
+                        "danger",
+                        "Oops! An unknown issue occurred while updating record"
+                    );
                 }
             } catch (PDOException $ex) {
-                Flash::addFlash("database", "Oops! A database error occurred while updating new record");
+                Flash::addFlash(
+                    "database",
+                    "Oops! A database error occurred while updating new record"
+                );
             }
         }
         return $this->editPartial($id);
@@ -144,10 +167,16 @@ class Module
             if ($result) {
                 Flash::addFlash("success", "Record deleted successfully");
             } else {
-                Flash::addFlash("danger", "Oops! An unknown issue occurred while deleting record");
+                Flash::addFlash(
+                    "danger",
+                    "Oops! An unknown issue occurred while deleting record"
+                );
             }
         } catch (PDOException $ex) {
-            Flash::addFlash("database", "Oops! A database error occurred while deleting record");
+            Flash::addFlash(
+                "database",
+                "Oops! A database error occurred while deleting record"
+            );
         }
         return $this->indexPartial();
     }
@@ -164,9 +193,12 @@ class Module
 
     protected function getTableQuery(): ?QueryBuilder
     {
-        if (is_null($this->table_name)) return null;
-        $qb = QueryBuilder::select($this->table_name)
-            ->columns(array_keys($this->table_columns));
+        if (is_null($this->table_name)) {
+            return null;
+        }
+        $qb = QueryBuilder::select($this->table_name)->columns(
+            array_keys($this->table_columns)
+        );
 
         return $qb;
     }
@@ -188,11 +220,16 @@ class Module
         $qb = $this->getTableQuery();
         try {
             $data = !is_null($qb)
-                ? db()->run($qb->build(), $qb->values())->fetchAll()
+                ? db()
+                    ->run($qb->build(), $qb->values())
+                    ->fetchAll()
                 : [];
         } catch (PDOException) {
             $data = [];
-            Flash::addFlash("database", "Oops! A database error occurred while selecting record(s)");
+            Flash::addFlash(
+                "database",
+                "Oops! A database error occurred while selecting record(s)"
+            );
         }
 
         return [
@@ -200,7 +237,7 @@ class Module
             "table" => [
                 "data" => $data,
                 "columns" => $this->table_columns,
-                "col_span" => count($this->table_columns) + 1
+                "col_span" => count($this->table_columns) + 1,
             ],
         ];
     }
@@ -227,11 +264,16 @@ class Module
         $qb = $this->getEditQuery($id);
         try {
             $data = !is_null($qb)
-                ? db()->run($qb->build(), $qb->values())->fetchAll()
+                ? db()
+                    ->run($qb->build(), $qb->values())
+                    ->fetchAll()
                 : [];
         } catch (PDOException) {
             $data = [];
-            Flash::addFlash("database", "Oops! A database error occurred while selecting record(s)");
+            Flash::addFlash(
+                "database",
+                "Oops! A database error occurred while selecting record(s)"
+            );
         }
         if (!$data) {
             $this->moduleNotFound();

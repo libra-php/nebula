@@ -2,5 +2,4 @@
 
 namespace App\Config;
 
-return [
-];
+return [];

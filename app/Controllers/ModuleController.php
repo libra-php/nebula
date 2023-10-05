@@ -18,7 +18,8 @@ class ModuleController extends Controller
     public function __construct()
     {
         // Using the route params to determine the module, or 404
-        $module_name = request()->route->getParameters()['module'] ?? 'module_unknown';
+        $module_name =
+            request()->route->getParameters()["module"] ?? "module_unknown";
         $this->module = $this->getModule($module_name);
 
         parent::__construct();
@@ -31,7 +32,7 @@ class ModuleController extends Controller
     {
         $module_map = classMap(config("paths.modules"));
         foreach ($module_map as $class => $_) {
-            $module = new $class;
+            $module = new $class();
             if ($module->getModuleName() === $module_name) {
                 return $module;
             }
@@ -44,9 +45,12 @@ class ModuleController extends Controller
      */
     private function moduleNotFound(): never
     {
-        Flash::addFlash("warning", "Oops! The requested module could not be found");
+        Flash::addFlash(
+            "warning",
+            "Oops! The requested module could not be found"
+        );
         echo $this->response(404, latte("backend/alert.latte"))->send();
-        die;
+        die();
     }
 
     /**
@@ -100,7 +104,7 @@ class ModuleController extends Controller
     #[Post("/{module}/store", "module.store", ["api"])]
     public function store(string $module)
     {
-       return $this->module->store();
+        return $this->module->store();
     }
 
     /**
@@ -109,7 +113,7 @@ class ModuleController extends Controller
     #[Patch("/{module}/{id}/update", "module.save", ["api"])]
     public function update(string $module, string $id)
     {
-       return $this->module->update($id);
+        return $this->module->update($id);
     }
 
     /**
@@ -118,6 +122,6 @@ class ModuleController extends Controller
     #[Delete("/{module}/{id}/destroy", "module.destroy", ["api"])]
     public function destroy(string $module, string $id)
     {
-       return $this->module->destroy($id);
+        return $this->module->destroy($id);
     }
 }

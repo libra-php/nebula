@@ -18,19 +18,14 @@ class QuickExit implements Middleware
     public function handle(Request $request, Closure $next): Response
     {
         $route_middleware = $request->route?->getMiddleware();
-        if (
-            $route_middleware &&
-            preg_grep("/quick-exit/", $route_middleware)
-        ) {
+        if ($route_middleware && preg_grep("/quick-exit/", $route_middleware)) {
             $response = Kernel::getInstance()->resolveRoute($request->route);
             $response->send();
-            die;
+            die();
         }
 
         $response = $next($request);
 
-
         return $response;
     }
 }
-
