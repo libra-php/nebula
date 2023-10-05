@@ -14,7 +14,7 @@ final class RegisterController extends Controller
     {
         // Disable registration if the config is set to false
         if (!config("auth.register_enabled")) {
-            redirectRoute("sign-in.index");
+            redirectRoute("sign-in.part");
         }
     }
 
