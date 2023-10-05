@@ -100,7 +100,9 @@ class Module
                 ->columns(request()->data());
             $result = db()->run($qb->build(), $qb->values());
             if ($result) {
-                Flash::addFlash("success", "Module created successfully");
+                Flash::addFlash("success", "Record created successfully");
+            } else {
+                Flash::addFlash("danger", "Oops! An unknown issue occurred while creating new record");
             }
         }
         return $this->createPartial();
@@ -116,7 +118,9 @@ class Module
                 ->where(["id", $id]);
             $result = db()->run($qb->build(), $qb->values());
             if ($result) {
-                Flash::addFlash("success", "Module updated successfully");
+                Flash::addFlash("success", "Record updated successfully");
+            } else {
+                Flash::addFlash("danger", "Oops! An unknown issue occurred while updating record");
             }
         }
         return $this->editPartial($id);
@@ -127,11 +131,16 @@ class Module
         $qb = QueryBuilder::delete($this->table_name)->where(["id", $id]);
         $result = db()->run($qb->build(), $qb->values());
         if ($result) {
-            Flash::addFlash("success", "Module deleted successfully");
+            Flash::addFlash("success", "Record deleted successfully");
+        } else {
+            Flash::addFlash("danger", "Oops! An unknown issue occurred while deleting record");
         }
         return $this->indexPartial();
     }
 
+    /**
+     * @param array<int,mixed> $rules
+     */
     protected function validate(array $rules): bool
     {
         $result = Validate::request($rules);
@@ -157,6 +166,9 @@ class Module
         return $qb;
     }
 
+    /**
+     * @return array<string,mixed>
+     */
     protected function getTableData(): array
     {
         $qb = $this->getTableQuery();
@@ -174,6 +186,9 @@ class Module
         ];
     }
 
+    /**
+     * @return array<string,mixed>
+     */
     protected function getCreateData(): array
     {
         return [
@@ -185,6 +200,9 @@ class Module
         ];
     }
 
+    /**
+     * @return array<string,mixed>
+     */
     protected function getEditData(string $id): array
     {
         $qb = $this->getEditQuery($id);
