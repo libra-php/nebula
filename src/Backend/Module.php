@@ -6,6 +6,7 @@ use Nebula\Alerts\Flash;
 use Nebula\Database\QueryBuilder;
 use Nebula\Traits\Http\Response;
 use Nebula\Validation\Validate;
+use PDOException;
 
 class Module
 {
@@ -99,11 +100,15 @@ class Module
         ) {
             $qb = QueryBuilder::insert($this->table_name)
                 ->columns(request()->data());
-            $result = db()->run($qb->build(), $qb->values());
-            if ($result) {
-                Flash::addFlash("success", "Record created successfully");
-            } else {
-                Flash::addFlash("danger", "Oops! An unknown issue occurred while creating new record");
+            try {
+                $result = db()->run($qb->build(), $qb->values());
+                if ($result) {
+                    Flash::addFlash("success", "Record created successfully");
+                } else {
+                    Flash::addFlash("danger", "Oops! An unknown issue occurred while creating new record");
+                }
+            } catch (PDOException $ex) {
+                Flash::addFlash("database", "Oops! A database error occurred while creating new record");
             }
         }
         return $this->createPartial();
@@ -117,11 +122,15 @@ class Module
             $qb = QueryBuilder::update($this->table_name)
                 ->columns(request()->data())
                 ->where(["id", $id]);
-            $result = db()->run($qb->build(), $qb->values());
-            if ($result) {
-                Flash::addFlash("success", "Record updated successfully");
-            } else {
-                Flash::addFlash("danger", "Oops! An unknown issue occurred while updating record");
+            try {
+                $result = db()->run($qb->build(), $qb->values());
+                if ($result) {
+                    Flash::addFlash("success", "Record updated successfully");
+                } else {
+                    Flash::addFlash("danger", "Oops! An unknown issue occurred while updating record");
+                }
+            } catch (PDOException $ex) {
+                Flash::addFlash("database", "Oops! A database error occurred while updating new record");
             }
         }
         return $this->editPartial($id);
@@ -130,11 +139,15 @@ class Module
     public function destroy(string $id): string
     {
         $qb = QueryBuilder::delete($this->table_name)->where(["id", $id]);
-        $result = db()->run($qb->build(), $qb->values());
-        if ($result) {
-            Flash::addFlash("success", "Record deleted successfully");
-        } else {
-            Flash::addFlash("danger", "Oops! An unknown issue occurred while deleting record");
+        try {
+            $result = db()->run($qb->build(), $qb->values());
+            if ($result) {
+                Flash::addFlash("success", "Record deleted successfully");
+            } else {
+                Flash::addFlash("danger", "Oops! An unknown issue occurred while deleting record");
+            }
+        } catch (PDOException $ex) {
+            Flash::addFlash("database", "Oops! A database error occurred while deleting record");
         }
         return $this->indexPartial();
     }
@@ -173,9 +186,14 @@ class Module
     protected function getTableData(): array
     {
         $qb = $this->getTableQuery();
-        $data = !is_null($qb)
-            ? db()->run($qb->build(), $qb->values())->fetchAll()
-            : [];
+        try {
+            $data = !is_null($qb)
+                ? db()->run($qb->build(), $qb->values())->fetchAll()
+                : [];
+        } catch (PDOException) {
+            $data = [];
+            Flash::addFlash("database", "Oops! A database error occurred while selecting record(s)");
+        }
 
         return [
             "module_name" => $this->module_name,
@@ -207,9 +225,14 @@ class Module
     protected function getEditData(string $id): array
     {
         $qb = $this->getEditQuery($id);
-        $data = !is_null($qb)
-            ? db()->run($qb->build(), $qb->values())->fetch()
-            : [];
+        try {
+            $data = !is_null($qb)
+                ? db()->run($qb->build(), $qb->values())->fetchAll()
+                : [];
+        } catch (PDOException) {
+            $data = [];
+            Flash::addFlash("database", "Oops! A database error occurred while selecting record(s)");
+        }
         if (!$data) {
             $this->moduleNotFound();
         }
