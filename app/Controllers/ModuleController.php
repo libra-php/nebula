@@ -71,6 +71,12 @@ class ModuleController extends Controller
         return $this->module->create();
     }
 
+    #[Get("/{module}/create/part", "module.create.part")]
+    public function create_part(string $module)
+    {
+        return $this->module->createPartial();
+    }
+
     /**
      * Show module edit form
      */

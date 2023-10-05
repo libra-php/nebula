@@ -2,8 +2,11 @@
 
 {block content}
 <section id="table">
+	<div class="alerts">
+		{getFlashMessages()|noescape}
+	</div>
 	<div id="actions" class="p-1">
-		<a class="btn btn-sm btn-success disabled" href="{moduleRoute($module_name)}/create" hx-boost="true" hx-target="#module">Create</a>
+		<a class="btn btn-sm btn-success" href="{moduleRoute($module_name)}/create/part" hx-boost="true" hx-target="#module" hx-replace-url="{moduleRoute($module_name)}/create">Create</a>
 	</div>
 	<div class="table-container mt-3">
 		<table class="table table-sm table-hover">
@@ -16,6 +19,7 @@
 				</tr>
 			</thead>	
 			<tbody>
+			{if $table[data]}
 			{foreach $table[data] as $datum}
 				<tr class="align-middle">
 					{foreach $table[columns] as $column => $title}
@@ -23,11 +27,15 @@
 					{/foreach}
 					<td>
 						<div class="d-flex justify-content-end">
-							<a class="btn btn-sm btn-primary m-1" href="{moduleRoute($module_name, $datum[id])}/part" hx-boost="true" hx-target="#module">Edit</a>
+							<a class="btn btn-sm btn-primary m-1" href="{moduleRoute($module_name, $datum[id])}/part" hx-boost="true" hx-target="#module" hx-replace-url="{moduleRoute($module_name, $datum[id])}">Edit</a>
+							<a class="btn btn-sm btn-danger m-1" hx-delete="{moduleRoute($module_name)}/{$datum[id]}/destroy" hx-target="#module">Delete</a>
 						</div>
 					</td>		
 				</tr>
 			{/foreach}
+			{else}
+				<tr><td class="text-center" colspan="{$table[col_span]}"><em>No results found</em></td></tr>
+			{/if}
 			</tbody>
 		</table>
 	</div>

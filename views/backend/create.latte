@@ -4,17 +4,17 @@
 <div class="alerts">
 	{getFlashMessages()|noescape}
 </div>
-<form>
-{csrf()|noescape}
+<form method="POST">
 {foreach $form['columns'] as $column => $title}
 	<div class="p-2">
 		<label for="{$column}" class="form-label">{$title}</label>
-		<input type="text" class="form-control" id="{$column}" value="{$form['data'][$column]}" placeholder="...">
+		<input type="text" class="form-control" id="{$column}" name="{$column}" value="{$form['data'][$column]}" placeholder="...">
+		{include '../layout/components/validation.latte', name: $column}
 	</div>
 {/foreach}
 	<div class="mt-3 p-2">
-		<button type="submit" class="btn btn-success">Create</button>
-		<a class="btn btn-warning ms-1" href='{moduleRoute($module_name)}/part' hx-target="#module" hx-boost="true" hx-replace-url="{moduleRoute($module_name)}">Back</a>
+		<button type="button" class="btn btn-success" hx-post="{moduleRoute($module_name)}/store" hx-target="#module">Create</button>
+		<a class="btn btn-secondary ms-1" href='{moduleRoute($module_name)}/part' hx-target="#module" hx-boost="true" hx-replace-url="{moduleRoute($module_name)}">Back</a>
 	</div>
 </form>
 {/block}

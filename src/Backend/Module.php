@@ -86,9 +86,24 @@ class Module
         return latte($this->getCreateTemplate(), $this->getCreateData());
     }
 
+    public function createPartial(): string
+    {
+        return latte($this->getCreateTemplate(), $this->getCreateData(), "content");
+    }
+
     public function store(): string
     {
-        die("wip");
+        if (
+            $this->validate($this->validation)
+        ) {
+            $qb = QueryBuilder::insert($this->table_name)
+                ->columns(request()->data());
+            $result = db()->run($qb->build(), $qb->values());
+            if ($result) {
+                Flash::addFlash("success", "Module created successfully");
+            }
+        }
+        return $this->createPartial();
     }
 
     public function update(string $id): string
@@ -109,7 +124,12 @@ class Module
 
     public function destroy(string $id): string
     {
-        die("wip");
+        $qb = QueryBuilder::delete($this->table_name)->where(["id", $id]);
+        $result = db()->run($qb->build(), $qb->values());
+        if ($result) {
+            Flash::addFlash("success", "Module deleted successfully");
+        }
+        return $this->indexPartial();
     }
 
     protected function validate(array $rules): bool
@@ -149,6 +169,7 @@ class Module
             "table" => [
                 "data" => $data,
                 "columns" => $this->table_columns,
+                "col_span" => count($this->table_columns) + 1
             ],
         ];
     }
