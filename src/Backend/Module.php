@@ -42,7 +42,8 @@ class Module
 
     private function moduleNotFound(): never
     {
-        echo $this->response(404, latte("backend/not-found.latte"))->send();
+        Flash::addFlash("warning", "Oops! The requested record could not be found");
+        echo $this->response(404, latte("backend/alert.latte"))->send();
         die;
     }
 

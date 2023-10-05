@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use Nebula\Alerts\Flash;
 use Nebula\Backend\Module;
 use Nebula\Controller\Controller;
 use Nebula\Traits\Http\Response;
@@ -43,7 +44,8 @@ class ModuleController extends Controller
      */
     private function moduleNotFound(): never
     {
-        echo $this->response(404, latte("backend/not-found.latte"))->send();
+        Flash::addFlash("warning", "Oops! The requested module could not be found");
+        echo $this->response(404, latte("backend/alert.latte"))->send();
         die;
     }
 
