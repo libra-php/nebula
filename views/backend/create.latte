@@ -8,7 +8,7 @@
 {foreach $form['columns'] as $column => $title}
 	<div class="p-2">
 		<label for="{$column}" class="form-label">{$title}</label>
-		<input type="text" class="form-control" id="{$column}" name="{$column}" value="{$form['data'][$column]}" placeholder="...">
+		<input type="text" class="form-control" id="{$column}" name="{$column}" placeholder="...">
 		{include '../layout/components/validation.latte', name: $column}
 	</div>
 {/foreach}
