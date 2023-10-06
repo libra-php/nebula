@@ -110,7 +110,7 @@ class ModuleController extends Controller
     /**
      * Update a module
      */
-    #[Patch("/{module}/{id}/update", "module.save", ["api"])]
+    #[Patch("/{module}/{id}/update", "module.update", ["api"])]
     public function update(string $module, string $id)
     {
         return $this->module->update($id);

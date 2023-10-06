@@ -13,8 +13,8 @@
 	</div>
 {/foreach}
 	<div class="mt-3 p-2">
-		<button type="button" class="btn btn-success" hx-post="/admin/v1/{$module_name}/store" hx-target="#module">Create</button>
-		<a class="btn btn-secondary ms-1" href="/admin/v1/{$module_name}/part" hx-target="#module" hx-boost="true">Back</a>
+		<button type="button" class="btn btn-success" hx-post="{$route('module.store')}" hx-target="#module">Create</button>
+		<a class="btn btn-secondary ms-1" href="{$route('module.index')}" hx-target="#module" hx-boost="true">Back</a>
 	</div>
 </form>
 {/block}

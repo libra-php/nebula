@@ -6,7 +6,7 @@
 		{getFlashMessages()|noescape}
 	</div>
 	<div id="actions" class="p-1">
-	<a class="btn btn-success ms-1" href="/admin/v1/{$module_name}/create/part" hx-target="#module" hx-boost="true">Create</a>
+	<a class="btn btn-success ms-1" href="{$route('module.create.part')}" hx-target="#module" hx-boost="true">Create</a>
 	</div>
 	<div class="table-container mt-3">
 		<table class="table table-sm table-hover">
@@ -27,8 +27,8 @@
 					{/foreach}
 					<td>
 						<div class="d-flex justify-content-end">
-							<a class="btn btn-sm btn-primary m-1" href="/admin/v1/{$module_name}/{$datum[id]}/edit/part" hx-boost="true" hx-target="#module">Edit</a>
-							<a class="btn btn-sm btn-danger m-1" hx-delete="{moduleRoute($module_name)}/{$datum[id]}/destroy" hx-target="#module">Delete</a>
+							<a class="btn btn-sm btn-primary m-1" href={$route('module.edit.part', $datum['id'])} hx-boost="true" hx-target="#module">Edit</a>
+							<a class="btn btn-sm btn-danger m-1" hx-delete="{$route('module.destroy', $datum[id])}" hx-target="#module">Delete</a>
 						</div>
 					</td>		
 				</tr>

@@ -212,6 +212,21 @@ class Module
         return $qb;
     }
 
+    public function commonData(): array
+    {
+        $route = function(string $name, ?string $id = null) {
+            $path = route($name);
+            $path = str_replace("{module}", $this->module_name, $path);
+            $path = str_replace("{id}", $id ?? '', $path);
+            return $path;
+        };
+        return [
+            "route" => $route,
+            "route_name" => request()->route->getName(),
+            "module_name" => $this->module_name,
+        ];
+    }
+
     /**
      * @return array<string,mixed>
      */
@@ -233,7 +248,7 @@ class Module
         }
 
         return [
-            "module_name" => $this->module_name,
+            ...$this->commonData(),
             "table" => [
                 "data" => $data,
                 "columns" => $this->table_columns,
@@ -248,7 +263,7 @@ class Module
     protected function getCreateData(): array
     {
         return [
-            "module_name" => $this->module_name,
+            ...$this->commonData(),
             "form" => [
                 "data" => [],
                 "columns" => $this->form_columns,
@@ -280,8 +295,8 @@ class Module
         }
 
         return [
+            ...$this->commonData(),
             "id" => $id,
-            "module_name" => $this->module_name,
             "form" => [
                 "data" => $data,
                 "columns" => $this->form_columns,

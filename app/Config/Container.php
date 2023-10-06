@@ -68,13 +68,6 @@ return [
             )
         );
         $latte->addFunction(
-            "moduleRoute",
-            fn(string $module_name, ?string $id = null) => moduleRoute(
-                $module_name,
-                $id
-            )
-        );
-        $latte->addFunction(
             "getFlashMessages",
             fn() => Flash::getSessionFlash()
         );
