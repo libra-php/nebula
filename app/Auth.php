@@ -68,6 +68,12 @@ class Auth
         ]);
     }
 
+    public static function getUser()
+    {
+        $uuid = session()->get("user");
+        return User::search(['uuid', $uuid]);
+    }
+
     public static function signIn(User $user)
     {
         session()->set("user", $user->uuid);
@@ -76,7 +82,7 @@ class Auth
             "reset_token" => null,
             "reset_expires_at" => null,
         ]);
-        return redirectModule("home");
+        return redirectModule("module.index", "home");
     }
 
     public static function twoFactorAuthentication(User $user)

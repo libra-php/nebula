@@ -1,7 +1,3 @@
-// On document ready...
-document.addEventListener("DOMContentLoaded", () => {
-});
-
 // Functions
 const keypadClick = (e) => {
   

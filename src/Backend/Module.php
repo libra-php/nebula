@@ -214,14 +214,17 @@ class Module
 
     public function commonData(): array
     {
-        $route = function(string $name, ?string $id = null) {
-            $path = route($name);
-            $path = str_replace("{module}", $this->module_name, $path);
-            $path = str_replace("{id}", $id ?? '', $path);
-            return $path;
+        $route = function(string $route_name, ?string $id = null) {
+            return moduleRoute($route_name, $this->module_name, $id);
         };
+        $moduleRoute = function(string $route_name, string $module_name, ?string $id = null) {
+            return moduleRoute($route_name, $module_name, $id);
+        };
+        $gravatar = fn(string $str) => md5( strtolower( trim( $str ) ) );;
         return [
+            "gravatar" => $gravatar,
             "route" => $route,
+            "moduleRoute" => $moduleRoute,
             "route_name" => request()->route->getName(),
             "module_name" => $this->module_name,
         ];

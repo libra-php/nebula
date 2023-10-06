@@ -14,7 +14,7 @@
     <div class="two-fa-control">
       <div class="form-floating mt-2">
         <input id="code" type="text" inputmode="numeric" maxlength="6" minlength="6" pattern="[0-9]*" class="form-control" id="code" name="code" placeholder="******" autocomplete="off" title="Please insert your 6 digit code">
-        <label for="password">Code</label>
+        <label for="code">Code</label>
         {include '../layout/components/validation.latte', name: 'code'}
       </div>
       {include "./keypad.latte" }
@@ -24,6 +24,5 @@
     </div>
   </form>
 </section>
+<script src="/assets/js/keypad.js"></script>
 {/block}
-
-

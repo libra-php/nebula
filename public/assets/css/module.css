@@ -1,4 +1,21 @@
 /**
+ * Module
+ */
+#main {
+  height: 100%;
+  overflow: hidden;
+}
+
+#module {
+  height: 100%;
+  width: 100%;
+}
+
+#gravatar {
+  height: 24px;
+}
+
+/**
  * Alerts
  */
 .alerts {

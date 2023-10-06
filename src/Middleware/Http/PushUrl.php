@@ -27,7 +27,7 @@ class PushUrl implements Middleware
                 preg_grep("/module/", $route_middleware)
             ) {
                 $params = $request->route->getParameters();
-                $uri = moduleRoute(...$params);
+                $uri = $this->moduleRoute(...$params);
                 if ($request->route->getName() === "module.create.part") {
                     $uri .= "/create";
                 }
@@ -38,5 +38,16 @@ class PushUrl implements Middleware
         }
 
         return $response;
+    }
+
+    private function moduleRoute(string $module, ?string $id = null): string
+    {
+        if (!is_null($id)) {
+            $route_path = route("module.edit");
+            $route_path = str_replace("{id}", $id, $route_path);
+        } else {
+            $route_path = route("module.index");
+        }
+        return str_replace("{module}", $module, $route_path);
     }
 }

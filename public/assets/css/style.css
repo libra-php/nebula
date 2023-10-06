@@ -41,3 +41,7 @@ body {
   margin: 3px;
   flex-basis: 30%;
 }
+
+#keypad > .btn.active {
+  background-color: #DDD;
+}

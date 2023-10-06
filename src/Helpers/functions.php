@@ -1,5 +1,6 @@
 <?php
 
+use App\Auth;
 use App\Models\User;
 use Idearia\Logger;
 use Nebula\Framework\Application;
@@ -107,21 +108,22 @@ function redirectRoute(string $name, int $code = 301, int $delay = 0): never
     }
 }
 
-function moduleRoute(string $module, ?string $id = null): string
-{
-    if (!is_null($id)) {
-        $route_path = route("module.edit");
-        $route_path = str_replace("{id}", $id, $route_path);
-    } else {
-        $route_path = route("module.index");
-    }
-    return str_replace("{module}", $module, $route_path);
+function moduleRoute(string $route_name, string $module_name, ?string $id = null) {
+    $path = route($route_name);
+    $path = str_replace("{module}", $module_name, $path);
+    $path = str_replace("{id}", $id ?? '', $path);
+    return $path;
 }
 
-function redirectModule(string $name, ?string $id = null): never
+function redirectModule(string $route_name, string $module_name, ?string $id = null, ?string $source = null, ?string $target = null)
 {
-    $route_path = moduleRoute($name, $id);
-    redirect($route_path);
+    $route_path = moduleRoute($route_name, $module_name, $id);
+    if ($source && $target) {
+        header('HX-Location: {"path":"'.$route_path.'", "source":"'.$source.'", "target":"'.$target.'"}');
+    } else {
+
+        header("HX-Location: $route_path");
+    }
 }
 
 function initLogger()
@@ -290,5 +292,6 @@ function latte(string $path, array $data = [], ?string $block = null): string
     $data["form_errors"] = $form_errors;
     $data["form_error_keys"] = array_keys($form_errors);
     $data["app"] = config("app");
+    $data["user"] = Auth::getUser();
     return $latte->renderToString($path, $data, $block);
 }
