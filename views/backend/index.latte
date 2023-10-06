@@ -2,18 +2,18 @@
 
 {block content}
 <section id="table">
-	<div class="alerts">
+	<div class="alerts" n:if="$has_flash">
 		{getFlashMessages()|noescape}
 	</div>
-	<div id="actions" class="p-1">
-	<a class="btn btn-success" href="{$route('module.create.part')}" hx-target="#module" hx-boost="true">Create</a>
+	<div id="actions" class="p-1 mb-2">
+		<a class="btn btn-success" href="{$route('module.create.part')}" hx-target="#module" hx-boost="true">Create</a>
 	</div>
-	<div class="table-container mt-3">
-		<table class="table table-sm table-hover">
+	<div class="table-container rounded-3">
+		<table class="table table-sm table-hover rounded-3">
 			<thead>
 				<tr>
 				{foreach $table[columns] as $column => $title}
-					<th scope="col" class="p-2">{$title}</th>
+					<th scope="col" class="p-1">{$title}</th>
 				{/foreach}
 					<th></th>
 				</tr>
@@ -23,7 +23,7 @@
 			{foreach $table[data] as $datum}
 				<tr class="align-middle">
 					{foreach $table[columns] as $column => $title}
-						<td class="p-2">{$datum[$column]}</td>
+						<td class="p-1">{$datum[$column]}</td>
 					{/foreach}
 					<td>
 						<div class="d-flex justify-content-end">

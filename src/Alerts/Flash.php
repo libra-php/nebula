@@ -24,9 +24,10 @@ class Flash
         }
     }
 
-    public static function hasFlash()
+    public static function hasFlash(): bool
     {
-        return session()->has("flash");
+        $flash = session()->get("flash");
+        return $flash && !empty($flash); 
     }
 
     public static function hasStatus($status): bool
@@ -51,10 +52,11 @@ class Flash
                 foreach ($flash[$status] as $key => $message) {
                     $alerts .= self::alert($status, $message);
                     unset($flash[$status][$key]);
-                    session()->set("flash", $flash);
                 }
+                unset($flash[$status]);
             }
         }
+        session()->set("flash", $flash);
         return $alerts;
     }
 

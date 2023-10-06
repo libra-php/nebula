@@ -222,6 +222,7 @@ class Module
         };
         $gravatar = fn(string $str) => md5( strtolower( trim( $str ) ) );;
         return [
+            "has_flash" => Flash::hasFlash(),
             "gravatar" => $gravatar,
             "route" => $route,
             "moduleRoute" => $moduleRoute,
