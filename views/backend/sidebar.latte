@@ -1,0 +1,40 @@
+<nav id="sidebar" hx-boost="true">
+  <div class="d-flex flex-column flex-shrink-0 p-3 bg-dark text-light h-100">
+    <a href="{$moduleRoute('module.index', 'home')}" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+  	<span class="fs-4">Nebula</span>
+    </a>
+    <hr>
+    <ul class="nav nav-pills flex-column mb-auto">
+  	<li class="nav-item">
+  	  <a href="{$moduleRoute('module.index.part', 'home')}" class="nav-link text-white" hx-target="#module">
+  		Home
+  	  </a>
+  	</li>
+  	<li>
+  	  <a href="{$moduleRoute('module.index.part', 'users')}" class="nav-link text-white" hx-target="#module">
+  		Users
+  	  </a>
+  	</li>
+  	<li>
+  	  <a href="{$moduleRoute('module.index.part', 'test')}" class="nav-link text-white" hx-target="#module">
+  		Test
+  	  </a>
+  	</li>
+    </ul>
+    <hr>
+    <div class="dropdown">
+  	<a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="user-dropdown"
+  	  data-bs-toggle="dropdown" aria-expanded="false">
+  	  <img id="gravatar" src="https://www.gravatar.com/avatar/{$gravatar($user->email)}" alt="avatar" class="rounded-1 me-2" />
+  	  <strong>{$user->name}</strong>
+  	</a>
+  	<ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="user-dropdown">
+  	  <li><a class="dropdown-item disabled" href="#">Profile</a></li>
+  	  <li>
+  		<hr class="dropdown-divider">
+  	  </li>
+  	  <li><a class="dropdown-item" href="{$route('sign-out.index')}" hx-target="body">Sign out</a></li>
+  	</ul>
+    </div>
+  </div>
+</nav>

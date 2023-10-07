@@ -19,11 +19,6 @@
   margin-bottom: 0;
 }
 
-.table thead {
-  background: #444;
-  color: #fff;
-}
-
 .table thead th {
   white-space: nowrap;
 }
