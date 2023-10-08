@@ -11,10 +11,9 @@
   overflow-y: auto;
 }
 
-#gravatar {
-  height: 24px;
-}
-
+/**
+ * Table
+ */
 .table {
   margin-bottom: 0;
 }
@@ -27,6 +26,34 @@
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
   overflow-x: auto;
   background-color: #fff;
+}
+
+/**
+ * Sidebar
+ */
+#sidebar ul a {
+  margin: 0;
+  padding: 0;
+  padding-left: 6px;
+}
+#sidebar ul li {
+  padding-left: 8px;
+  padding-right: 8px;
+}
+#sidebar li.nav-item a {
+  display: -moz-flex;
+  display: -webkit-flex;
+  display: -ms-flex;
+  display: flex;
+  -moz-align-items: center;
+  -webkit-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+}
+#sidebar li.nav-item a svg {
+  width: 16px;
+  height: 16px;
+  margin-right: 4px;
 }
 
 /**
@@ -96,4 +123,11 @@
   margin: 0;
   padding: 0;
   margin-left: 52px;
+}
+
+/**
+ * Utility
+ */
+#gravatar {
+  height: 24px;
 }
