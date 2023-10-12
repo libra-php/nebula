@@ -39,6 +39,7 @@
 #sidebar ul li {
   padding-left: 8px;
   padding-right: 8px;
+  margin-bottom: 5px;
 }
 #sidebar li.nav-item a {
   display: -moz-flex;
