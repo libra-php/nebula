@@ -1,24 +1,27 @@
 <nav id="sidebar" hx-boost="true">
   <div class="d-flex flex-column flex-shrink-0 p-3 bg-dark text-light h-100">
     <a href="{$moduleRoute('module.index', 'home')}"
-      class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-      <span class="fs-4">Nebula</span>
+      class="d-flex align-items-center justify-content-center text-white text-decoration-none">
+      <div class="d-flex align-items-center truncate">
+        <img id="project-logo" class="rounded-3" title="Nebula" src="/assets/img/nebula.jpeg" alt="logo">
+        <span id="project-name" class="ms-2 fs-4 d-none d-sm-block truncate" title="{$app['name']}">{$app['name']}</span>
+      </div>
     </a>
     <hr>
     <ul class="nav nav-pills flex-column mb-auto">
       <li class="nav-item">
         <a href="{$moduleRoute('module.index.part', 'home')}" class="nav-link text-white" hx-target="#module">
-          <i data-feather="home" /> Home
+          <i data-feather="home" /><span class="d-none d-sm-block">Home</span>
         </a>
       </li>
       <li class="nav-item">
         <a href="{$moduleRoute('module.index.part', 'users')}" class="nav-link text-white" hx-target="#module">
-          <i data-feather="users" /> Users
+          <i data-feather="users" /><span class="d-none d-sm-block">Users</span>
         </a>
       </li>
       <li class="nav-item">
         <a href="{$moduleRoute('module.index.part', 'test')}" class="nav-link text-white" hx-target="#module">
-          <i data-feather="package" /> Test
+          <i data-feather="package" /><span class="d-none d-sm-block">Test</span>
         </a>
       </li>
     </ul>
@@ -26,18 +29,23 @@
     <div class="dropdown">
       <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="user-dropdown"
         data-bs-toggle="dropdown" aria-expanded="false">
-        <div id="user" class="truncate">
+        <div id="user" class="d-flex truncate">
           <img id="gravatar" src="https://www.gravatar.com/avatar/{$gravatar($user->email)}" alt="avatar"
             class="rounded-3 me-2" />
-          <strong>{$user->name}</strong>
+          <span class="d-none d-sm-block truncate"><strong>{$user->name}</strong></span>
         </div>
       </a>
       <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="user-dropdown">
         <li class="nav-item">
-          <a class="dropdown-item disabled" href="#"><i data-feather="edit-2" /> Profile</a>
+          <div class="d-flex justify-content-center align-items-center text-nowrap">
+            <i data-feather="user" height="18" width="18" /><h5 class="m-0 ms-2">{$user->name}</h5>
+          </div>
         </li>
         <li class="nav-item">
           <hr class="dropdown-divider">
+        </li>
+        <li class="nav-item">
+          <a class="dropdown-item disabled" href="#"><i data-feather="edit-2" /> Profile</a>
         </li>
         <li class="nav-item">
           <a class="dropdown-item" href="{$route('sign-out.index')}" hx-target="body"><i data-feather="log-out" /> Sign
