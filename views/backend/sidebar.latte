@@ -26,9 +26,11 @@
     <div class="dropdown">
       <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="user-dropdown"
         data-bs-toggle="dropdown" aria-expanded="false">
-        <img id="gravatar" src="https://www.gravatar.com/avatar/{$gravatar($user->email)}" alt="avatar"
-          class="rounded-3 me-2" />
-        <strong>{$user->name}</strong>
+        <div id="user" class="truncate">
+          <img id="gravatar" src="https://www.gravatar.com/avatar/{$gravatar($user->email)}" alt="avatar"
+            class="rounded-3 me-2" />
+          <strong>{$user->name}</strong>
+        </div>
       </a>
       <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="user-dropdown">
         <li class="nav-item">
