@@ -61,8 +61,11 @@
  * Alerts
  */
 .alerts {
-  padding-bottom: 20px;
   width: 100%;
+}
+
+.alerts > .flash {
+  margin: 10px 0;
 }
 
 .flash {

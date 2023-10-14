@@ -3,7 +3,7 @@
 {block content}
 <section id="edit">
 	<div class="module-title">
-		<h1>Edit {$id}</h1>
+		<h1>Edit {$module_title_singular}: {$id}</h1>
 	</div>
 	<div class="alerts" n:if="$has_flash">
 		{getFlashMessages()|noescape}

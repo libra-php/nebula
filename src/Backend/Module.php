@@ -13,6 +13,7 @@ class Module
     use Response;
 
     protected string $module_name;
+    protected string $module_title;
     protected ?string $table_name;
     protected array $validation = [];
     protected array $errors = [];
@@ -27,6 +28,7 @@ class Module
     public function __construct(string $module_name, ?string $table_name = null)
     {
         $this->module_name = $module_name;
+        $this->module_title = ucfirst($module_name);
         $this->table_name = $table_name;
     }
 
@@ -221,6 +223,11 @@ class Module
             return moduleRoute($route_name, $module_name, $id);
         };
         $gravatar = fn(string $str) => md5( strtolower( trim( $str ) ) );;
+        $singular = function(string $str) {
+            return substr($str, -1) === 's'
+                ? rtrim($str, 's')
+                : $str;
+        };
         return [
             "has_flash" => Flash::hasFlash(),
             "gravatar" => $gravatar,
@@ -228,6 +235,8 @@ class Module
             "moduleRoute" => $moduleRoute,
             "route_name" => request()->route->getName(),
             "module_name" => $this->module_name,
+            "module_title" => $this->module_title,
+            "module_title_singular" => $singular($this->module_title),
         ];
     }
 

@@ -2,10 +2,13 @@
 
 {block content}
 <section id="table">
+	<div class="module-title">
+		<h1>{$module_title}</h1>
+	</div>
 	<div class="alerts" n:if="$has_flash">
 		{getFlashMessages()|noescape}
 	</div>
-	<div id="actions" class="p-1 mb-2">
+	<div id="actions" class="mb-2">
 		<a class="btn btn-success" href="{$route('module.create.part')}" hx-target="#module" hx-boost="true">Create New</a>
 	</div>
 	<div class="table-container rounded-3">
