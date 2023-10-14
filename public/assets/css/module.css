@@ -61,6 +61,9 @@
   padding-right: 8px;
   margin-bottom: 12px;
 }
+#sidebar li.nav-item a.active {
+  color: #fff !important;
+}
 #sidebar li.nav-item a {
   display: -moz-flex;
   display: -webkit-flex;
@@ -70,6 +73,10 @@
   -webkit-align-items: center;
   -ms-align-items: center;
   align-items: center;
+  color: #aaa !important;
+}
+#sidebar li.nav-item a:hover {
+  color: #fff !important;
 }
 /** Mobile */
 @media (max-width: 575.98px) {
