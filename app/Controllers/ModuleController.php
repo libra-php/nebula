@@ -30,6 +30,7 @@ class ModuleController extends Controller
      */
     private function getModule(string $module_name): Module
     {
+        $module_name = strtok($module_name, "?");
         $module_map = classMap(config("paths.modules"));
         foreach ($module_map as $class => $_) {
             $module = new $class();
@@ -45,12 +46,8 @@ class ModuleController extends Controller
      */
     private function moduleNotFound(): never
     {
-        Flash::addFlash(
-            "warning",
-            "Oops! The requested module could not be found"
-        );
-        echo $this->response(404, latte("backend/alert.latte"))->send();
-        die();
+        $module = new Module('error');
+        $module->moduleNotFound();
     }
 
     /**

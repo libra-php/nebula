@@ -42,14 +42,14 @@ class Module
         return $this->table_name;
     }
 
-    private function moduleNotFound(): never
+    public function moduleNotFound(): never
     {
         Flash::addFlash(
             "warning",
             "Oops! The requested record could not be found"
         );
-        echo $this->response(404, latte("backend/alert.latte"))->send();
-        die();
+        echo $this->response(404, latte("backend/alert.latte", $this->commonData()))->send();
+        exit();
     }
 
     protected function getIndexTemplate(): string
