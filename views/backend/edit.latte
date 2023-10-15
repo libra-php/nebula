@@ -10,13 +10,13 @@
 	</div>
 	<form method="POST">
 	{foreach $form['columns'] as $column => $title}
-		<div class="container d-flex form-row p-2">
+		<div class="container d-flex form-row p-2 w-100">
 			<div class="label d-flex align-items-start justify-content-end pt-1">
 				<label for="{$column}" class="form-label"><strong>{$title}</strong></label>
 			</div>
-			<div class="control ms-2">
-				<input type="text" class="form-control" id="{$column}" name="{$column}" value="{$form['data'][$column]}" placeholder="...">
-			{include '../layout/components/validation.latte', name: $column}
+			<div class="control ms-2 w-100">
+				{$controls($column, $form['data'][$column])|noescape}
+				{include '../layout/components/validation.latte', name: $column}
 			</div>
 		</div>
 	{/foreach}

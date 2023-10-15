@@ -6,6 +6,7 @@ use Nebula\Alerts\Flash;
 use Nebula\Database\QueryBuilder;
 use Nebula\Traits\Http\Response;
 use Nebula\Validation\Validate;
+use Nebula\Backend\FormControls;
 use PDOException;
 
 class Module
@@ -24,6 +25,7 @@ class Module
     protected bool $table_view = true;
     protected bool $edit_view = true;
     protected bool $create_view = true;
+    protected array $form_controls = [];
 
     public function __construct(string $module_name, ?string $table_name = null)
     {
@@ -240,6 +242,27 @@ class Module
         ];
     }
 
+    protected function formControls()
+    {
+        $controls = function($name, $value) {
+            $fc = new FormControls();
+            if (!isset($this->form_controls[$name])) {
+                return $fc->plain($name, $value); 
+            }
+            if (is_callable($this->form_controls[$name])) {
+                return $this->form_controls[$name]($name, $value);
+            }
+            return match ($this->form_controls[$name]) {
+                "text" => $fc->input($name, $value, 'text'),
+                "textarea" => $fc->textarea($name, $value),
+                "disabled" => $fc->input($name, $value, 'text', 'disabled=true'),
+                "plain" => $fc->plain($name, $value),
+                default => $fc->plain($name, $value),
+            };
+        };
+        return $controls;
+    }
+
     /**
      * @return array<string,mixed>
      */
@@ -275,8 +298,10 @@ class Module
      */
     protected function getCreateData(): array
     {
+        $fc = $this->formControls();
         return [
             ...$this->commonData(),
+            "controls" => $fc,
             "form" => [
                 "data" => [],
                 "columns" => $this->form_columns,
@@ -306,10 +331,12 @@ class Module
         if (!$data) {
             $this->moduleNotFound();
         }
+        $fc = $this->formControls();
 
         return [
             ...$this->commonData(),
             "id" => $id,
+            "controls" => $fc,
             "form" => [
                 "data" => $data,
                 "columns" => $this->form_columns,

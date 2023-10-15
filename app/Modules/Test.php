@@ -15,6 +15,7 @@ class Test extends Module
     protected array $form_columns = [
         "number" => "Number",
         "name" => "Name",
+        "comment" => "Comment",
     ];
 
     protected array $validation = [
@@ -24,6 +25,11 @@ class Test extends Module
 
     public function __construct()
     {
+        $this->form_controls = [
+            "number" => "text",
+            "name" => "text",
+            "comment" => "textarea",
+        ];
         parent::__construct("test", "test");
     }
 }
