@@ -2,7 +2,6 @@
 
 namespace App\Controllers;
 
-use Nebula\Alerts\Flash;
 use Nebula\Backend\Module;
 use Nebula\Controller\Controller;
 use Nebula\Traits\Http\Response;
