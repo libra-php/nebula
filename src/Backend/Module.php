@@ -327,6 +327,7 @@ class Module
             "table" => [
                 "total_results" => $this->total_results,
                 "total_pages" => $this->total_pages,
+                "pagination_offset" => 4,
                 "page" => $this->page,
                 "data" => $data,
                 "columns" => $this->table_columns,
