@@ -13,25 +13,45 @@ class Module
 {
     use Response;
 
+    /** Module */
     protected string $module_name;
     protected string $module_title;
     protected ?string $table_name;
-    protected array $validation = [];
-    protected array $errors = [];
-    protected array $table_columns = [];
-    protected array $table_data = [];
-    protected array $form_columns = [];
-    protected array $form_data = [];
-    protected bool $table_view = true;
+    /** Form */
     protected bool $edit_view = true;
     protected bool $create_view = true;
+    protected array $form_columns = [];
+    protected array $form_data = [];
     protected array $form_controls = [];
+    /** Table */
+    protected bool $table_view = true;
+    protected array $table_columns = [];
+    protected array $table_data = [];
+    protected array $where = [];
+    /** Pagination */
+    protected int $page = 1;
+    protected int $total_results = 0;
+    protected int $total_pages = 1;
+    protected int $limit = 10;
+    protected ?int $offset = null;
+    /** Validation */
+    protected array $validation = [];
+    protected array $errors = [];
 
     public function __construct(string $module_name, ?string $table_name = null)
     {
         $this->module_name = $module_name;
         $this->module_title = ucfirst($module_name);
         $this->table_name = $table_name;
+        $this->processRequest();
+    }
+
+    protected function processRequest()
+    {
+        // Pagination
+        if (request()->has('page')) {
+            $this->page = intval(request()->page);
+        }
     }
 
     public function getModuleName(): string
@@ -203,7 +223,9 @@ class Module
         $qb = QueryBuilder::select($this->table_name)->columns(
             array_keys($this->table_columns)
         );
-
+        if (!is_null($this->offset)) {
+            $qb->limit($this->limit)->offset($this->offset);
+        }
         return $qb;
     }
 
@@ -264,18 +286,34 @@ class Module
         return $controls;
     }
 
+    protected function tableData()
+    {
+        $data = [];
+        $qb = $this->getIndexQuery();
+        if (!is_null($qb)) {
+            $stmt = db()->run($qb->build(), $qb->values());
+            $this->total_results = $stmt?->rowCount() ?? 0;
+            $this->total_pages = ceil($this->total_results / $this->limit);
+            if ($this->page > $this->total_pages) {
+                $this->page = $this->total_pages;
+            }
+            if ($this->page < 1) {
+                $this->page = 1;
+            }
+             $this->offset = ($this->page - 1) * $this->limit;
+            $qb = $this->getIndexQuery();
+            $data = db()->run($qb->build(), $qb->values())->fetchAll();
+        }
+        return $data;
+    }
+
     /**
      * @return array<string,mixed>
      */
     protected function getIndexData(): array
     {
-        $qb = $this->getIndexQuery();
         try {
-            $data = !is_null($qb)
-                ? db()
-                    ->run($qb->build(), $qb->values())
-                    ->fetchAll()
-                : [];
+            $data = $this->tableData();
         } catch (PDOException) {
             $data = [];
             Flash::addFlash(
@@ -287,6 +325,9 @@ class Module
         return [
             ...$this->commonData(),
             "table" => [
+                "total_results" => $this->total_results,
+                "total_pages" => $this->total_pages,
+                "page" => $this->page,
                 "data" => $data,
                 "columns" => $this->table_columns,
                 "col_span" => count($this->table_columns) + 1,

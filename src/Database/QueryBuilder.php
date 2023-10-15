@@ -261,11 +261,11 @@ class QueryBuilder implements QueryBuilderInterface
                 );
                 $sql .= "ORDER BY $order_by_clause ";
             }
-            if (!is_null($this->limit)) {
-                $sql .= "LIMIT $this->limit";
-            }
             if (!is_null($this->offset)) {
-                $sql .= ", $this->offset";
+                $sql .= "LIMIT $this->offset";
+            }
+            if (!is_null($this->limit)) {
+                $sql .= ", $this->limit";
             }
         } else {
             if (!empty($this->columns)) {
