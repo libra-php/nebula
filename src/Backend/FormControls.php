@@ -6,7 +6,7 @@ class FormControls
 {
     public function plain($name, $value)
     {
-        return sprintf('<div class="w-100" id="%s"><p>%s</p></div>', $name, htmlspecialchars($value ?? ''));
+        return sprintf('<div class="w-100" id="%s"><p class="p-1">%s</p></div>', $name, htmlspecialchars($value ?? ''));
     }
 
     public function input($name, $value, $type = 'text', ...$attrs)

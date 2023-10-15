@@ -244,18 +244,19 @@ class Module
 
     protected function formControls()
     {
-        $controls = function($name, $value) {
+        $controls = function($name, $value, ...$args) {
             $fc = new FormControls();
             if (!isset($this->form_controls[$name])) {
                 return $fc->plain($name, $value); 
             }
             if (is_callable($this->form_controls[$name])) {
-                return $this->form_controls[$name]($name, $value);
+                return $this->form_controls[$name]($name, $value, ...$args);
             }
             return match ($this->form_controls[$name]) {
                 "text" => $fc->input($name, $value, 'text'),
                 "textarea" => $fc->textarea($name, $value),
                 "disabled" => $fc->input($name, $value, 'text', 'disabled=true'),
+                "readonly" => $fc->input($name, $value, 'text', 'readonly'),
                 "plain" => $fc->plain($name, $value),
                 default => $fc->plain($name, $value),
             };

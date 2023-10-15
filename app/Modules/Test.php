@@ -6,30 +6,31 @@ use Nebula\Backend\Module;
 
 class Test extends Module
 {
-    protected array $table_columns = [
-        "id" => "ID",
-        "number" => "Number",
-        "name" => "Name",
-    ];
-
-    protected array $form_columns = [
-        "number" => "Number",
-        "name" => "Name",
-        "comment" => "Comment",
-    ];
-
-    protected array $validation = [
-        "name" => ["required"],
-        "number" => ["required", "numeric"],
-    ];
-
     public function __construct()
     {
+        $this->table_columns = [
+            "id" => "ID",
+            "number" => "Number",
+            "name" => "Name",
+        ];
+
+        $this->form_columns = [
+            "number" => "Number",
+            "name" => "Name",
+            "comment" => "Comment",
+        ];
+
+        $this->validation = [
+            "name" => ["required"],
+            "number" => ["required", "numeric"],
+        ];
+
         $this->form_controls = [
             "number" => "text",
             "name" => "text",
             "comment" => "textarea",
         ];
+
         parent::__construct("test", "test");
     }
 }
