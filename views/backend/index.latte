@@ -12,12 +12,12 @@
 		<a class="btn btn-success" href="{$route('module.create.part')}" hx-target="#module" hx-boost="true" title="Create new record">Create new</a>
 	</div>
 	<div id="filters" class="mb-2">
-		<div id="search" class="d-flex">
+		<div id="search" class="d-flex" n:if="$has_search">
 			<input type="search" name="search" 
 				class="form-control form-control-sm" 
 				hx-get="{$route('module.index.part')}"
 				placeholder=""
-				value="{$old('search')}"
+				value="{$session($module_name . '_term')}"
 				hx-trigger="keyup changed delay:500ms, search" 
 				hx-target="#module"/>
 		</div>

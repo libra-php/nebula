@@ -6,6 +6,7 @@ interface Session
 {
     public function get(string $name): mixed;
     public function has(string $name): bool;
+    public function remove(string $name): void;
     public function set(string $name, mixed $value): void;
     public function getAll(): array;
     public function destroy(): void;

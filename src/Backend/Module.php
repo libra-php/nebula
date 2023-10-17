@@ -59,24 +59,34 @@ class Module
 
     protected function pagination(): void
     {
+        $page = $this->page;
         if (request()->has("page")) {
             session()->set($this->module_name . "_page", intval(request()->page));
         }
 
-        $this->page = session()->get($this->module_name . "_page") ?? $this->page;
+        $this->page = session()->get($this->module_name . "_page") ?? $page;
     }
 
     protected function search(): void
     {
+        $where = []; 
         if (request()->has('search') && trim(request()->search) != '') {
-            $where = []; 
+            $term = trim(request()->search);
             foreach ($this->search as $column) {
-                $term = trim(request()->search);
                 // Search where column like search term
                 $where[] = "($column LIKE '$term%')";
             }
-            $this->where[] = [implode(" OR ", $where)];
+            session()->set($this->module_name . "_term", $term);
+            session()->set($this->module_name . "_search", [implode(" OR ", $where)]);
             session()->set($this->module_name . "_page", 1);
+        } else if (request()->has('search') && trim(request()->search) == '') {
+            session()->remove($this->module_name . "_term");
+            session()->remove($this->module_name . "_search");
+            session()->remove($this->module_name . "_page");
+        }
+
+        if (session()->has($this->module_name . "_search")) {
+            $this->where[] = session()->get($this->module_name . "_search");
         }
     }
 
@@ -281,10 +291,13 @@ class Module
                 ? rtrim($str, 's')
                 : $str;
         };
-        $old = fn(string $column) => request()->has($column) ? request()->$column : '';
+        $dump = fn(string $stuff) => dump($stuff);
+        $request = fn(string $column) => request()->has($column) ? request()->$column : '';
+        $session = fn(string $column) => session()->has($column) ? session()->get($column) : '';
         return [
             "has_flash" => Flash::hasFlash(),
-            "old" => $old,
+            "request" => $request,
+            "session" => $session,
             "gravatar" => $gravatar,
             "route" => $route,
             "moduleRoute" => $moduleRoute,
@@ -357,6 +370,7 @@ class Module
 
         return [
             ...$this->commonData(),
+            "has_search" => !empty($this->search),
             "table" => [
                 "total_results" => $this->total_results,
                 "total_pages" => $this->total_pages,
