@@ -8,11 +8,20 @@
 #module {
   height: 100%;
   width: 100%;
-  overflow-y: auto;
-}
+  overflow-y: auto}
 
 #module .module-title h1 {
   font-size: 1.9rem;
+}
+
+/**
+ * Form
+ */
+.form-row .label {
+  width: 100px;
+}
+#edit form, #create form {
+  margin-top: 20px;
 }
 
 /**
