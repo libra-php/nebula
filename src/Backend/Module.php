@@ -27,6 +27,7 @@ class Module
     protected bool $table_view = true;
     protected array $table_columns = [];
     protected array $table_data = [];
+    protected array $search = [];
     protected array $where = [];
     /** Pagination */
     protected int $page = 1;
@@ -43,14 +44,39 @@ class Module
         $this->module_name = $module_name;
         $this->module_title = ucfirst($module_name);
         $this->table_name = $table_name;
-        $this->processRequest();
     }
 
-    protected function processRequest()
+    protected function processTableRequest()
     {
-        // Pagination
-        if (request()->has('page')) {
-            $this->page = intval(request()->page);
+        $this->pagination();
+        $this->search();
+    }
+
+    protected function processFormRequest()
+    {
+
+    }
+
+    protected function pagination(): void
+    {
+        if (request()->has("page")) {
+            session()->set($this->module_name . "_page", intval(request()->page));
+        }
+
+        $this->page = session()->get($this->module_name . "_page") ?? $this->page;
+    }
+
+    protected function search(): void
+    {
+        if (request()->has('search') && trim(request()->search) != '') {
+            $where = []; 
+            foreach ($this->search as $column) {
+                $term = trim(request()->search);
+                // Search where column like search term
+                $where[] = "($column LIKE '$term%')";
+            }
+            $this->where[] = [implode(" OR ", $where)];
+            session()->set($this->module_name . "_page", 1);
         }
     }
 
@@ -223,6 +249,9 @@ class Module
         $qb = QueryBuilder::select($this->table_name)->columns(
             array_keys($this->table_columns)
         );
+        if (!empty($this->where)) {
+            $qb->where(...$this->where);
+        }
         if (!is_null($this->offset)) {
             $qb->limit($this->limit)->offset($this->offset);
         }
@@ -252,8 +281,10 @@ class Module
                 ? rtrim($str, 's')
                 : $str;
         };
+        $old = fn(string $column) => request()->has($column) ? request()->$column : '';
         return [
             "has_flash" => Flash::hasFlash(),
+            "old" => $old,
             "gravatar" => $gravatar,
             "route" => $route,
             "moduleRoute" => $moduleRoute,
@@ -307,11 +338,13 @@ class Module
         return $data;
     }
 
+
     /**
      * @return array<string,mixed>
      */
     protected function getIndexData(): array
     {
+        $this->processTableRequest();
         try {
             $data = $this->tableData();
         } catch (PDOException) {

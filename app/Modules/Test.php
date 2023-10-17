@@ -31,6 +31,11 @@ class Test extends Module
             "comment" => "textarea",
         ];
 
+        $this->search = [
+            "number",
+            "name"
+        ];
+
         parent::__construct("test", "test");
     }
 }
