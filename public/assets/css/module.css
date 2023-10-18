@@ -18,7 +18,7 @@
  * Form
  */
 .form-row .label {
-  width: 100px;
+  width: 120px;
 }
 #edit form, #create form {
   margin-top: 20px;
@@ -41,23 +41,24 @@
   background-color: #fff;
 }
 
-/**
- * Search 
- */
-#pagination a {
-  cursor: pointer;
-}
-#pagination .page-item.disabled {
-  cursor: not-allowed;
-}
-
-input[type="search"] {
+#table input[type="search"] {
   padding: 7px 0 7px 30px;
   background-image: url("/assets/img/magnifying_glass.svg");
   background-size: 13px;
   background-repeat: no-repeat;
   background-position: 10px center;
 }
+
+/**
+ * Search 
+ */
+#pagination li.page-item a.page-link {
+  cursor: pointer;
+}
+#pagination li.page-item.disabled {
+  cursor: not-allowed;
+}
+
 
 /**
  * Sidebar
