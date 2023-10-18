@@ -20,6 +20,9 @@
 .form-row .label {
   width: 120px;
 }
+.form-row .control {
+  width: 320px !important;
+}
 #edit form, #create form {
   margin-top: 20px;
 }
