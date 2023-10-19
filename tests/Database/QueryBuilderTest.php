@@ -55,7 +55,7 @@ final class QueryBuilderTest extends TestCase
             ->offset(2);
         $this->assertSame($qb->values(), [1, "test", 2, "blue"]);
         $this->assertSame(
-            "SELECT id, email, name FROM users WHERE (id = ?) AND (name = ?) GROUP BY id, name HAVING (id = ?) AND (name = ?) ORDER BY id ASC, name DESC LIMIT 1, 2",
+            "SELECT id, email, name FROM users WHERE (id = ?) AND (name = ?) GROUP BY id, name HAVING (id = ?) AND (name = ?) ORDER BY id ASC, name DESC LIMIT 2, 1",
             $qb->build()
         );
     }
