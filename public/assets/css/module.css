@@ -8,10 +8,13 @@
 #module {
   height: 100%;
   width: 100%;
-  overflow-y: auto}
+  overflow-y: auto
+}
 
 #module .module-title h1 {
-  font-size: 1.9rem;
+  font-size: 40px;
+  font-weight: 600;
+  color: #102a3c;
 }
 
 /**
@@ -31,7 +34,12 @@
  * Table
  */
 .table {
+  color: #102a3c;
   margin-bottom: 0;
+}
+
+.table thead {
+  background-image: linear-gradient(45deg, #102a3c, #050e14);
 }
 
 .table thead th {
@@ -77,6 +85,7 @@
  * Sidebar
  */
 #sidebar {
+  background-image: linear-gradient(45deg, #102a3c, #050e14);
   max-width: 220px;
   font-size: 1.1rem;
 }
@@ -106,7 +115,7 @@
   margin-bottom: 12px;
 }
 #sidebar .nav-pills li.nav-item.active a {
-  color: #fff !important;
+  color: #ffffb3 !important;
   font-weight: 900;
 }
 #sidebar .nav-pills li.nav-item a {
