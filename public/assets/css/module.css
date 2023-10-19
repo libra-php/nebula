@@ -18,10 +18,10 @@
  * Form
  */
 .form-row .label {
-  width: 120px;
+  width: 100px;
 }
 .form-row .control {
-  width: 320px !important;
+  max-width: 320px !important;
 }
 #edit form, #create form {
   margin-top: 20px;
