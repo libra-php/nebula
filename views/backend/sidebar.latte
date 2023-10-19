@@ -6,24 +6,24 @@
       >
       <div class="d-flex align-items-center truncate">
         <img id="project-logo" class="rounded-3" title="Nebula" src="/assets/img/nebula.jpeg" alt="logo">
-        <span id="project-name" class="ms-2 fs-4 d-none d-sm-block truncate" title="{$app['name']}">{$app['name']}</span>
+        <span id="project-name" class="ms-2 fs-4 d-none d-lg-block truncate" title="{$app['name']}">{$app['name']}</span>
       </div>
     </a>
     <hr>
     <ul class="nav nav-pills flex-column mb-auto">
-      <li class="nav-item" title="Home">
+      <li class="nav-item {if $module_name === "home"}active{/if}" title="Home" data-module='home'>
         <a href="{$moduleRoute('module.index.part', 'home')}" class="nav-link text-white" hx-target="#module">
-          <i data-feather="home" /><span class="d-none d-sm-block">Home</span>
+          <i data-feather="home" /><span class="d-none d-lg-block">Home</span>
         </a>
       </li>
-      <li class="nav-item" title="Users">
+      <li class="nav-item {if $module_name === "users"}active{/if}" title="Users" data-module='users'>
         <a href="{$moduleRoute('module.index.part', 'users')}" class="nav-link text-white" hx-target="#module">
-          <i data-feather="users" /><span class="d-none d-sm-block">Users</span>
+          <i data-feather="users" /><span class="d-none d-lg-block">Users</span>
         </a>
       </li>
-      <li class="nav-item" title="Test">
+      <li class="nav-item {if $module_name === "test"}active{/if}" title="Test" data-module='test'>
         <a href="{$moduleRoute('module.index.part', 'test')}" class="nav-link text-white" hx-target="#module">
-          <i data-feather="package" /><span class="d-none d-sm-block">Test</span>
+          <i data-feather="package" /><span class="d-none d-lg-block">Test</span>
         </a>
       </li>
     </ul>
@@ -34,10 +34,10 @@
         <div id="user" class="d-flex truncate">
           <img id="gravatar" src="https://www.gravatar.com/avatar/{$gravatar($user->email)}" alt="avatar"
             class="rounded-3 me-2" />
-          <span class="d-none d-sm-block truncate"><strong>{$user->name}</strong></span>
+          <span class="d-none d-lg-block truncate"><strong>{$user->name}</strong></span>
         </div>
       </a>
-      <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="user-dropdown">
+      <ul class="dropdown-menu text-small shadow" aria-labelledby="user-dropdown">
         <li class="nav-item">
           <div class="d-flex justify-content-center align-items-center text-nowrap">
             <i data-feather="user" height="18" width="18" /><h5 class="m-0 ms-2">{$user->name}</h5>

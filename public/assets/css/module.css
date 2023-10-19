@@ -105,10 +105,11 @@
   padding-right: 8px;
   margin-bottom: 12px;
 }
-#sidebar li.nav-item a.active {
+#sidebar .nav-pills li.nav-item.active a {
   color: #fff !important;
+  font-weight: 900;
 }
-#sidebar li.nav-item a {
+#sidebar .nav-pills li.nav-item a {
   display: -moz-flex;
   display: -webkit-flex;
   display: -ms-flex;
@@ -119,11 +120,8 @@
   align-items: center;
   color: #aaa !important;
 }
-#sidebar li.nav-item a:hover {
-  color: #fff !important;
-}
-/** Mobile */
-@media (max-width: 575.98px) {
+/** Sidebar Mobile */
+@media (max-width: 1199.98px) {
   #sidebar #project-logo {
     height: 40px;
     width: 40px;
