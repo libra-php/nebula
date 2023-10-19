@@ -61,7 +61,17 @@
 #pagination li.page-item.disabled {
   cursor: not-allowed;
 }
+#pagination #page-selector {
+  color: #555;
+  background-color: #fff;
+  border-top: 1px solid #d6dee1 !important;
+  border-bottom: 1px solid #d6dee1 !important;
+}
 
+#pagination #page-selector:hover {
+  cursor: pointer;
+  background-color: #eee;
+}
 
 /**
  * Sidebar
@@ -69,6 +79,9 @@
 #sidebar {
   max-width: 220px;
   font-size: 1.1rem;
+}
+#sidebar #gravatar {
+  height: 24px;
 }
 #sidebar #project-logo {
   height: 30px;
@@ -196,8 +209,8 @@
 /**
  * Utility
  */
-#gravatar {
-  height: 24px;
+*:focus {
+  outline: none;
 }
 .truncate {
   white-space: nowrap;
