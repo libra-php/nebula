@@ -62,7 +62,7 @@
   cursor: not-allowed;
 }
 #pagination #page-selector {
-  color: #555;
+  color: royalblue;
   background-color: #fff;
   border-top: 1px solid #d6dee1 !important;
   border-bottom: 1px solid #d6dee1 !important;
@@ -211,6 +211,16 @@
  */
 *:focus {
   outline: none;
+}
+.htmx-indicator{
+  opacity:0;
+  transition: opacity 500ms ease-in;
+}
+.htmx-request .htmx-indicator{
+  opacity:1
+}
+.htmx-request.htmx-indicator{
+  opacity:1
 }
 .truncate {
   white-space: nowrap;

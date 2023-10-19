@@ -11,9 +11,9 @@
 	<div id="actions" class="my-4">
 		<a class="btn btn-success" href="{$route('module.create.part')}" hx-target="#module" hx-boost="true" title="Create new record">Create new</a>
 	</div>
-	<div id="filters" class="mb-3">
+	<div id="filters" class="mb-4">
 		<div id="search" class="d-flex align-items-center" n:if="$has_search">
-			<label class="p-1 pe-2" for="search-input">Search</label>
+			<label class="p-1 pe-2" for="search-input"><strong>Search</strong></label>
 			<input id="search-input"
 				type="search" 
 				name="search" 
@@ -21,6 +21,7 @@
 				hx-get="{$route('module.index.part')}"
 				placeholder="..."
 				value="{$session($module_name . '_term')}"
+				hx-indicator=".htmx-indicator"
 				hx-trigger="keyup changed delay:500ms, search" 
 				hx-target="#module"/>
 		</div>
