@@ -48,7 +48,7 @@ Follow these steps to kickstart your Nebula journey:
 
 3. **Dependencies**: Nebula integrates essential dependencies such as Redis (caching, rate limiting) and MySQL (database).
 
-4. **Development**: Begin building your application by creating controllers, views, and models within the `src` directory. Start a local development server with:
+4. **Development**: Begin building your application by creating controllers, views, and models within the `app` directory. Feel free to modify the framework source code located in the  `src` directory. Start a local development server with:
    ```bash
    ./nebula -s
    ```
@@ -88,4 +88,4 @@ This project is licensed under the [MIT License](https://github.com/libra-php/ne
 
 Nebula draws inspiration from leading open-source projects including Symfony, Slim Framework, Leaf, and Laravel.
 
-✌️
+We ❤️ htmx + php
