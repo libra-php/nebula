@@ -39,6 +39,7 @@ class Test extends Module
 
         // The options for a select control
         $this->select_options = [
+            "dropdown" => db()->selectAll("SELECT id, name FROM animals"),
         ];
 
         // Searchable columns
