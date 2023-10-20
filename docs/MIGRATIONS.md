@@ -65,7 +65,7 @@ return Schema::create("users", function (Blueprint $table) {
 });
 ```
 
-⭐ There is a build in command for creating a new table migration file:
+⭐ There is a built-in command for creating a new table migration file:
 
 ```bash
 ./nebula --migration-table=<table_name>
