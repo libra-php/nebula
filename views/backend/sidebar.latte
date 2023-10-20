@@ -1,5 +1,5 @@
 <nav id="sidebar" hx-boost="true">
-  <div class="d-flex flex-column flex-shrink-0 p-3 text-light h-100">
+  <div class="d-flex flex-column flex-shrink-0 text-light h-100">
     <a href="{$moduleRoute('module.index.part', 'home')}"
       class="d-flex align-items-center justify-content-center text-white text-decoration-none"
       hx-target="#module"
@@ -10,7 +10,7 @@
       </div>
     </a>
     <hr>
-    <ul class="nav nav-pills flex-column mb-auto">
+    <ul id="sidebar-links" class="nav nav-pills flex-column mb-auto">
       <li class="nav-item {if $module_name === "home"}active{/if}" title="Home" data-module='home'>
         <a href="{$moduleRoute('module.index.part', 'home')}" class="nav-link text-white" hx-target="#module">
           <i data-feather="home" /><span class="d-none d-lg-block">Home</span>
@@ -28,7 +28,7 @@
       </li>
     </ul>
     <hr>
-    <div class="dropdown">
+    <div class="dropdown mb-2 p-2">
       <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="user-dropdown"
         data-bs-toggle="dropdown" aria-expanded="false">
         <div id="user" class="d-flex truncate">

@@ -95,6 +95,7 @@
 #sidebar #project-logo {
   height: 30px;
   width: 30px;
+  margin: 12px;
 }
 #sidebar #project-name {
   font-size: 2rem !important;
@@ -138,6 +139,16 @@
   #sidebar li.nav-item a svg {
     width: 24px;
     height: 24px;
+  }
+  #sidebar #sidebar-links li.nav-item {
+    display: -moz-flex;
+    display: -webkit-flex;
+    display: -ms-flex;
+    display: flex;
+    -moz-justify-content: center;
+    -webkit-justify-content: center;
+    -ms--justify-content: center;
+    justify-content: center;
   }
 }
 
