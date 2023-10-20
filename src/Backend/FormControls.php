@@ -25,11 +25,11 @@ class FormControls
     {
         $attrs = implode(" ", $attrs);
         if (is_object($options[0] ?? [])) {
-            // Object (db query properties: id, name)
+            // Object (db query: id, name)
             $options = array_map(fn($option) => sprintf('<option value="%s" %s>%s</option>', $option->id, $value == $option->id ? 'selected' : '', htmlspecialchars($option->name)), array_values($options));
         } else {
-            // Array (label => value)
-            $options = array_map(fn($label, $val) => sprintf('<option value="%s" %s>%s</option>', htmlspecialchars($val), $value == $val ? 'selected' : '', $label), array_keys($options), array_values($options));
+            // Array (value => label)
+            $options = array_map(fn($val, $label) => sprintf('<option value="%s" %s>%s</option>', htmlspecialchars($val), $value == $val ? 'selected' : '', $label), array_keys($options), array_values($options));
         }
         return sprintf('<select name="%s" class="form-select control-select" %s><option disabled>Please select an option</option>%s</select>', $name, $attrs, implode("", $options));
     }

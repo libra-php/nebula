@@ -327,6 +327,7 @@ class Module
                 "readonly" => $fc->input($name, $value, 'text', 'readonly'),
                 "plain" => $fc->plain($name, $value),
                 "select" => $fc->select($name, $value, isset($this->select_options[$name]) ? $this->select_options[$name] : []),
+                "number" => $fc->input($name, $value, 'number'),
                 default => $fc->plain($name, $value),
             };
         };

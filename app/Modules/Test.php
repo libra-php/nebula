@@ -31,7 +31,7 @@ class Test extends Module
 
         // Edit / Create view controls
         $this->form_controls = [
-            "number" => "text",
+            "number" => "number",
             "name" => "text",
             "comment" => "textarea",
             "dropdown" => "select",
@@ -39,7 +39,11 @@ class Test extends Module
 
         // The options for a select control
         $this->select_options = [
+            // The select control can be provided by 
+            // a query with attributes id & name
             "dropdown" => db()->selectAll("SELECT id, name FROM animals"),
+            // Or an array
+            // "dropdown" => ['Dog', 'Cat', 'Mouse', 'Duck', 'Deer', 'Shrimp'],
         ];
 
         // Searchable columns
