@@ -24,16 +24,42 @@ class FormControls
     public function select(string $name, ?string $value, array $options, ...$attrs): string
     {
         $attrs = implode(" ", $attrs);
-        $options = array_map(fn($key, $opt) => sprintf('<option value="%s" %s>%s</option>', $opt->id, $value == $opt->id ? 'selected' : '', htmlspecialchars($opt->name)), array_keys($options), array_values($options));
+        if (is_object($options[0] ?? [])) {
+            // Object (db query properties: id, name)
+            $options = array_map(fn($option) => sprintf('<option value="%s" %s>%s</option>', $option->id, $value == $option->id ? 'selected' : '', htmlspecialchars($option->name)), array_values($options));
+        } else {
+            // Array (label => value)
+            $options = array_map(fn($label, $val) => sprintf('<option value="%s" %s>%s</option>', htmlspecialchars($val), $value == $val ? 'selected' : '', $label), array_keys($options), array_values($options));
+        }
         return sprintf('<select name="%s" class="form-select control-select" %s><option disabled>Please select an option</option>%s</select>', $name, $attrs, implode("", $options));
     }
 
-    public function checkbox(): string
+    public function image(string $name, ?string $value): string
+    {
+        return '';
+    }
+
+    public function file(string $name, ?string $value): string
+    {
+        return '';
+    }
+
+    public function color(string $name, ?string $value): string
+    {
+        return '';
+    }
+
+    public function checkbox(string $name, ?string $value): string
     {
         return ''; 
     }
 
-    public function toggle(): string
+    public function switch(string $name, ?string $value): string
+    {
+        return ''; 
+    }
+
+    public function range(string $name, ?string $value): string
     {
         return ''; 
     }
