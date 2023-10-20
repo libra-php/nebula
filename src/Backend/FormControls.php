@@ -44,11 +44,6 @@ class FormControls
         return '';
     }
 
-    public function color(string $name, ?string $value): string
-    {
-        return '';
-    }
-
     public function checkbox(string $name, ?string $value): string
     {
         return ''; 

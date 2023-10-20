@@ -328,6 +328,7 @@ class Module
                 "plain" => $fc->plain($name, $value),
                 "select" => $fc->select($name, $value, isset($this->select_options[$name]) ? $this->select_options[$name] : []),
                 "number" => $fc->input($name, $value, 'number'),
+                "color" => $fc->input($name, $value, 'color'),
                 default => $fc->plain($name, $value),
             };
         };
