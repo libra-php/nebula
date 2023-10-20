@@ -21,12 +21,15 @@ class Test extends Module
             "name" => "Name",
             "comment" => "Comment",
             "dropdown" => "Dropdown",
+            "color" => "Colour",
         ];
 
         // Form valdiation columns / rules
         $this->validation = [
             "name" => ["required"],
             "number" => ["required", "numeric"],
+            "dropdown" => ["required", "numeric"],
+            "color" => ["required"],
         ];
 
         // Edit / Create view controls
@@ -35,6 +38,7 @@ class Test extends Module
             "name" => "text",
             "comment" => "textarea",
             "dropdown" => "select",
+            "color" => "color",
         ];
 
         // The options for a select control

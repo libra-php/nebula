@@ -12,7 +12,7 @@ class FormControls
     public function input(string $name, ?string $value, $type = 'text', ...$attrs): string
     {
         $attrs = implode(" ", $attrs);
-        return sprintf('<input type="%s" class="form-control control-input w-100" id="%s" name="%s" value="%s" placeholder="..." %s>', $type, $name, $name, htmlspecialchars($value ?? ''), $attrs);
+        return sprintf('<input type="%s" class="form-control control-%s w-100" id="%s" name="%s" value="%s" placeholder="..." %s>', $type, $type, $name, $name, htmlspecialchars($value ?? ''), $attrs);
     }
 
     public function textarea(string $name, ?string $value, ...$attrs): string
