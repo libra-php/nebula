@@ -20,6 +20,7 @@ class Test extends Module
             "number" => "Number",
             "name" => "Name",
             "comment" => "Comment",
+            "dropdown" => "Dropdown",
         ];
 
         // Form valdiation columns / rules
@@ -33,6 +34,12 @@ class Test extends Module
             "number" => "text",
             "name" => "text",
             "comment" => "textarea",
+            "dropdown" => "select",
+        ];
+
+        // The options for a select control
+        $this->select_options = [
+            "dropdown" => db()->selectAll("SELECT * FROM animals"),
         ];
 
         // Searchable columns

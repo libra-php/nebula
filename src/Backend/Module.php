@@ -22,7 +22,9 @@ class Module
     protected bool $create_view = true;
     protected array $form_columns = [];
     protected array $form_data = [];
+    /** Controls **/
     protected array $form_controls = [];
+    protected array $select_options = [];
     /** Table */
     protected bool $table_view = true;
     protected array $table_columns = [];
@@ -324,6 +326,7 @@ class Module
                 "disabled" => $fc->input($name, $value, 'text', 'disabled=true'),
                 "readonly" => $fc->input($name, $value, 'text', 'readonly'),
                 "plain" => $fc->plain($name, $value),
+                "select" => $fc->select($name, $value, isset($this->select_options[$name]) ? $this->select_options[$name] : []),
                 default => $fc->plain($name, $value),
             };
         };
