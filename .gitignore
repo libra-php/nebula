@@ -2,5 +2,5 @@
 node_modules/
 .env
 .php-cs-fixer.cache
-.phpunit.cache
+.phpunit.cache/
 /logs/nebula.log
