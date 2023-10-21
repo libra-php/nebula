@@ -23,6 +23,7 @@ class Kernel implements ConsoleKernel
         ],
         "long" => [
             "help" => "Print help and exit.",
+            "fix-permissions" => "Automatically fix permissions on directories.",
             "migration-table:" =>
                 "Create new table migration. Usage: --migration-table=<table_name>",
             "migration-create:" =>
@@ -75,6 +76,7 @@ class Kernel implements ConsoleKernel
                 "s" => $this->startServer(),
                 "t" => $this->runTests(),
                 "h", "help" => $this->displayHelp(),
+                "fix-permissions" => $this->fixPermissions(),
                 "migration-table" => $this->migrationCreate($value, "_table"),
                 "migration-create" => $this->migrationCreate($value),
                 "migration-run" => $this->runMigrations(),
@@ -127,6 +129,20 @@ EOT;
             }
         }
         return "\n" . $help;
+    }
+
+    protected function fixPermissions()
+    {
+        $twig_cache = config("twig.cache_path");
+        $latte_cache = config("latte.cache_path");
+        $logs = config("paths.logs");
+        foreach (array_unique([$twig_cache, $latte_cache, $logs]) as $path) {
+            if (!file_exists($path)) {
+                mkdir($path);
+            }
+            chown($path, 'www-data');
+            $this->write("Permission fixed: $path");
+        }
     }
 
     protected function migrationCreate(

@@ -1,2 +1,0 @@
-#!/usr/bin/env bash
-npx tailwindcss -i ./public/assets/css/admin.css -o ./public/assets/dist/css/admin.css --watch

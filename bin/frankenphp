@@ -1,6 +1,0 @@
-#!/usr/bin/env bash
-
-docker run -v $PWD:/app \
-    -e CADDY_DEBUG=debug \
-    -p 80:80 -p 443:443 \
-    dunglas/frankenphp
