@@ -4,4 +4,3 @@ node_modules/
 .php-cs-fixer.cache
 .phpunit.cache
 /logs/nebula.log
-public/uploads/
