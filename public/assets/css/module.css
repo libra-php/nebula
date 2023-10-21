@@ -33,6 +33,9 @@
   width: 42px !important;
   height: 30px !important;
 }
+.form-row .control-textarea {
+  height: 300px;
+}
 
 
 /**

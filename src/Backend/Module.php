@@ -130,7 +130,7 @@ class Module
             "warning",
             "Oops! The requested record could not be found"
         );
-        echo $this->response(404, latte("backend/alert.latte", $this->commonData()))->send();
+        echo $this->indexPartial();
         exit();
     }
 
@@ -205,6 +205,8 @@ class Module
                 "Oops! A database error occurred"
             );
         }
+        echo $this->indexPartial();
+        exit();
     }
 
     public function store(): string
@@ -438,6 +440,7 @@ class Module
     protected function getEditData(string $id): array
     {
         $qb = $this->getEditQuery($id);
+        $data = null;
         try {
             $data = !is_null($qb)
                 ? db()
