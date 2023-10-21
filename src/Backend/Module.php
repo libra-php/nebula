@@ -22,6 +22,7 @@ class Module
     protected bool $create_view = true;
     protected array $form_columns = [];
     protected array $form_data = [];
+    protected string $file_accept = ".pdf, .doc, .docx, .jpg, .png";
     /** Controls **/
     protected array $form_controls = [];
     protected array $select_options = [];
@@ -56,7 +57,28 @@ class Module
 
     protected function processFormRequest()
     {
+    }
 
+    protected function handleUpload(string $id): bool
+    {
+        foreach (request()->files() as $column => $file) {
+            $timestamp = time();
+            $random = md5(uniqid());
+            $filename = $file['name'];
+            $extension = pathinfo($filename, PATHINFO_EXTENSION);
+            $new_filename = sprintf("%s_%s.%s", $timestamp, $random, $extension);
+            $uploads_path = config("paths.uploads");
+            $target_path = $uploads_path . $new_filename;
+            if (!file_exists($target_path) && move_uploaded_file($file['tmp_name'], $target_path)) {
+                $qb = QueryBuilder::update($this->table_name)
+                    ->columns([$column => $target_path])
+                    ->where(["id", $id]);
+                if (is_null(db()->run($qb->build(), $qb->values()))) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     protected function pagination(): void
@@ -71,7 +93,7 @@ class Module
 
     protected function search(): void
     {
-        $where = []; 
+        $where = [];
         if (request()->has('search') && trim(request()->search) != '') {
             $term = trim(request()->search);
             foreach ($this->search as $column) {
@@ -169,6 +191,22 @@ class Module
         );
     }
 
+    protected function handleDatabaseException(PDOException $ex)
+    {
+        if (config('app.debug')) {
+            Flash::addFlash(
+                "database",
+                $ex->getMessage()
+            );
+        } else {
+            logger('error', $ex->getMessage(), sprintf("%s[%s]", $ex->getFile(), $ex->getLine()));
+            Flash::addFlash(
+                "database",
+                "Oops! A database error occurred"
+            );
+        }
+    }
+
     public function store(): string
     {
         if ($this->validate($this->validation)) {
@@ -186,10 +224,7 @@ class Module
                     );
                 }
             } catch (PDOException $ex) {
-                Flash::addFlash(
-                    "database",
-                    "Oops! A database error occurred while creating new record"
-                );
+                $this->handleDatabaseException($ex);
             }
         }
         return $this->createPartial();
@@ -198,11 +233,15 @@ class Module
     public function update(string $id): string
     {
         if ($this->validate($this->validation)) {
+            $columns = array_filter(request()->data(), fn ($value, $key) => $this->form_controls[$key] !== 'upload', ARRAY_FILTER_USE_BOTH);
             $qb = QueryBuilder::update($this->table_name)
-                ->columns(request()->data())
+                ->columns($columns)
                 ->where(["id", $id]);
             try {
-                $result = db()->run($qb->build(), $qb->values());
+                $result = (bool)db()->run($qb->build(), $qb->values());
+                if (request()->files()) {
+                    $result &= $this->handleUpload($id);
+                }
                 if ($result) {
                     Flash::addFlash("success", "Record updated successfully");
                 } else {
@@ -212,10 +251,7 @@ class Module
                     );
                 }
             } catch (PDOException $ex) {
-                Flash::addFlash(
-                    "database",
-                    "Oops! A database error occurred while updating new record"
-                );
+                $this->handleDatabaseException($ex);
             }
         }
         return $this->editPartial($id);
@@ -235,10 +271,7 @@ class Module
                 );
             }
         } catch (PDOException $ex) {
-            Flash::addFlash(
-                "database",
-                "Oops! A database error occurred while deleting record"
-            );
+            $this->handleDatabaseException($ex);
         }
         return $this->indexPartial();
     }
@@ -281,21 +314,20 @@ class Module
 
     public function commonData(): array
     {
-        $route = function(string $route_name, ?string $id = null) {
+        $route = function (string $route_name, ?string $id = null) {
             return moduleRoute($route_name, $this->module_name, $id);
         };
-        $moduleRoute = function(string $route_name, string $module_name, ?string $id = null) {
+        $moduleRoute = function (string $route_name, string $module_name, ?string $id = null) {
             return moduleRoute($route_name, $module_name, $id);
         };
-        $gravatar = fn(string $str) => md5( strtolower( trim( $str ) ) );;
-        $singular = function(string $str) {
+        $gravatar = fn (string $str) => md5(strtolower(trim($str)));;
+        $singular = function (string $str) {
             return substr($str, -1) === 's'
                 ? rtrim($str, 's')
                 : $str;
         };
-        $dump = fn(string $stuff) => dump($stuff);
-        $request = fn(string $column) => request()->has($column) ? request()->$column : '';
-        $session = fn(string $column) => session()->has($column) ? session()->get($column) : '';
+        $request = fn (string $column) => request()->has($column) ? request()->$column : '';
+        $session = fn (string $column) => session()->has($column) ? session()->get($column) : '';
         return [
             "has_flash" => Flash::hasFlash(),
             "request" => $request,
@@ -310,12 +342,12 @@ class Module
         ];
     }
 
-    protected function formControls()
+    protected function formControls($id = null)
     {
-        $controls = function($name, $value, ...$args) {
+        $controls = function ($name, $value, ...$args) use ($id) {
             $fc = new FormControls();
             if (!isset($this->form_controls[$name])) {
-                return $fc->plain($name, $value); 
+                return $fc->plain($name, $value);
             }
             if (is_callable($this->form_controls[$name])) {
                 return $this->form_controls[$name]($name, $value, ...$args);
@@ -329,6 +361,7 @@ class Module
                 "select" => $fc->select($name, $value, isset($this->select_options[$name]) ? $this->select_options[$name] : []),
                 "number" => $fc->input($name, $value, 'number'),
                 "color" => $fc->input($name, $value, 'color'),
+                "upload" => $fc->file($name, $value, sprintf('accept="%s"', $this->file_accept)),
                 default => $fc->plain($name, $value),
             };
         };
@@ -349,7 +382,7 @@ class Module
             if ($this->page < 1) {
                 $this->page = 1;
             }
-             $this->offset = ($this->page - 1) * $this->limit;
+            $this->offset = ($this->page - 1) * $this->limit;
             $qb = $this->getIndexQuery();
             $data = db()->run($qb->build(), $qb->values())->fetchAll();
         }
@@ -365,12 +398,8 @@ class Module
         $this->processTableRequest();
         try {
             $data = $this->tableData();
-        } catch (PDOException) {
-            $data = [];
-            Flash::addFlash(
-                "database",
-                "Oops! A database error occurred while selecting record(s)"
-            );
+        } catch (PDOException $ex) {
+            $this->handleDatabaseException($ex);
         }
 
         return [
@@ -379,7 +408,6 @@ class Module
             "table" => [
                 "total_results" => $this->total_results,
                 "total_pages" => $this->total_pages,
-                "pagination_offset" => 4,
                 "page" => $this->page,
                 "data" => $data,
                 "columns" => $this->table_columns,
@@ -413,20 +441,16 @@ class Module
         try {
             $data = !is_null($qb)
                 ? db()
-                    ->run($qb->build(), $qb->values())
-                    ->fetch()
+                ->run($qb->build(), $qb->values())
+                ->fetch()
                 : [];
-        } catch (PDOException) {
-            $data = [];
-            Flash::addFlash(
-                "database",
-                "Oops! A database error occurred while selecting record(s)"
-            );
+        } catch (PDOException $ex) {
+            $this->handleDatabaseException($ex);
         }
         if (!$data) {
             $this->moduleNotFound();
         }
-        $fc = $this->formControls();
+        $fc = $this->formControls($id);
 
         return [
             ...$this->commonData(),

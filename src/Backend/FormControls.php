@@ -24,7 +24,7 @@ class FormControls
     public function select(string $name, ?string $value, array $options, ...$attrs): string
     {
         $attrs = implode(" ", $attrs);
-        if (is_object($options[0] ?? [])) {
+        if (isset($options[0]) && is_object($options[0])) {
             // Object (db query: id, name)
             $options = array_map(fn($option) => sprintf('<option value="%s" %s>%s</option>', $option->id, $value == $option->id ? 'selected' : '', htmlspecialchars($option->name)), array_values($options));
         } else {
@@ -34,14 +34,18 @@ class FormControls
         return sprintf('<select name="%s" class="form-select control-select" %s><option disabled>Please select an option</option>%s</select>', $name, $attrs, implode("", $options));
     }
 
-    public function image(string $name, ?string $value): string
+    public function file(string $name, ?string $value, ...$attrs): string
     {
-        return '';
-    }
-
-    public function file(string $name, ?string $value): string
-    {
-        return '';
+        $attrs = implode(" ", $attrs);
+        $control = sprintf('<input type="file" class="form-control control-file w-100" id="%s" name="%s" %s>', $name, $name, $attrs);
+        if ($value && file_exists($value)) {
+            $basename = basename($value);
+            $control .= "<div class='d-flex'>";
+            $control .= sprintf('<div class="d-flex mt-1 me-1"><a class="btn btn-sm btn-secondary" href="%s">View file</a></div>', "/uploads/$basename", $value, $value);
+            $control .= sprintf('<div class="d-flex mt-1"><a class="btn btn-sm btn-danger disabled" href="%s">Delete file</a></div>', "/uploads/$basename", $value, $value);
+            $control .= "</div>";
+        }
+        return $control;
     }
 
     public function checkbox(string $name, ?string $value): string

@@ -8,7 +8,7 @@
 	<div class="alerts" n:if="$has_flash">
 		{getFlashMessages()|noescape}
 	</div>
-	<form method="POST">
+	<form method="POST" hx-encoding="multipart/form-data">
 	{foreach $form['columns'] as $column => $title}
 		<div class="container-fluid d-flex form-row p-2 w-100">
 			<div class="label d-flex align-items-start justify-content-end pt-1 text-end">
@@ -25,7 +25,7 @@
 			</div>
 			<div class="control">
 				<div class="p-2">
-					<button type="button" class="btn btn-primary" hx-patch="{$route('module.update', $id)}" hx-target="#module" title="Update record">Update</button>
+					<button type="button" class="btn btn-primary" hx-post="{$route('module.update', $id)}" hx-target="#module" title="Update record">Update</button>
 					<a class="btn btn-secondary ms-1" href="{$route('module.index.part')}" hx-target="#module" hx-boost="true" title="Cancel">Cancel</a>
 				</div>
 			</div>

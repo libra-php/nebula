@@ -104,9 +104,9 @@ class ModuleController extends Controller
     }
 
     /**
-     * Update a module
+     * Update a module (using post for files)
      */
-    #[Patch("/{module}/{id}/update", "module.update", ["api"])]
+    #[Post("/{module}/{id}/update", "module.update", ["api"])]
     public function update(string $module, string $id)
     {
         return $this->module->update($id);

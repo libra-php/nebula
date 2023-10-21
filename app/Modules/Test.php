@@ -22,6 +22,7 @@ class Test extends Module
             "comment" => "Comment",
             "dropdown" => "Dropdown",
             "color" => "Colour",
+            "file" => "File",
         ];
 
         // Form valdiation columns / rules
@@ -39,6 +40,7 @@ class Test extends Module
             "comment" => "textarea",
             "dropdown" => "select",
             "color" => "color",
+            "file" => "upload",
         ];
 
         // The options for a select control

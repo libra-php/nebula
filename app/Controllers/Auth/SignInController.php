@@ -6,7 +6,7 @@ use App\Auth;
 use App\Models\User;
 use Nebula\Controller\Controller;
 use Nebula\Validation\Validate;
-use StellarRouter\{Get, Post, Group};
+use StellarRouter\{Get, Post, Put, Group};
 
 #[Group(prefix: "/admin")]
 final class SignInController extends Controller
