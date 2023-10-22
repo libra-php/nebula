@@ -22,7 +22,39 @@ class Module
     protected bool $create_view = true;
     protected array $form_columns = [];
     protected array $form_data = [];
-    protected array $file_extensions = [".pdf", ".doc", ".docx"];
+    protected array $file_extensions = [
+        ".txt",
+        ".pdf",
+        ".doc",
+        ".docx",
+        ".xls",
+        ".xlsx",
+        ".ppt",
+        ".pptx",
+        ".csv",
+        ".zip",
+        ".rar",
+        ".7z",
+        ".tar",
+        ".gz",
+        ".mp3",
+        ".wav",
+        ".mp4",
+        ".mov",
+        ".avi"
+    ];
+    protected array $image_extensions = [
+        ".jpg",
+        ".jpeg",
+        ".png",
+        ".gif",
+        ".bmp",
+        ".tif",
+        ".tiff",
+        ".webp",
+        ".svg",
+        ".ico",
+    ];
     /** Controls **/
     protected array $form_controls = [];
     protected array $select_options = [];
