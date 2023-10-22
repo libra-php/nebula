@@ -23,6 +23,7 @@ class Test extends Module
             "dropdown" => "Dropdown",
             "color" => "Colour",
             "file" => "File",
+            "image" => "Image",
         ];
 
         // Form valdiation columns / rules
@@ -41,6 +42,7 @@ class Test extends Module
             "dropdown" => "select",
             "color" => "color",
             "file" => "upload",
+            "image" => "image",
         ];
 
         // The options for a select control

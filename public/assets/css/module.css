@@ -36,6 +36,9 @@
 .form-row .control-textarea {
   height: 300px;
 }
+.form-row .control-image {
+  width: 200px;
+}
 .form-row .file-button {
   font-size: 1.1rem !important;
   padding:  2px 6px;
@@ -134,27 +137,6 @@
 #sidebar .nav-pills li.nav-item a {
   color: #aaa !important;
 }
-/** Sidebar Mobile */
-@media (max-width: 1199.98px) {
-  #sidebar #project-logo {
-    height: 40px;
-    width: 40px;
-  }
-  #sidebar li.nav-item a svg {
-    width: 24px;
-    height: 24px;
-  }
-  #sidebar #sidebar-links li.nav-item {
-    display: -moz-flex;
-    display: -webkit-flex;
-    display: -ms-flex;
-    display: flex;
-    -moz-justify-content: center;
-    -webkit-justify-content: center;
-    -ms--justify-content: center;
-    justify-content: center;
-  }
-}
 
 /**
  * Alerts
@@ -250,7 +232,27 @@
 @media (max-width: 767.98px) {}
 
 /* Medium devices (tablets, less than 992px) */
-@media (max-width: 991.98px) {}
+@media (max-width: 991.98px) {
+  #sidebar #project-logo {
+    height: 40px;
+    width: 40px;
+  }
+  #sidebar li.nav-item a svg {
+    width: 30px;
+    height: 30px;
+  }
+  #sidebar #sidebar-links li.nav-item {
+    display: -moz-flex;
+    display: -webkit-flex;
+    display: -ms-flex;
+    display: flex;
+    -moz-justify-content: center;
+    -webkit-justify-content: center;
+    -ms--justify-content: center;
+    justify-content: center;
+    margin-bottom: 15px;
+  }
+}
 
 /* Large devices (desktops, less than 1200px) */
 @media (max-width: 1199.98px) {}

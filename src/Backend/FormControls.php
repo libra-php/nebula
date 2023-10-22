@@ -4,6 +4,9 @@ namespace Nebula\Backend;
 
 class FormControls
 {
+    public function __construct(private ?string $id)
+    {}
+
     public function plain(string $name, ?string $value): string
     {
         return sprintf(
@@ -93,15 +96,18 @@ class FormControls
         );
         if ($value && file_exists($value)) {
             $basename = basename($value);
-            $control .= "<div class='d-flex align-items-center p-1'>";
+            $public_uploads = config("paths.public_uploads");
+            $path = sprintf("%s/%s", $public_uploads, $basename);
+            $control .= "<div class='d-flex align-items-center control-file p-1'>";
             $control .= sprintf(
-                '<label class="truncate" width="25" for="%s">%s</label>',
+                '<label title="%s" class="truncate" width="25" for="%s">%s</label>',
+                $basename,
                 $name,
                 $basename
             );
             $control .= sprintf(
                 '<div class="d-flex ms-2"><a title="View" class="btn btn-sm btn-outline-info file-button" href="%s">&#128065;</a></div>',
-                "/uploads/$basename",
+                $path,
                 $value,
                 $value
             );
@@ -112,6 +118,19 @@ class FormControls
             );
             $control .= "</div>";
         }
+        return $control;
+    }
+
+    public function image(string $name, ?string $value, ...$attrs): string
+    {
+        $control = '';
+        if ($value && file_exists($value)) {
+            $basename = basename($value);
+            $public_uploads = config("paths.public_uploads");
+            $path = sprintf("%s/%s", $public_uploads, $basename);
+            $control .= sprintf('<img title="%s" src="%s" class="control-image mb-1 rounded-3 border-1 border-secondary" alt="img" />', $basename, $path);
+        }
+        $control .= $this->file($name, $value, ...$attrs);
         return $control;
     }
 

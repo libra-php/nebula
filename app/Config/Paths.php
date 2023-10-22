@@ -12,4 +12,5 @@ return [
     "config" => $app_root . "app/Config/",
     "modules" => $app_root . "app/Modules/",
     "uploads" => $app_root . "public/uploads/",
+    "public_uploads" => "/uploads",
 ];

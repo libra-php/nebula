@@ -290,7 +290,7 @@ class Module
 
     protected function getFilteredFormColumns(): array
     {
-        $filtered_controls = ["upload"];
+        $filtered_controls = ["upload", "image"];
         return array_filter(
             request()->data(),
             fn($value, $key) => $key != "csrf_token" &&
@@ -446,7 +446,7 @@ class Module
     protected function formControls($id = null)
     {
         $controls = function ($name, $value, ...$args) use ($id) {
-            $fc = new FormControls();
+            $fc = new FormControls($id);
             if (!isset($this->form_controls[$name])) {
                 return $fc->plain($name, $value);
             }
@@ -481,6 +481,7 @@ class Module
                         implode(", ", $this->file_extensions)
                     )
                 ),
+                "image" => $fc->image($name, $value, sprintf('accept="%s"', implode(", ", $this->image_extensions))),
                 default => $fc->plain($name, $value),
             };
         };
