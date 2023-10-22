@@ -22,7 +22,7 @@ class Module
     protected bool $create_view = true;
     protected array $form_columns = [];
     protected array $form_data = [];
-    protected string $file_accept = ".pdf, .doc, .docx, .jpg, .png";
+    protected array $file_extensions = [".pdf", ".doc", ".docx"];
     /** Controls **/
     protected array $form_controls = [];
     protected array $select_options = [];
@@ -402,7 +402,7 @@ class Module
                 "select" => $fc->select($name, $value, isset($this->select_options[$name]) ? $this->select_options[$name] : []),
                 "number" => $fc->input($name, $value, 'number'),
                 "color" => $fc->input($name, $value, 'color'),
-                "upload" => $fc->file($name, $value, sprintf('accept="%s"', $this->file_accept)),
+                "upload" => $fc->file($name, $value, sprintf('accept="%s"', implode(", ", $this->file_extensions))),
                 default => $fc->plain($name, $value),
             };
         };
