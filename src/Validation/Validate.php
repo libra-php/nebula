@@ -11,7 +11,7 @@ class Validate
      */
     public static $messages = [
         "string" => "%label must be a string",
-        "numeric" => "%label must be a number",
+        "numeric" => "%label must be numeric",
         "email" => "You must supply a valid email address",
         "required" => "%label is a required field",
         "match" => "%label does not match",
