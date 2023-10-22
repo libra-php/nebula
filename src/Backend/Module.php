@@ -136,7 +136,7 @@ class Module
     protected function deleteColumnFile($column, $id)
     {
         $row = db()->select("SELECT $column FROM $this->table_name WHERE id = ?", $id);
-        if ($row->$column && file_exists($row->$column)) {
+        if ($row && !is_null($row->$column) && trim($row->$column) != '' && file_exists($row->$column)) {
             unlink($row->$column);
         }
     }
