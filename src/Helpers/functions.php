@@ -108,20 +108,36 @@ function redirectRoute(string $name, int $code = 301, int $delay = 0): never
     }
 }
 
-function moduleRoute(string $route_name, string $module_name, ?string $id = null) {
+function moduleRoute(
+    string $route_name,
+    string $module_name,
+    ?string $id = null
+) {
     $path = route($route_name);
     $path = str_replace("{module}", $module_name, $path);
-    $path = str_replace("{id}", $id ?? '', $path);
+    $path = str_replace("{id}", $id ?? "", $path);
     return $path;
 }
 
-function redirectModule(string $route_name, string $module_name, ?string $id = null, ?string $source = null, ?string $target = null)
-{
+function redirectModule(
+    string $route_name,
+    string $module_name,
+    ?string $id = null,
+    ?string $source = null,
+    ?string $target = null
+) {
     $route_path = moduleRoute($route_name, $module_name, $id);
     if ($source && $target) {
-        header('HX-Location: {"path":"'.$route_path.'", "source":"'.$source.'", "target":"'.$target.'"}');
+        header(
+            'HX-Location: {"path":"' .
+                $route_path .
+                '", "source":"' .
+                $source .
+                '", "target":"' .
+                $target .
+                '"}'
+        );
     } else {
-
         header("HX-Location: $route_path");
     }
 }

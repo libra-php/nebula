@@ -29,12 +29,11 @@ class PushUrl implements Middleware
                 $params = $request->route->getParameters();
                 $uri = $this->moduleRoute(...$params);
 
-                 // Append the query parameters to the URL
+                // Append the query parameters to the URL
                 $query = http_build_query($request->query());
                 if (!empty($query)) {
-                    $uri .= '?' . $query;
+                    $uri .= "?" . $query;
                 }
-
 
                 if ($request->route->getName() === "module.create.part") {
                     $uri .= "/create";
@@ -44,7 +43,7 @@ class PushUrl implements Middleware
 
                 $query = http_build_query($request->query());
                 if (!empty($query)) {
-                    $uri .= '?' . $query;
+                    $uri .= "?" . $query;
                 }
             }
             $response->setHeader("HX-Push-Url", $uri);

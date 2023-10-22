@@ -231,9 +231,12 @@ class QueryBuilder implements QueryBuilderInterface
         };
         if ($this->mode === "select") {
             if (!empty($this->columns)) {
-                $select_stmt = implode(", ", array_map(function ($value) {
-                    return "`$value`";
-                }, $this->columns));
+                $select_stmt = implode(
+                    ", ",
+                    array_map(function ($value) {
+                        return "`$value`";
+                    }, $this->columns)
+                );
                 $sql = str_replace("*", $select_stmt, $sql);
             }
             if (!empty($this->where)) {
@@ -243,7 +246,7 @@ class QueryBuilder implements QueryBuilderInterface
             if (!empty($this->group_by)) {
                 $group_by_clause = $this->mapToString(
                     $this->group_by,
-                    fn ($column) => $column,
+                    fn($column) => $column,
                     ", "
                 );
                 $sql .= "GROUP BY $group_by_clause ";
@@ -256,7 +259,7 @@ class QueryBuilder implements QueryBuilderInterface
                 $order_by_clause = implode(
                     ", ",
                     array_map(
-                        fn ($key, $value) => "$key $value",
+                        fn($key, $value) => "$key $value",
                         array_keys($this->order_by),
                         array_values($this->order_by)
                     )
@@ -273,7 +276,7 @@ class QueryBuilder implements QueryBuilderInterface
             if (!empty($this->columns)) {
                 $columns = $this->mapToString(
                     array_keys($this->columns),
-                    fn ($key) => "$key = ?",
+                    fn($key) => "$key = ?",
                     ", "
                 );
                 $sql .= "$columns ";

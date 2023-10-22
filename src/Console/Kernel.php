@@ -23,7 +23,8 @@ class Kernel implements ConsoleKernel
         ],
         "long" => [
             "help" => "Print help and exit.",
-            "fix-permissions" => "Automatically fix permissions on directories.",
+            "fix-permissions" =>
+                "Automatically fix permissions on directories.",
             "migration-table:" =>
                 "Create new table migration. Usage: --migration-table=<table_name>",
             "migration-create:" =>
@@ -140,7 +141,7 @@ EOT;
             if (!file_exists($path)) {
                 mkdir($path);
             }
-            chown($path, 'www-data');
+            chown($path, "www-data");
             $this->write("Permission fixed: $path");
         }
     }

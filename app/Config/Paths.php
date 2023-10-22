@@ -11,5 +11,5 @@ return [
     "migrations" => $app_root . "migrations/",
     "config" => $app_root . "app/Config/",
     "modules" => $app_root . "app/Modules/",
-    "uploads" => $app_root . "public/uploads/"
+    "uploads" => $app_root . "public/uploads/",
 ];

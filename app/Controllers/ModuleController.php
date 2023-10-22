@@ -45,7 +45,7 @@ class ModuleController extends Controller
      */
     private function moduleNotFound(): never
     {
-        $module = new Module('error');
+        $module = new Module("error");
         $module->moduleNotFound();
     }
 

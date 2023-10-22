@@ -45,7 +45,7 @@ class Test extends Module
 
         // The options for a select control
         $this->select_options = [
-            // The select control can be provided by 
+            // The select control can be provided by
             // a query with attributes id & name
             "dropdown" => db()->selectAll("SELECT id, name FROM animals"),
             // Or an array
@@ -53,11 +53,7 @@ class Test extends Module
         ];
 
         // Searchable columns
-        $this->search = [
-            "number",
-            "name",
-            "comment"
-        ];
+        $this->search = ["number", "name", "comment"];
 
         parent::__construct("test", "test");
     }

@@ -27,7 +27,7 @@ class Flash
     public static function hasFlash(): bool
     {
         $flash = session()->get("flash");
-        return $flash && !empty($flash); 
+        return $flash && !empty($flash);
     }
 
     public static function hasStatus($status): bool

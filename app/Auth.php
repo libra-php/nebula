@@ -71,7 +71,7 @@ class Auth
     public static function getUser()
     {
         $uuid = session()->get("user");
-        return User::search(['uuid', $uuid]);
+        return User::search(["uuid", $uuid]);
     }
 
     public static function signIn(User $user)

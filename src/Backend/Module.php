@@ -41,7 +41,7 @@ class Module
         ".wav",
         ".mp4",
         ".mov",
-        ".avi"
+        ".avi",
     ];
     protected array $image_extensions = [
         ".jpg",
@@ -97,12 +97,20 @@ class Module
         foreach (request()->files() as $column => $file) {
             $timestamp = time();
             $random = md5(uniqid());
-            $filename = $file['name'];
+            $filename = $file["name"];
             $extension = pathinfo($filename, PATHINFO_EXTENSION);
-            $new_filename = sprintf("%s_%s.%s", $timestamp, $random, $extension);
+            $new_filename = sprintf(
+                "%s_%s.%s",
+                $timestamp,
+                $random,
+                $extension
+            );
             $uploads_path = config("paths.uploads");
             $target_path = $uploads_path . $new_filename;
-            if (!file_exists($target_path) && move_uploaded_file($file['tmp_name'], $target_path)) {
+            if (
+                !file_exists($target_path) &&
+                move_uploaded_file($file["tmp_name"], $target_path)
+            ) {
                 $this->deleteColumnFile($column, $id);
                 $qb = QueryBuilder::update($this->table_name)
                     ->columns([$column => $target_path])
@@ -135,8 +143,16 @@ class Module
 
     protected function deleteColumnFile($column, $id)
     {
-        $row = db()->select("SELECT $column FROM $this->table_name WHERE id = ?", $id);
-        if ($row && !is_null($row->$column) && trim($row->$column) != '' && file_exists($row->$column)) {
+        $row = db()->select(
+            "SELECT $column FROM $this->table_name WHERE id = ?",
+            $id
+        );
+        if (
+            $row &&
+            !is_null($row->$column) &&
+            trim($row->$column) != "" &&
+            file_exists($row->$column)
+        ) {
             unlink($row->$column);
         }
     }
@@ -145,7 +161,10 @@ class Module
     {
         $page = $this->page;
         if (request()->has("page")) {
-            session()->set($this->module_name . "_page", intval(request()->page));
+            session()->set(
+                $this->module_name . "_page",
+                intval(request()->page)
+            );
         }
 
         $this->page = session()->get($this->module_name . "_page") ?? $page;
@@ -154,16 +173,18 @@ class Module
     protected function search(): void
     {
         $where = [];
-        if (request()->has('search') && trim(request()->search) != '') {
+        if (request()->has("search") && trim(request()->search) != "") {
             $term = trim(request()->search);
             foreach ($this->search as $column) {
                 // Search where column like search term
                 $where[] = "($column LIKE '$term%')";
             }
             session()->set($this->module_name . "_term", $term);
-            session()->set($this->module_name . "_search", [implode(" OR ", $where)]);
+            session()->set($this->module_name . "_search", [
+                implode(" OR ", $where),
+            ]);
             session()->set($this->module_name . "_page", 1);
-        } else if (request()->has('search') && trim(request()->search) == '') {
+        } elseif (request()->has("search") && trim(request()->search) == "") {
             session()->remove($this->module_name . "_term");
             session()->remove($this->module_name . "_search");
             session()->remove($this->module_name . "_page");
@@ -253,17 +274,15 @@ class Module
 
     protected function handleDatabaseException(PDOException $ex)
     {
-        if (config('app.debug')) {
-            Flash::addFlash(
-                "database",
-                $ex->getMessage()
-            );
+        if (config("app.debug")) {
+            Flash::addFlash("database", $ex->getMessage());
         } else {
-            logger('error', $ex->getMessage(), sprintf("%s[%s]", $ex->getFile(), $ex->getLine()));
-            Flash::addFlash(
-                "database",
-                "Oops! A database error occurred"
+            logger(
+                "error",
+                $ex->getMessage(),
+                sprintf("%s[%s]", $ex->getFile(), $ex->getLine())
             );
+            Flash::addFlash("database", "Oops! A database error occurred");
         }
         echo $this->indexPartial();
         exit();
@@ -272,18 +291,21 @@ class Module
     protected function getFilteredFormColumns(): array
     {
         $filtered_controls = ["upload"];
-        return array_filter(request()->data(), fn ($value, $key) => $key != 'csrf_token' && !in_array($this->form_controls[$key], $filtered_controls), ARRAY_FILTER_USE_BOTH);
+        return array_filter(
+            request()->data(),
+            fn($value, $key) => $key != "csrf_token" &&
+                !in_array($this->form_controls[$key], $filtered_controls),
+            ARRAY_FILTER_USE_BOTH
+        );
     }
 
     public function store(): string
     {
         if ($this->validate($this->validation)) {
             $columns = $this->getFilteredFormColumns();
-            $qb = QueryBuilder::insert($this->table_name)->columns(
-                $columns
-            );
+            $qb = QueryBuilder::insert($this->table_name)->columns($columns);
             try {
-                $result = (bool)db()->run($qb->build(), $qb->values());
+                $result = (bool) db()->run($qb->build(), $qb->values());
                 $id = db()->lastInsertId();
                 if (request()->files()) {
                     $result &= $this->handleUpload($id);
@@ -311,7 +333,7 @@ class Module
                 ->columns($columns)
                 ->where(["id", $id]);
             try {
-                $result = (bool)db()->run($qb->build(), $qb->values());
+                $result = (bool) db()->run($qb->build(), $qb->values());
                 if (request()->files()) {
                     $result &= $this->handleUpload($id);
                 }
@@ -390,17 +412,23 @@ class Module
         $route = function (string $route_name, ?string $id = null) {
             return moduleRoute($route_name, $this->module_name, $id);
         };
-        $moduleRoute = function (string $route_name, string $module_name, ?string $id = null) {
+        $moduleRoute = function (
+            string $route_name,
+            string $module_name,
+            ?string $id = null
+        ) {
             return moduleRoute($route_name, $module_name, $id);
         };
-        $gravatar = fn (string $str) => md5(strtolower(trim($str)));;
+        $gravatar = fn(string $str) => md5(strtolower(trim($str)));
         $singular = function (string $str) {
-            return substr($str, -1) === 's'
-                ? rtrim($str, 's')
-                : $str;
+            return substr($str, -1) === "s" ? rtrim($str, "s") : $str;
         };
-        $request = fn (string $column) => request()->has($column) ? request()->$column : '';
-        $session = fn (string $column) => session()->has($column) ? session()->get($column) : '';
+        $request = fn(string $column) => request()->has($column)
+            ? request()->$column
+            : "";
+        $session = fn(string $column) => session()->has($column)
+            ? session()->get($column)
+            : "";
         return [
             "has_flash" => Flash::hasFlash(),
             "request" => $request,
@@ -426,15 +454,33 @@ class Module
                 return $this->form_controls[$name]($name, $value, ...$args);
             }
             return match ($this->form_controls[$name]) {
-                "text" => $fc->input($name, $value, 'text'),
+                "text" => $fc->input($name, $value, "text"),
                 "textarea" => $fc->textarea($name, $value),
-                "disabled" => $fc->input($name, $value, 'text', 'disabled=true'),
-                "readonly" => $fc->input($name, $value, 'text', 'readonly'),
+                "disabled" => $fc->input(
+                    $name,
+                    $value,
+                    "text",
+                    "disabled=true"
+                ),
+                "readonly" => $fc->input($name, $value, "text", "readonly"),
                 "plain" => $fc->plain($name, $value),
-                "select" => $fc->select($name, $value, isset($this->select_options[$name]) ? $this->select_options[$name] : []),
-                "number" => $fc->input($name, $value, 'number'),
-                "color" => $fc->input($name, $value, 'color'),
-                "upload" => $fc->file($name, $value, sprintf('accept="%s"', implode(", ", $this->file_extensions))),
+                "select" => $fc->select(
+                    $name,
+                    $value,
+                    isset($this->select_options[$name])
+                        ? $this->select_options[$name]
+                        : []
+                ),
+                "number" => $fc->input($name, $value, "number"),
+                "color" => $fc->input($name, $value, "color"),
+                "upload" => $fc->file(
+                    $name,
+                    $value,
+                    sprintf(
+                        'accept="%s"',
+                        implode(", ", $this->file_extensions)
+                    )
+                ),
                 default => $fc->plain($name, $value),
             };
         };
@@ -457,11 +503,12 @@ class Module
             }
             $this->offset = ($this->page - 1) * $this->limit;
             $qb = $this->getIndexQuery();
-            $data = db()->run($qb->build(), $qb->values())->fetchAll();
+            $data = db()
+                ->run($qb->build(), $qb->values())
+                ->fetchAll();
         }
         return $data;
     }
-
 
     /**
      * @return array<string,mixed>
@@ -517,8 +564,8 @@ class Module
         try {
             $data = !is_null($qb)
                 ? db()
-                ->run($qb->build(), $qb->values())
-                ->fetch()
+                    ->run($qb->build(), $qb->values())
+                    ->fetch()
                 : [];
         } catch (PDOException $ex) {
             $this->handleDatabaseException($ex);
