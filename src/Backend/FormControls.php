@@ -40,9 +40,10 @@ class FormControls
         $control = sprintf('<input type="file" class="form-control control-file w-100" id="%s" name="%s" %s>', $name, $name, $attrs);
         if ($value && file_exists($value)) {
             $basename = basename($value);
-            $control .= "<div class='d-flex'>";
-            $control .= sprintf('<div class="d-flex mt-1 me-1"><a class="btn btn-sm btn-secondary" href="%s">View file</a></div>', "/uploads/$basename", $value, $value);
-            $control .= sprintf('<div class="d-flex mt-1"><a class="btn btn-sm btn-danger disabled" href="%s">Delete file</a></div>', "/uploads/$basename", $value, $value);
+            $control .= "<div class='d-flex align-items-center'>";
+            $control .= sprintf('<label class="truncate" width="25" for="%s">%s</label>', $name, $basename);
+            $control .= sprintf('<div class="d-flex ms-2"><a class="btn btn-sm btn-info p-0 m-0" href="%s">&#128065;</a></div>', "/uploads/$basename", $value, $value);
+            $control .= sprintf('<div class="d-flex ms-2"><button type="submit" class="btn btn-sm btn-danger p-0 m-0" name="delete_file" value="%s" hx-confirm="Are you sure you want to delete this file?" hx-post="%s" hx-target="#module">&#8855;</button></div>', $name, "");
             $control .= "</div>";
         }
         return $control;

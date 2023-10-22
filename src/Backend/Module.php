@@ -55,8 +55,9 @@ class Module
         $this->search();
     }
 
-    protected function processFormRequest()
+    protected function processFormRequest(?string $id = null)
     {
+        $this->handleDeleteFile($id);
     }
 
     protected function handleUpload(string $id): bool
@@ -70,6 +71,7 @@ class Module
             $uploads_path = config("paths.uploads");
             $target_path = $uploads_path . $new_filename;
             if (!file_exists($target_path) && move_uploaded_file($file['tmp_name'], $target_path)) {
+                $this->deleteColumnFile($column, $id);
                 $qb = QueryBuilder::update($this->table_name)
                     ->columns([$column => $target_path])
                     ->where(["id", $id]);
@@ -79,6 +81,32 @@ class Module
             }
         }
         return true;
+    }
+
+    protected function handleDeleteFile(string $id)
+    {
+        if (request()->has("delete_file")) {
+            $column = request()->delete_file;
+            $this->deleteColumnFile($column, $id);
+            $qb = QueryBuilder::update($this->table_name)
+                ->columns([$column => null])
+                ->where(["id", $id]);
+            if (is_null(db()->run($qb->build(), $qb->values()))) {
+                Flash::addFlash(
+                    "danger",
+                    "Oops! An unknown issue occurred while deleting file"
+                );
+            }
+            redirectModule("module.edit", $this->module_name, $id);
+        }
+    }
+
+    protected function deleteColumnFile($column, $id)
+    {
+        $row = db()->select("SELECT $column FROM $this->table_name WHERE id = ?", $id);
+        if ($row->$column && file_exists($row->$column)) {
+            unlink($row->$column);
+        }
     }
 
     protected function pagination(): void
@@ -235,7 +263,8 @@ class Module
     public function update(string $id): string
     {
         if ($this->validate($this->validation)) {
-            $columns = array_filter(request()->data(), fn ($value, $key) => $this->form_controls[$key] !== 'upload', ARRAY_FILTER_USE_BOTH);
+            $filtered_controls = ["upload"];
+            $columns = array_filter(request()->data(), fn ($value, $key) => $key != 'csrf_token' && !in_array($this->form_controls[$key], $filtered_controls), ARRAY_FILTER_USE_BOTH);
             $qb = QueryBuilder::update($this->table_name)
                 ->columns($columns)
                 ->where(["id", $id]);
@@ -423,6 +452,7 @@ class Module
      */
     protected function getCreateData(): array
     {
+        $this->processFormRequest();
         $fc = $this->formControls();
         return [
             ...$this->commonData(),
@@ -439,6 +469,7 @@ class Module
      */
     protected function getEditData(string $id): array
     {
+        $this->processFormRequest($id);
         $qb = $this->getEditQuery($id);
         $data = null;
         try {

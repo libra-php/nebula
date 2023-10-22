@@ -52,6 +52,7 @@ class ModuleController extends Controller
     /**
      * Table view
      */
+    #[Post("/{module}", "module.index.post")]
     #[Get("/{module}", "module.index", ["push-url"])]
     public function index(string $module)
     {
@@ -67,6 +68,7 @@ class ModuleController extends Controller
     /**
      * Show create module form
      */
+    #[Post("/{module}/create", "module.create.post")]
     #[Get("/{module}/create", "module.create", ["push-url"])]
     public function create(string $module)
     {
@@ -82,6 +84,7 @@ class ModuleController extends Controller
     /**
      * Show module edit form
      */
+    #[Post("/{module}/{id}/edit", "module.edit.post")]
     #[Get("/{module}/{id}/edit", "module.edit", ["push-url"])]
     public function edit(string $module, string $id)
     {
