@@ -8,12 +8,12 @@
 	<div class="alerts" n:if="$has_flash">
 		{getFlashMessages()|noescape}
 	</div>
-	<form method="POST">
-    {csrf()|noescape}
+	<form method="POST" hx-encoding="multipart/form-data">
+	{csrf()|noescape}
 	{foreach $form['columns'] as $column => $title}
 		<div class="container-fluid d-flex form-row p-2 w-100">
 			<div class="label d-flex align-items-start justify-content-end pt-1 text-end">
-				<label for="{$column}" $class="form-label truncate" title="{$title}"><strong>{$title}</strong></label>
+				<label for="{$column}" class="form-label truncate" title="{$title}"><strong>{$title}</strong></label>
 			</div>
 			<div class="control ms-2 w-100">
 				{$controls($column, '')|noescape}
@@ -32,4 +32,5 @@
 			</div>
 		</div>
 	</form>
+</section>
 {/block}

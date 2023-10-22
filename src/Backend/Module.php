@@ -83,7 +83,7 @@ class Module
         return true;
     }
 
-    protected function handleDeleteFile(string $id)
+    protected function handleDeleteFile(?string $id)
     {
         if (request()->has("delete_file")) {
             $column = request()->delete_file;
@@ -237,14 +237,25 @@ class Module
         exit();
     }
 
+    protected function getFilteredFormColumns(): array
+    {
+        $filtered_controls = ["upload"];
+        return array_filter(request()->data(), fn ($value, $key) => $key != 'csrf_token' && !in_array($this->form_controls[$key], $filtered_controls), ARRAY_FILTER_USE_BOTH);
+    }
+
     public function store(): string
     {
         if ($this->validate($this->validation)) {
+            $columns = $this->getFilteredFormColumns();
             $qb = QueryBuilder::insert($this->table_name)->columns(
-                request()->data()
+                $columns
             );
             try {
-                $result = db()->run($qb->build(), $qb->values());
+                $result = (bool)db()->run($qb->build(), $qb->values());
+                $id = db()->lastInsertId();
+                if (request()->files()) {
+                    $result &= $this->handleUpload($id);
+                }
                 if ($result) {
                     Flash::addFlash("success", "Record created successfully");
                 } else {
@@ -263,8 +274,7 @@ class Module
     public function update(string $id): string
     {
         if ($this->validate($this->validation)) {
-            $filtered_controls = ["upload"];
-            $columns = array_filter(request()->data(), fn ($value, $key) => $key != 'csrf_token' && !in_array($this->form_controls[$key], $filtered_controls), ARRAY_FILTER_USE_BOTH);
+            $columns = $this->getFilteredFormColumns();
             $qb = QueryBuilder::update($this->table_name)
                 ->columns($columns)
                 ->where(["id", $id]);

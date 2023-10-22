@@ -9,7 +9,7 @@
 		{getFlashMessages()|noescape}
 	</div>
 	<form method="POST" hx-encoding="multipart/form-data">
-    {csrf()|noescape}
+	{csrf()|noescape}
 	{foreach $form['columns'] as $column => $title}
 		<div class="container-fluid d-flex form-row p-2 w-100">
 			<div class="label d-flex align-items-start justify-content-end pt-1 text-end">
@@ -25,7 +25,7 @@
 			<div class="label d-flex align-items-start justify-content-end pt-1 text-end">
 			</div>
 			<div class="control">
-				<div class="p-2">
+				<div class="p-2 d-flex">
 					<button type="button" class="btn btn-primary" hx-post="{$route('module.update', $id)}" hx-target="#module" title="Update record">Update</button>
 					<a class="btn btn-secondary ms-1" href="{$route('module.index.part')}" hx-target="#module" hx-boost="true" title="Cancel">Cancel</a>
 				</div>
