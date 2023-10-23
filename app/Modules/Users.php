@@ -27,8 +27,8 @@ class Users extends Module
         ];
 
         $this->form_controls = [
-            "name" => "readonly",
-            "email" => "readonly",
+            "name" => "disabled",
+            "email" => "disabled",
         ];
 
         parent::__construct("users", "users");

@@ -24,6 +24,8 @@ class Test extends Module
             "color" => "Colour",
             "file" => "File",
             "image" => "Image",
+            "checkbox" => "Checkbox",
+            "switch" => "Switch",
         ];
 
         // Form valdiation columns / rules
@@ -37,12 +39,14 @@ class Test extends Module
         // Edit / Create view controls
         $this->form_controls = [
             "number" => "number",
-            "name" => "text",
+            "name" => "input",
             "comment" => "textarea",
             "dropdown" => "select",
             "color" => "color",
             "file" => "upload",
             "image" => "image",
+            "checkbox" => "checkbox",
+            "switch" => "switch",
         ];
 
         // The options for a select control

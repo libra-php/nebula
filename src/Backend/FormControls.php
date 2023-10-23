@@ -19,13 +19,15 @@ class FormControls
     public function input(
         string $name,
         ?string $value,
-        $type = "text",
+        string $type = "text",
+        string $class = "form-control w-100",
         ...$attrs
     ): string {
         $attrs = implode(" ", $attrs);
         return sprintf(
-            '<input type="%s" class="form-control control-%s w-100" id="%s" name="%s" value="%s" placeholder="..." %s>',
+            '<input type="%s" class="%s control-%s" id="%s" name="%s" value="%s" placeholder="..." %s>',
             $type,
+            $class,
             $type,
             $name,
             $name,
@@ -134,14 +136,20 @@ class FormControls
         return $control;
     }
 
-    public function checkbox(string $name, ?string $value): string
+    public function checkbox(string $name, ?string $value, ...$attrs): string
     {
-        return "";
+        $hidden = $this->input($name, $value, "hidden");
+        $checked = intval($value) ? "checked" : '';
+        $checkbox = $this->input('', '', "checkbox", "form-check-input", $checked);
+        return $hidden.$checkbox;
     }
 
     public function switch(string $name, ?string $value): string
     {
-        return "";
+        $hidden = $this->input($name, $value, "hidden");
+        $checked = intval($value) ? "checked" : '';
+        $checkbox = $this->input('', '', "checkbox", "form-check-input", $checked);
+        return sprintf("<div class='form-check form-switch'>%s</div>", $hidden.$checkbox);
     }
 
     public function range(string $name, ?string $value): string

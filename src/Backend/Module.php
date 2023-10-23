@@ -454,15 +454,15 @@ class Module
                 return $this->form_controls[$name]($name, $value, ...$args);
             }
             return match ($this->form_controls[$name]) {
-                "text" => $fc->input($name, $value, "text"),
+                "input" => $fc->input($name, $value, "text"),
                 "textarea" => $fc->textarea($name, $value),
                 "disabled" => $fc->input(
                     $name,
                     $value,
                     "text",
-                    "disabled=true"
+                    attrs: "disabled=true"
                 ),
-                "readonly" => $fc->input($name, $value, "text", "readonly"),
+                "readonly" => $fc->input($name, $value, "text", attrs: "readonly"),
                 "plain" => $fc->plain($name, $value),
                 "select" => $fc->select(
                     $name,
@@ -482,6 +482,8 @@ class Module
                     )
                 ),
                 "image" => $fc->image($name, $value, sprintf('accept="%s"', implode(", ", $this->image_extensions))),
+                "checkbox" => $fc->checkbox($name, $value),
+                "switch" => $fc->switch($name, $value),
                 default => $fc->plain($name, $value),
             };
         };
