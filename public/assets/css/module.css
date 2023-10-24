@@ -23,8 +23,13 @@
 #edit form, #create form {
   margin-top: 20px;
 }
+.form-row {
+  margin-bottom: 10px;
+}
 .form-row .label {
-  width: 100px;
+  color: #555;
+  padding-top: 2px;
+  min-width: 100px;
 }
 .form-row .control {
   max-width: 320px !important;
@@ -37,11 +42,14 @@
   height: 300px;
 }
 .form-row .control-image {
-  width: 200px;
+  max-width: 245px;
 }
 .form-row .file-button {
   font-size: 1.1rem !important;
   padding:  2px 6px;
+}
+.form-row .file-label {
+  max-width: 150px;
 }
 
 

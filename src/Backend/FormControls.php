@@ -102,7 +102,7 @@ class FormControls
             $path = sprintf("%s/%s", $public_uploads, $basename);
             $control .= "<div class='d-flex align-items-center control-file p-1'>";
             $control .= sprintf(
-                '<label title="%s" class="truncate" width="25" for="%s">%s</label>',
+                '<label title="%s" class="truncate file-label" for="%s">%s</label>',
                 $basename,
                 $name,
                 $basename
