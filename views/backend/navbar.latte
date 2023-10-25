@@ -1,0 +1,55 @@
+<nav id="navbar" class="navbar navbar-expand navbar-dark bg-dark d-block d-sm-none" aria-label="Second navbar example"
+	hx-boost="true">
+	<div class="container-fluid">
+		<div class="dropdown">
+			<a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
+				id="user-dropdown" data-bs-toggle="dropdown" aria-expanded="false">
+				<div id="user" class="d-flex truncate">
+					<img id="project-logo" src="https://www.gravatar.com/avatar/{$gravatar($user->email)}" alt="avatar"
+						class="rounded-3 me-2" />
+					<span class="d-none d-lg-block truncate"><strong>{$user->name}</strong></span>
+				</div>
+			</a>
+			<ul class="dropdown-menu text-small shadow p-2" aria-labelledby="user-dropdown">
+				<li class="nav-item">
+					<div class="d-flex justify-content-center align-items-center text-nowrap">
+						<i data-feather="user" height="18" width="18" />
+						<h5 class="m-0 ms-2">{$user->name}</h5>
+					</div>
+				</li>
+				<li class="nav-item">
+					<hr class="dropdown-divider">
+				</li>
+				<li class="nav-item" title="Home">
+					<a href="{$moduleRoute('module.index.part', 'home')}"
+						class="nav-link d-flex align-items-center" hx-target="#module">
+						<i data-feather="home" /><span class="ps-2">Home</span>
+					</a>
+				</li>
+				<li class="nav-item" title="Users">
+					<a href="{$moduleRoute('module.index.part', 'users')}"
+						class="nav-link d-flex align-items-center" hx-target="#module">
+						<i data-feather="users" /><span class="ps-2">Users</span>
+					</a>
+				</li>
+				<li class="nav-item" title="Test">
+					<a href="{$moduleRoute('module.index.part', 'test')}"
+						class="nav-link d-flex align-items-center" hx-target="#module">
+						<i data-feather="package" /><span class="ps-2">Test</span>
+					</a>
+				</li>
+				<li class="nav-item">
+					<hr class="dropdown-divider">
+				</li>
+				<li class="nav-item">
+					<a class="dropdown-item disabled" href="#"><i data-feather="edit-2" /> Profile</a>
+				</li>
+				<li class="nav-item">
+					<a class="dropdown-item" href="{$route('sign-out.index')}" hx-target="body"><i
+							data-feather="log-out" /> Sign
+						out</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</nav>

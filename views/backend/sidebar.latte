@@ -1,11 +1,6 @@
 <nav id="sidebar" class="d-none d-sm-block" hx-boost="true">
   <div class="d-flex flex-column flex-shrink-0 text-light h-100">
-    <div class="d-flex align-items-center truncate">
-      <img id="project-logo" class="rounded-3" title="Nebula" src="/assets/img/nebula.jpeg" alt="logo">
-      <span id="project-name" class="ms-2 fs-4 d-none d-lg-block truncate" title="{$app['name']}">{$app['name']}</span>
-    </div>
-    <hr>
-    <ul id="sidebar-links" class="nav nav-pills flex-column mb-auto">
+    <ul id="sidebar-links" class="nav nav-pills flex-column mb-auto pt-3">
       <li class="nav-item {if $module_name === "home"}active{/if}" title="Home" data-module='home'>
         <a href="{$moduleRoute('module.index.part', 'home')}" class="nav-link d-flex align-items-center text-white" hx-target="#module">
           <i data-feather="home" /><span class="d-none d-lg-block">Home</span>
@@ -23,7 +18,7 @@
       </li>
     </ul>
     <hr>
-    <div class="dropdown mb-2 p-2">
+    <div class="dropdown mb-2 p-2 p-lg-3">
       <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="user-dropdown"
         data-bs-toggle="dropdown" aria-expanded="false">
         <div id="user" class="d-flex truncate">
@@ -32,7 +27,7 @@
           <span class="d-none d-lg-block truncate"><strong>{$user->name}</strong></span>
         </div>
       </a>
-      <ul class="dropdown-menu text-small shadow" aria-labelledby="user-dropdown">
+      <ul class="dropdown-menu text-small shadow p-2" aria-labelledby="user-dropdown">
         <li class="nav-item">
           <div class="d-flex justify-content-center align-items-center text-nowrap">
             <i data-feather="user" height="18" width="18" /><h5 class="m-0 ms-2">{$user->name}</h5>

@@ -103,6 +103,23 @@
   cursor: pointer;
   background-color: #eee;
 }
+/**
+ * Navbar
+ */
+#navbar {
+  background-image: linear-gradient(45deg, #050e14, #102a3c);
+}
+#navbar #project-logo {
+  height: 30px;
+  width: 30px;
+  margin: 5px;
+}
+#navbar #project-name {
+  font-size: 2rem !important;
+}
+#navbar .dropdown-menu a {
+ color: #222;
+}
 
 /**
  * Sidebar
@@ -234,7 +251,11 @@
  * Mobile
  */
 /* X-Small devices (portrait phones, less than 576px) */
-@media (max-width: 575.98px) {}
+@media (max-width: 575.98px) {
+  #main {
+    height: calc(100% - 56px);
+  }
+}
 
 /* Small devices (landscape phones, less than 768px) */
 @media (max-width: 767.98px) {}
