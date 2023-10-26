@@ -35,6 +35,11 @@ function dd(...$args)
     die();
 }
 
+function json(mixed $data)
+{
+    return json_encode($data, JSON_PRETTY_PRINT);
+}
+
 /**
  * Get the middleware index of a given middleware name
  */

@@ -15,6 +15,15 @@ class Test extends Module
             "number" => "Number",
         ];
 
+        // Searchable columns
+        $this->search = ["number", "name", "comment"];
+
+        // Table links
+        $this->filter_links = [
+            "All" => "1=1",
+            "Test" => "number > 60",
+        ];
+
         // Form columns for Edit / Create views
         $this->form_columns = [
             "name" => "Name",
@@ -55,9 +64,6 @@ class Test extends Module
             // Or an array
             // "dropdown" => ['Dog', 'Cat', 'Mouse', 'Duck', 'Deer', 'Shrimp'],
         ];
-
-        // Searchable columns
-        $this->search = ["number", "name", "comment"];
 
         parent::__construct("test", "test");
     }

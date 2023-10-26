@@ -26,6 +26,15 @@
 				hx-target="#module"/>
 		</div>
 	</div>
+	<div n:if="$has_filter_links" class="d-flex my-1">
+		{foreach $filter_links as $title => $clause}
+			<a hx-boost="true" href="?filter_link={$title|escapeUrl}" target="#module">
+				<span class="badge filter-link pill me-1">{$title} 
+					[<span hx-trigger="load delay:50ms" hx-get="?filter_count={$title|escapeUrl}" class="count">??</span>]
+				</span>
+			</a>
+		{/foreach}		
+	</div>
 	<div class="table-container rounded-3">
 		<table class="table table-sm table-hover rounded-3">
 			<thead class="text-light">

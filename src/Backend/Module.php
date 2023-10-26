@@ -63,6 +63,7 @@ class Module
     protected array $table_columns = [];
     protected array $table_data = [];
     protected array $search = [];
+    protected array $filter_links = [];
     protected array $where = [];
     /** Pagination */
     protected int $page = 1;
@@ -83,6 +84,8 @@ class Module
 
     protected function processTableRequest()
     {
+        $this->getFilterCount();
+        $this->filterLinks();
         $this->pagination();
         $this->search();
     }
@@ -123,7 +126,7 @@ class Module
         return true;
     }
 
-    protected function handleDeleteFile(?string $id)
+    protected function handleDeleteFile(?string $id): void
     {
         if (request()->has("delete_file")) {
             $column = request()->delete_file;
@@ -141,7 +144,7 @@ class Module
         }
     }
 
-    protected function deleteColumnFile($column, $id)
+    protected function deleteColumnFile(string $column, string $id): void
     {
         $row = db()->select(
             "SELECT $column FROM $this->table_name WHERE id = ?",
@@ -154,6 +157,33 @@ class Module
             file_exists($row->$column)
         ) {
             unlink($row->$column);
+        }
+    }
+
+    protected function getFilterCount(): void
+    {
+        if (request()->has("filter_count")) {
+            $idx = request()->filter_count;
+            if (isset($this->filter_links[$idx])) {
+                $this->where[] = [$this->filter_links[$idx]];
+                $count = $this->getTotalResults();
+                echo json($count);
+            }
+            exit;
+        }
+    }
+
+    protected function filterLinks(): void
+    {
+        if (request()->has("filter_link")) {
+            $idx = request()->filter_link;
+            if (isset($this->filter_links[$idx])) {
+                session()->set($this->module_name . "_filter_link", $this->filter_links[$idx]);
+            }
+        }
+
+        if (session()->has($this->module_name . "_filter_link")) {
+            $this->where[] = [session()->get($this->module_name . "_filter_link")];
         }
     }
 
@@ -559,6 +589,8 @@ class Module
             ...$this->commonData(),
             "custom_content" => $this->customContent(),
             "has_search" => !empty($this->search),
+            "has_filter_links" => !empty($this->filter_links),
+            "filter_links" => $this->filter_links,
             "table" => [
                 "total_results" => $this->total_results,
                 "total_pages" => $this->total_pages,

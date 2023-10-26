@@ -84,6 +84,9 @@
   background-repeat: no-repeat;
   background-position: 10px center;
 }
+#table .filter-link {
+  background-image: linear-gradient(100deg, #050e14, #102a3c);
+}
 
 /**
  * Search 
