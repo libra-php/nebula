@@ -32,8 +32,6 @@ class Test extends Module
         $this->validation = [
             "name" => ["required"],
             "number" => ["required", "numeric"],
-            "dropdown" => ["required", "numeric"],
-            "color" => ["required"],
         ];
 
         // Edit / Create view controls
@@ -41,7 +39,7 @@ class Test extends Module
             "number" => "number",
             "name" => "input",
             "comment" => "textarea",
-            "dropdown" => "select",
+            "dropdown" => "nselect",
             "color" => "color",
             "file" => "upload",
             "image" => "image",

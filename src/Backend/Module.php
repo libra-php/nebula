@@ -284,6 +284,8 @@ class Module
             );
             Flash::addFlash("database", "Oops! A database error occurred");
         }
+        // TODO this always returns to list view, 
+        // maybe we can stay in edit view
         echo $this->indexPartial();
         exit();
     }
@@ -291,8 +293,11 @@ class Module
     protected function getFilteredFormColumns(): array
     {
         $filtered_controls = ["upload", "image"];
+        $data = request()->data();
+        // Deal with "NULL" string
+        array_walk($data, fn(&$value, $key) => $value = ($value === "NULL") ? NULL : $value);
         return array_filter(
-            request()->data(),
+            $data,
             fn($value, $key) => $key != "csrf_token" &&
                 !in_array($this->form_controls[$key], $filtered_controls),
             ARRAY_FILTER_USE_BOTH
@@ -465,6 +470,13 @@ class Module
                 "readonly" => $fc->input($name, $value, "text", attrs: "readonly"),
                 "plain" => $fc->plain($name, $value),
                 "select" => $fc->select(
+                    $name,
+                    $value,
+                    isset($this->select_options[$name])
+                        ? $this->select_options[$name]
+                        : []
+                ),
+                "nselect" => $fc->nselect(
                     $name,
                     $value,
                     isset($this->select_options[$name])

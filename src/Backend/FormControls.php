@@ -87,6 +87,12 @@ class FormControls
         );
     }
 
+    public function nselect(string $name, ?string $value, array $options, ...$attrs): string
+    {
+        $null = [(object)["id" => "NULL", "name" => "None"]];
+        return $this->select($name, $value, [...$null, ...$options], ...$attrs);
+    }
+
     public function file(string $name, ?string $value, ...$attrs): string
     {
         $attrs = implode(" ", $attrs);
