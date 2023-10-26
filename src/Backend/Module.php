@@ -220,6 +220,11 @@ class Module
         return "backend/index.latte";
     }
 
+    protected function getCustomIndex(): string
+    {
+        return "backend/custom.latte";
+    }
+
     protected function getEditTemplate(): string
     {
         return "backend/edit.latte";
@@ -232,13 +237,15 @@ class Module
 
     public function index(): string
     {
-        return latte($this->getIndexTemplate(), $this->getIndexData());
+        $template = !is_null($this->table_name) ? $this->getIndexTemplate() : $this->getCustomIndex();
+        return latte($template, $this->getIndexData());
     }
 
     public function indexPartial(): string
     {
+        $template = !is_null($this->table_name) ? $this->getIndexTemplate() : $this->getCustomIndex();
         return latte(
-            $this->getIndexTemplate(),
+            $template,
             $this->getIndexData(),
             "content"
         );
@@ -272,7 +279,7 @@ class Module
         );
     }
 
-    protected function handleDatabaseException(PDOException $ex)
+    protected function handleDatabaseException(PDOException $ex): void
     {
         if (config("app.debug")) {
             Flash::addFlash("database", $ex->getMessage());
@@ -295,10 +302,10 @@ class Module
         $filtered_controls = ["upload", "image"];
         $data = request()->data();
         // Deal with "NULL" string
-        array_walk($data, fn(&$value, $key) => $value = ($value === "NULL") ? NULL : $value);
+        array_walk($data, fn (&$value, $key) => $value = ($value === "NULL") ? NULL : $value);
         return array_filter(
             $data,
-            fn($value, $key) => $key != "csrf_token" &&
+            fn ($value, $key) => $key != "csrf_token" &&
                 !in_array($this->form_controls[$key], $filtered_controls),
             ARRAY_FILTER_USE_BOTH
         );
@@ -412,6 +419,13 @@ class Module
         return $qb;
     }
 
+    /**
+     * Override method for rendering custom content
+     */
+    protected function customContent()
+    {
+    }
+
     public function commonData(): array
     {
         $route = function (string $route_name, ?string $id = null) {
@@ -424,14 +438,14 @@ class Module
         ) {
             return moduleRoute($route_name, $module_name, $id);
         };
-        $gravatar = fn(string $str) => md5(strtolower(trim($str)));
+        $gravatar = fn (string $str) => md5(strtolower(trim($str)));
         $singular = function (string $str) {
             return substr($str, -1) === "s" ? rtrim($str, "s") : $str;
         };
-        $request = fn(string $column) => request()->has($column)
+        $request = fn (string $column) => request()->has($column)
             ? request()->$column
             : "";
-        $session = fn(string $column) => session()->has($column)
+        $session = fn (string $column) => session()->has($column)
             ? session()->get($column)
             : "";
         return [
@@ -539,6 +553,7 @@ class Module
 
         return [
             ...$this->commonData(),
+            "custom_content" => $this->customContent(),
             "has_search" => !empty($this->search),
             "table" => [
                 "total_results" => $this->total_results,
@@ -579,8 +594,8 @@ class Module
         try {
             $data = !is_null($qb)
                 ? db()
-                    ->run($qb->build(), $qb->values())
-                    ->fetch()
+                ->run($qb->build(), $qb->values())
+                ->fetch()
                 : [];
         } catch (PDOException $ex) {
             $this->handleDatabaseException($ex);

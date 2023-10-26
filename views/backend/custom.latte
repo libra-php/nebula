@@ -1,0 +1,13 @@
+{layout "../layout/module.latte"}
+
+{block content}
+<section id="custom">
+	<div class="module-title">
+		<h1>{$module_title}</h1>
+	</div>
+	<div class="alerts" n:if="$has_flash">
+		{getFlashMessages()|noescape}
+	</div>
+	{$custom_content|noescape}
+</section>
+{/block}

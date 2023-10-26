@@ -11,8 +11,8 @@ class Home extends Module
         parent::__construct("home");
     }
 
-    protected function getIndexTemplate(): string
+    protected function customContent(): string
     {
-        return "backend/home.latte";
+        return latte("backend/home.latte");
     }
 }
