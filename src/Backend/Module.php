@@ -169,7 +169,7 @@ class Module
                 $count = $this->getTotalResults();
                 echo json($count);
             }
-            exit;
+            exit();
         }
     }
 
@@ -178,12 +178,17 @@ class Module
         if (request()->has("filter_link")) {
             $idx = request()->filter_link;
             if (isset($this->filter_links[$idx])) {
-                session()->set($this->module_name . "_filter_link", $this->filter_links[$idx]);
+                session()->set(
+                    $this->module_name . "_filter_link",
+                    $this->filter_links[$idx]
+                );
             }
         }
 
         if (session()->has($this->module_name . "_filter_link")) {
-            $this->where[] = [session()->get($this->module_name . "_filter_link")];
+            $this->where[] = [
+                session()->get($this->module_name . "_filter_link"),
+            ];
         }
     }
 
@@ -267,18 +272,18 @@ class Module
 
     public function index(): string
     {
-        $template = !is_null($this->table_name) ? $this->getIndexTemplate() : $this->getCustomIndex();
+        $template = !is_null($this->table_name)
+            ? $this->getIndexTemplate()
+            : $this->getCustomIndex();
         return latte($template, $this->getIndexData());
     }
 
     public function indexPartial(): string
     {
-        $template = !is_null($this->table_name) ? $this->getIndexTemplate() : $this->getCustomIndex();
-        return latte(
-            $template,
-            $this->getIndexData(),
-            "content"
-        );
+        $template = !is_null($this->table_name)
+            ? $this->getIndexTemplate()
+            : $this->getCustomIndex();
+        return latte($template, $this->getIndexData(), "content");
     }
 
     public function edit(string $id): string
@@ -321,7 +326,7 @@ class Module
             );
             Flash::addFlash("database", "Oops! A database error occurred");
         }
-        // TODO this always returns to list view, 
+        // TODO this always returns to list view,
         // maybe we can stay in edit view
         echo $this->indexPartial();
         exit();
@@ -332,10 +337,13 @@ class Module
         $filtered_controls = ["upload", "image"];
         $data = request()->data();
         // Deal with "NULL" string
-        array_walk($data, fn (&$value, $key) => $value = ($value === "NULL") ? NULL : $value);
+        array_walk(
+            $data,
+            fn(&$value, $key) => ($value = $value === "NULL" ? null : $value)
+        );
         return array_filter(
             $data,
-            fn ($value, $key) => $key != "csrf_token" &&
+            fn($value, $key) => $key != "csrf_token" &&
                 !in_array($this->form_controls[$key], $filtered_controls),
             ARRAY_FILTER_USE_BOTH
         );
@@ -468,14 +476,14 @@ class Module
         ) {
             return moduleRoute($route_name, $module_name, $id);
         };
-        $gravatar = fn (string $str) => md5(strtolower(trim($str)));
+        $gravatar = fn(string $str) => md5(strtolower(trim($str)));
         $singular = function (string $str) {
             return substr($str, -1) === "s" ? rtrim($str, "s") : $str;
         };
-        $request = fn (string $column) => request()->has($column)
+        $request = fn(string $column) => request()->has($column)
             ? request()->$column
             : "";
-        $session = fn (string $column) => session()->has($column)
+        $session = fn(string $column) => session()->has($column)
             ? session()->get($column)
             : "";
         return [
@@ -511,7 +519,12 @@ class Module
                     "text",
                     attrs: "disabled=true"
                 ),
-                "readonly" => $fc->input($name, $value, "text", attrs: "readonly"),
+                "readonly" => $fc->input(
+                    $name,
+                    $value,
+                    "text",
+                    attrs: "readonly"
+                ),
                 "plain" => $fc->plain($name, $value),
                 "select" => $fc->select(
                     $name,
@@ -537,7 +550,14 @@ class Module
                         implode(", ", $this->file_extensions)
                     )
                 ),
-                "image" => $fc->image($name, $value, sprintf('accept="%s"', implode(", ", $this->image_extensions))),
+                "image" => $fc->image(
+                    $name,
+                    $value,
+                    sprintf(
+                        'accept="%s"',
+                        implode(", ", $this->image_extensions)
+                    )
+                ),
                 "checkbox" => $fc->checkbox($name, $value),
                 "switch" => $fc->switch($name, $value),
                 default => $fc->plain($name, $value),
@@ -555,7 +575,9 @@ class Module
 
     protected function tableData(): array|bool
     {
-        if (is_null($this->table_name)) return false;
+        if (is_null($this->table_name)) {
+            return false;
+        }
         $data = [];
         $this->total_results = $this->getTotalResults();
         $this->total_pages = ceil($this->total_results / $this->limit);
@@ -630,8 +652,8 @@ class Module
         try {
             $data = !is_null($qb)
                 ? db()
-                ->run($qb->build(), $qb->values())
-                ->fetch()
+                    ->run($qb->build(), $qb->values())
+                    ->fetch()
                 : [];
         } catch (PDOException $ex) {
             $this->handleDatabaseException($ex);

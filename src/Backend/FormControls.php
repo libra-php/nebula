@@ -5,7 +5,8 @@ namespace Nebula\Backend;
 class FormControls
 {
     public function __construct(private ?string $id)
-    {}
+    {
+    }
 
     public function plain(string $name, ?string $value): string
     {
@@ -87,9 +88,13 @@ class FormControls
         );
     }
 
-    public function nselect(string $name, ?string $value, array $options, ...$attrs): string
-    {
-        $null = [(object)["id" => "NULL", "name" => "None"]];
+    public function nselect(
+        string $name,
+        ?string $value,
+        array $options,
+        ...$attrs
+    ): string {
+        $null = [(object) ["id" => "NULL", "name" => "None"]];
         return $this->select($name, $value, [...$null, ...$options], ...$attrs);
     }
 
@@ -106,7 +111,8 @@ class FormControls
             $basename = basename($value);
             $public_uploads = config("paths.public_uploads");
             $path = sprintf("%s/%s", $public_uploads, $basename);
-            $control .= "<div class='d-flex align-items-center control-file p-1'>";
+            $control .=
+                "<div class='d-flex align-items-center control-file p-1'>";
             $control .= sprintf(
                 '<label title="%s" class="truncate file-label" for="%s">%s</label>',
                 $basename,
@@ -131,12 +137,16 @@ class FormControls
 
     public function image(string $name, ?string $value, ...$attrs): string
     {
-        $control = '';
+        $control = "";
         if ($value && file_exists($value)) {
             $basename = basename($value);
             $public_uploads = config("paths.public_uploads");
             $path = sprintf("%s/%s", $public_uploads, $basename);
-            $control .= sprintf('<img title="%s" src="%s" class="control-image mb-1 rounded-3 border-1 border-secondary" alt="img" />', $basename, $path);
+            $control .= sprintf(
+                '<img title="%s" src="%s" class="control-image mb-1 rounded-3 border-1 border-secondary" alt="img" />',
+                $basename,
+                $path
+            );
         }
         $control .= $this->file($name, $value, ...$attrs);
         return $control;
@@ -145,17 +155,32 @@ class FormControls
     public function checkbox(string $name, ?string $value, ...$attrs): string
     {
         $hidden = $this->input($name, $value, "hidden");
-        $checked = intval($value) ? "checked" : '';
-        $checkbox = $this->input('', '', "checkbox", "form-check-input", $checked);
-        return $hidden.$checkbox;
+        $checked = intval($value) ? "checked" : "";
+        $checkbox = $this->input(
+            "",
+            "",
+            "checkbox",
+            "form-check-input",
+            $checked
+        );
+        return $hidden . $checkbox;
     }
 
     public function switch(string $name, ?string $value): string
     {
         $hidden = $this->input($name, $value, "hidden");
-        $checked = intval($value) ? "checked" : '';
-        $checkbox = $this->input('', '', "checkbox", "form-check-input", $checked);
-        return sprintf("<div class='form-check form-switch'>%s</div>", $hidden.$checkbox);
+        $checked = intval($value) ? "checked" : "";
+        $checkbox = $this->input(
+            "",
+            "",
+            "checkbox",
+            "form-check-input",
+            $checked
+        );
+        return sprintf(
+            "<div class='form-check form-switch'>%s</div>",
+            $hidden . $checkbox
+        );
     }
 
     public function range(string $name, ?string $value): string
