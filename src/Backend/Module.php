@@ -84,10 +84,10 @@ class Module
 
     protected function processTableRequest()
     {
-        $this->getFilterCount();
-        $this->filterLinks();
         $this->pagination();
         $this->search();
+        $this->filterLinks();
+        $this->getFilterCount();
     }
 
     protected function processFormRequest(?string $id = null)
