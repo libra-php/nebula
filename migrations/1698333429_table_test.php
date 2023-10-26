@@ -14,7 +14,7 @@ return new class implements Migration
             $table->id();
             $table->varchar("name");
             $table->bigInteger("number");
-            $table->mediumText("comment");
+            $table->mediumText("comment")->nullable();
             $table->unsignedSmallInteger("dropdown")->nullable();
             $table->char("color", 7)->default("'#000000'");
             $table->unsignedTinyInteger("checkbox")->default(0);

@@ -516,26 +516,30 @@ class Module
         return $controls;
     }
 
-    protected function tableData()
+    protected function getTotalResults(): int
     {
-        $data = [];
         $qb = $this->getIndexQuery();
-        if (!is_null($qb)) {
-            $stmt = db()->run($qb->build(), $qb->values());
-            $this->total_results = $stmt?->rowCount() ?? 0;
-            $this->total_pages = ceil($this->total_results / $this->limit);
-            if ($this->page > $this->total_pages) {
-                $this->page = $this->total_pages;
-            }
-            if ($this->page < 1) {
-                $this->page = 1;
-            }
-            $this->offset = ($this->page - 1) * $this->limit;
-            $qb = $this->getIndexQuery();
-            $data = db()
-                ->run($qb->build(), $qb->values())
-                ->fetchAll();
+        $stmt = db()->run($qb->build(), $qb->values());
+        return $stmt?->rowCount() ?? 0;
+    }
+
+    protected function tableData(): array|bool
+    {
+        if (is_null($this->table_name)) return false;
+        $data = [];
+        $this->total_results = $this->getTotalResults();
+        $this->total_pages = ceil($this->total_results / $this->limit);
+        if ($this->page > $this->total_pages) {
+            $this->page = $this->total_pages;
         }
+        if ($this->page < 1) {
+            $this->page = 1;
+        }
+        $this->offset = ($this->page - 1) * $this->limit;
+        $qb = $this->getIndexQuery();
+        $data = db()
+            ->run($qb->build(), $qb->values())
+            ->fetchAll();
         return $data;
     }
 

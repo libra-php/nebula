@@ -122,6 +122,11 @@
 #navbar .dropdown-menu a {
  color: #222;
 }
+#navbar li.nav-item a.dropdown-item svg {
+  width: 12px;
+  height: 12px;
+  margin-right: 6px;
+}
 
 /**
  * Sidebar
@@ -163,6 +168,11 @@
 }
 #sidebar .nav-pills li.nav-item a {
   color: #aaa !important;
+}
+#sidebar li.nav-item a.dropdown-item svg {
+  width: 12px;
+  height: 12px;
+  margin-right: 6px;
 }
 
 /**
