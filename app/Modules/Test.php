@@ -11,19 +11,19 @@ class Test extends Module
         // Table columns for Index view
         $this->table_columns = [
             "id" => "ID",
-            "number" => "Number",
             "name" => "Name",
+            "number" => "Number",
         ];
 
         // Form columns for Edit / Create views
         $this->form_columns = [
-            "number" => "Number",
             "name" => "Name",
-            "comment" => "Comment",
-            "dropdown" => "Dropdown",
-            "color" => "Colour",
+            "number" => "Number",
             "file" => "File",
             "image" => "Image",
+            "dropdown" => "Dropdown",
+            "comment" => "Comment",
+            "color" => "Colour",
             "checkbox" => "Checkbox",
             "switch" => "Switch",
         ];
