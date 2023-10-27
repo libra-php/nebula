@@ -41,6 +41,15 @@ function json(mixed $data)
 }
 
 /**
+ * Used in a module 
+ * for defining select_options values
+ */
+function option(string $id, mixed $name)
+{
+    return (object)['id' => $id, 'name' => $name];
+}
+
+/**
  * Get the middleware index of a given middleware name
  */
 function middlewareIndex(array $middleware, string $name)

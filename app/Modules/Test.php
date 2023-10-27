@@ -8,23 +8,37 @@ class Test extends Module
 {
     public function __construct()
     {
-        // Table columns for Index view
+        /**
+         * Table columns for Index view
+         * key: column for table query
+         * value: table header label
+         */
         $this->table_columns = [
             "id" => "ID",
             "name" => "Name",
             "number" => "Number",
         ];
 
-        // Searchable columns
+        /**
+         * Searchable table columns
+         */
         $this->search = ["number", "name", "comment"];
 
-        // Table links
+        /**
+         * Table filter links
+         * key: link label
+         * value: where clause filter
+         */
         $this->filter_links = [
             "All" => "1=1",
-            "Test" => "number > 60",
+            "Over 9000" => "number > 9000",
         ];
 
-        // Form columns for Edit / Create views
+        /**
+         * Form columns for Edit & Create views
+         * key: column for edit / create query
+         * value: form label
+         */
         $this->form_columns = [
             "name" => "Name",
             "number" => "Number",
@@ -37,18 +51,29 @@ class Test extends Module
             "switch" => "Switch",
         ];
 
-        // Form valdiation columns / rules
+        /**
+         * Form validation columns / rules
+         * key: form column to validate
+         * value: array of validation rules
+         */
         $this->validation = [
             "name" => ["required"],
             "number" => ["required", "numeric"],
+            "dropdown" => ["required"],
         ];
 
-        // Edit / Create view controls
+        /**
+         * Edit & Create view controls
+         * key: form column
+         * value: control type
+         */
         $this->form_controls = [
             "number" => "number",
             "name" => "input",
             "comment" => "textarea",
-            "dropdown" => "nselect",
+            // select if you require a value
+            // nselect if you allow null
+            "dropdown" => "select",
             "color" => "color",
             "file" => "upload",
             "image" => "image",
@@ -56,13 +81,22 @@ class Test extends Module
             "switch" => "switch",
         ];
 
-        // The options for a select control
+        /**
+         * The options for a select control
+         * key: form column
+         * value: query or array
+         * query: db query of (id = option value & name = option label)
+         * array: array of options (key = option value & name = option label)
+         */
         $this->select_options = [
-            // The select control can be provided by
-            // a query with attributes id & name
             "dropdown" => db()->selectAll("SELECT id, name FROM animals"),
-            // Or an array
-            // "dropdown" => ['Dog', 'Cat', 'Mouse', 'Duck', 'Deer', 'Shrimp'],
+            // "dropdown" => [
+            //     0 => "Fish",
+            //     1 => "Cat",
+            //     2 => "Dog",
+            //     3 => "Wolf",
+            //     4 => "Bear"
+            // ]
         ];
 
         parent::__construct("test", "test");

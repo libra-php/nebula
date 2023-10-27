@@ -69,7 +69,7 @@ class Module
     protected int $page = 1;
     protected int $total_results = 0;
     protected int $total_pages = 1;
-    protected int $limit = 10;
+    protected int $limit = 15;
     protected ?int $offset = null;
     /** Validation */
     protected array $validation = [];

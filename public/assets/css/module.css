@@ -58,26 +58,27 @@
 /**
  * Table
  */
-.table {
+#table .table {
   color: #102a3c;
   margin-bottom: 0;
 }
 
-.table thead {
+#table .table thead {
   background-image: linear-gradient(45deg, #102a3c, #050e14);
 }
 
-.table thead th {
+#table .table thead th {
   white-space: nowrap;
 }
 
-.table-container {
+#table .table-container {
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
   overflow-x: auto;
   background-color: #fff;
 }
 
-#table input[type="search"] {
+#table #search-input {
+  width: 200px;
   padding: 7px 0 7px 30px;
   background-image: url("/assets/img/magnifying_glass.svg");
   background-size: 13px;
@@ -87,24 +88,27 @@
 #table .filter-link {
   background-image: linear-gradient(45deg, #102a3c, #050e14);
 }
+#table .row-action {
+  padding: 2px 4px;
+}
 
 /**
  * Search 
  */
-#pagination li.page-item a.page-link {
+#table #pagination li.page-item a.page-link {
   cursor: pointer;
 }
-#pagination li.page-item.disabled {
+#table #pagination li.page-item.disabled {
   cursor: not-allowed;
 }
-#pagination #page-selector {
+#table #pagination #page-selector {
   color: royalblue;
   background-color: #fff;
   border-top: 1px solid #d6dee1 !important;
   border-bottom: 1px solid #d6dee1 !important;
 }
 
-#pagination #page-selector:hover {
+#table #pagination #page-selector:hover {
   cursor: pointer;
   background-color: #eee;
 }
@@ -126,8 +130,8 @@
  color: #222;
 }
 #navbar li.nav-item a.dropdown-item svg {
-  width: 12px;
-  height: 12px;
+  width: 18px;
+  height: 18px;
   margin-right: 6px;
 }
 
@@ -173,8 +177,8 @@
   color: #aaa !important;
 }
 #sidebar li.nav-item a.dropdown-item svg {
-  width: 12px;
-  height: 12px;
+  width: 18px;
+  height: 18px;
   margin-right: 6px;
 }
 
@@ -272,6 +276,9 @@
   }
   #main {
     height: calc(100% - 56px);
+  }
+  #table #search-input {
+    width: 100%;
   }
 }
 

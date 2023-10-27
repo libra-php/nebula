@@ -54,9 +54,9 @@
 					{/foreach}
 					<td>
 						<div class="d-flex justify-content-end">
-							<a class="btn btn-sm btn-primary m-1" href={$route('module.edit.part', $datum['id'])}
+							<a class="row-action btn btn-sm btn-outline-primary ms-1" href={$route('module.edit.part', $datum['id'])}
 								hx-boost="true" hx-target="#module" title="Edit record">Edit</a>
-							<a class="btn btn-sm btn-danger m-1" hx-delete="{$route('module.destroy', $datum[id])}"
+							<a class="row-action btn btn-sm btn-outline-danger ms-1" hx-delete="{$route('module.destroy', $datum[id])}"
 								hx-target="#module"
 								hx-confirm="Are you sure you want to delete this record? This action cannot be undone."
 								title="Delete record">Delete</a>
