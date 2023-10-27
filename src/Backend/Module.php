@@ -19,6 +19,9 @@ class Module
     protected ?string $table_name;
     protected string $name_col = "name";
     protected string $key_col = "id";
+    protected bool $table_create = true;
+    protected bool $table_edit = true;
+    protected bool $table_destroy = true;
     /** Form */
     protected bool $edit_view = true;
     protected bool $create_view = true;
@@ -544,6 +547,7 @@ class Module
 
     protected function getTotalResults(): int
     {
+        if (empty($this->table_columns)) return 0;
         $qb = $this->getIndexQuery();
         $stmt = db()->run($qb->build(), $qb->values());
         return $stmt?->rowCount() ?? 0;
@@ -551,7 +555,7 @@ class Module
 
     protected function tableData(): array|bool
     {
-        if (is_null($this->table_name)) {
+        if (is_null($this->table_name) || empty($this->table_columns)) {
             return false;
         }
         $data = [];
@@ -590,6 +594,9 @@ class Module
             "has_filter_links" => !empty($this->filter_links),
             "filter_links" => $this->filter_links,
             "table" => [
+                "create" => $this->table_create,
+                "edit" => $this->table_edit,
+                "destroy" => $this->table_destroy,
                 "total_results" => $this->total_results,
                 "total_pages" => $this->total_pages,
                 "page" => $this->page,
@@ -698,7 +705,7 @@ class Module
 
     public function store(): string
     {
-        if ($this->validate($this->validation)) {
+        if ($this->validate($this->validation) && $this->table_create) {
             $columns = $this->getFilteredFormColumns();
             $qb = QueryBuilder::insert($this->table_name)->columns($columns);
             try {
@@ -725,7 +732,7 @@ class Module
 
     public function update(string $id): string
     {
-        if ($this->validate($this->validation)) {
+        if ($this->validate($this->validation) && $this->table_edit) {
             $columns = $this->getFilteredFormColumns();
             $qb = QueryBuilder::update($this->table_name)
                 ->columns($columns)
@@ -753,20 +760,22 @@ class Module
 
     public function destroy(string $id): string
     {
-        $qb = QueryBuilder::delete($this->table_name)->where([$this->key_col, $id]);
-        try {
-            $result = db()->run($qb->build(), $qb->values());
-            if ($result) {
-                $this->auditColumns([$this->key_col => "NULL"], $id, 'DELETE');
-                Flash::addFlash("success", "Record deleted successfully");
-            } else {
-                Flash::addFlash(
-                    "danger",
-                    "Oops! An unknown issue occurred while deleting record"
-                );
+        if ($this->table_destroy) {
+            $qb = QueryBuilder::delete($this->table_name)->where([$this->key_col, $id]);
+            try {
+                $result = db()->run($qb->build(), $qb->values());
+                if ($result) {
+                    $this->auditColumns([$this->key_col => "NULL"], $id, 'DELETE');
+                    Flash::addFlash("success", "Record deleted successfully");
+                } else {
+                    Flash::addFlash(
+                        "danger",
+                        "Oops! An unknown issue occurred while deleting record"
+                    );
+                }
+            } catch (PDOException $ex) {
+                $this->handleDatabaseException($ex);
             }
-        } catch (PDOException $ex) {
-            $this->handleDatabaseException($ex);
         }
         return $this->indexPartial();
     }
