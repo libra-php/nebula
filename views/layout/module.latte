@@ -1,19 +1,12 @@
 {layout "../layout/base.latte"}
 
-
-{block head} 
-{include parent}
-<link rel="stylesheet" href="/assets/css/module.css">
-{/block}
-
 {block body}
 {include "../backend/navbar.latte"}
 <section id="main" class="d-flex">
   {include "../backend/sidebar.latte"}
   <section id="module" class="p-2">
     {block content}
-    {/block}
-    <section id="profiler" n:if="$profiler['show_profiler']">
+    <section class="mt-3" id="profiler" n:if="$profiler['show_profiler']">
       <div title="Show more info" id="info" onClick="toggleProfiler(event)">
         🛈  PHP time: {$profiler['total_php']}, DB time: {$profiler['db_total_time']} ({$profiler['db_num_queries']} queries)
       </div>
@@ -25,6 +18,7 @@
         {/if}
       </div>
     </section>
+    {/block}
   </section>
 </section>
 {/block}
