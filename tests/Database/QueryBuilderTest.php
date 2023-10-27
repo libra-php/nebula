@@ -13,21 +13,21 @@ final class QueryBuilderTest extends TestCase
         ->columns(["id", "email", "name"])
         ->where(["id IS NOT NULL"]);
         $this->assertSame(
-            "SELECT id, email, name FROM users WHERE (id IS NOT NULL)",
+            "SELECT `id`, `email`, `name` FROM users WHERE (id IS NOT NULL)",
             $qb->build()
         );
         $qb = QueryBuilder::select("users")
         ->columns(["id", "email", "name"])
         ->where(["id", 3]);
         $this->assertSame(
-            "SELECT id, email, name FROM users WHERE (id = ?)",
+            "SELECT `id`, `email`, `name` FROM users WHERE (id = ?)",
             $qb->build()
         );
         $qb = QueryBuilder::select("users")
         ->columns(["id", "email", "name"])
         ->where(["id", ">", 3]);
         $this->assertSame(
-            "SELECT id, email, name FROM users WHERE (id > ?)",
+            "SELECT `id`, `email`, `name` FROM users WHERE (id > ?)",
             $qb->build()
         );
     }
@@ -38,7 +38,7 @@ final class QueryBuilderTest extends TestCase
         ->columns(["id", "email", "name"])
         ->where(["id", ">", 3], ["email", "IS NOT", "NULL"], ["name", "!=", "bacon"]);
         $this->assertSame(
-            "SELECT id, email, name FROM users WHERE (id > ?) AND (email IS NOT ?) AND (name != ?)",
+            "SELECT `id`, `email`, `name` FROM users WHERE (id > ?) AND (email IS NOT ?) AND (name != ?)",
             $qb->build()
         );
     }
@@ -55,7 +55,7 @@ final class QueryBuilderTest extends TestCase
             ->offset(2);
         $this->assertSame($qb->values(), [1, "test", 2, "blue"]);
         $this->assertSame(
-            "SELECT id, email, name FROM users WHERE (id = ?) AND (name = ?) GROUP BY id, name HAVING (id = ?) AND (name = ?) ORDER BY id ASC, name DESC LIMIT 2, 1",
+            "SELECT `id`, `email`, `name` FROM users WHERE (id = ?) AND (name = ?) GROUP BY id, name HAVING (id = ?) AND (name = ?) ORDER BY id ASC, name DESC LIMIT 2, 1",
             $qb->build()
         );
     }
