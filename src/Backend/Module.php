@@ -86,10 +86,10 @@ class Module
 
     protected function processTableRequest(): void
     {
-        $this->pagination();
-        $this->search();
-        $this->getFilterCount();
-        $this->filterLinks();
+        $this->handlePagination();
+        $this->handleSearch();
+        $this->handleFilterCount();
+        $this->handleFilterLinks();
     }
 
     protected function processFormRequest(?string $id = null): void
@@ -162,7 +162,7 @@ class Module
         }
     }
 
-    protected function getFilterCount(): void
+    protected function handleFilterCount(): void
     {
         if (request()->has("filter_count")) {
             $idx = request()->filter_count;
@@ -175,7 +175,7 @@ class Module
         }
     }
 
-    protected function filterLinks(): void
+    protected function handleFilterLinks(): void
     {
         if (request()->has("filter_link")) {
             $idx = request()->filter_link;
@@ -194,7 +194,7 @@ class Module
         }
     }
 
-    protected function pagination(): void
+    protected function handlePagination(): void
     {
         $page = $this->page;
         if (request()->has("page")) {
@@ -207,7 +207,7 @@ class Module
         $this->page = session()->get($this->module_name . "_page") ?? $page;
     }
 
-    protected function search(): void
+    protected function handleSearch(): void
     {
         $where = [];
         if (request()->has("search") && trim(request()->search) != "") {
@@ -232,16 +232,6 @@ class Module
         }
     }
 
-    public function getModuleName(): string
-    {
-        return $this->module_name;
-    }
-
-    public function getTableName(): string
-    {
-        return $this->table_name;
-    }
-
     public function moduleNotFound(): never
     {
         Flash::addFlash(
@@ -250,6 +240,16 @@ class Module
         );
         echo $this->indexPartial();
         exit();
+    }
+
+    public function getModuleName(): string
+    {
+        return $this->module_name;
+    }
+
+    public function getTableName(): string
+    {
+        return $this->table_name;
     }
 
     protected function getIndexTemplate(): string
