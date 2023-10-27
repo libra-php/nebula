@@ -86,8 +86,8 @@ class Module
     {
         $this->pagination();
         $this->search();
-        $this->filterLinks();
         $this->getFilterCount();
+        $this->filterLinks();
     }
 
     protected function processFormRequest(?string $id = null)
