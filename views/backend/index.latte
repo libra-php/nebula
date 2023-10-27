@@ -21,7 +21,6 @@
 				hx-get="{$route('module.index.part')}"
 				placeholder="..."
 				value="{$session($module_name . '_term')}"
-				hx-indicator=".htmx-indicator"
 				hx-trigger="keyup changed delay:500ms, search" 
 				hx-target="#module"/>
 		</div>
