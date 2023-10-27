@@ -4,6 +4,7 @@ namespace App\Config;
 
 return [
     "enabled" => env("DB_ENABLED", "true") == "true",
+    "show_profiler" => env("DB_SHOW_PROFILER", "true") == "true",
     "mode" => env("DB_MODE"),
     "name" => env("DB_NAME"),
     "host" => env("DB_HOST"),

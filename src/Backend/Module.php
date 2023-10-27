@@ -348,6 +348,42 @@ class Module
     {
     }
 
+    /**
+     * Profiler
+     */
+    protected function profiler(): array
+    {
+        global $global_start;
+        $slow_traces = [];
+        foreach (["Slow DB:" => db()->trace_counts] as $title => $traces) {
+            //$slow_traces[] = $title;
+            if ($traces) {
+                uasort($traces, fn ($a, $b) => $b["time"] <=> $a["time"]);
+                $i = 0;
+                foreach ($traces as $key => $value) {
+                    $i++;
+                    if ($i > 10) {
+                        break;
+                    }
+                    $pct =
+                        number_format(
+                            ($value["time"] / db()->total_time) * 100,
+                            2
+                        ) . "%";
+                    $slow_traces[] = "{$key} &times; {$value["count"]}, {$value["time"]} <strong>{$pct}</strong>";
+                }
+            }
+        }
+        return [
+            "show_profiler" => config("database.show_profiler"),
+            "global_start" => $global_start,
+            "total_php" => microtime(true) - $global_start,
+            "db_total_time" => db()->total_time ?? 0,
+            "db_num_queries" => db()->num_queries ?? 0,
+            "slow_traces" => $slow_traces ?? [],
+        ];
+    }
+
     public function commonData(): array
     {
         $route = function (string $route_name, ?string $id = null) {
@@ -371,6 +407,7 @@ class Module
             ? session()->get($column)
             : "";
         return [
+            "profiler" => $this->profiler(),
             "has_flash" => Flash::hasFlash(),
             "request" => $request,
             "session" => $session,

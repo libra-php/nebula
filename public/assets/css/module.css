@@ -112,6 +112,18 @@
   cursor: pointer;
   background-color: #eee;
 }
+
+/**
+ * Profiler
+ */
+#profiler #info {
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+#profiler #extra-info {
+  font-size: 0.7rem;
+}
+
 /**
  * Navbar
  */
@@ -257,6 +269,9 @@
 /**
  * Utility
  */
+.hidden {
+  display: none !important;
+}
 *:focus {
   outline: none;
 }
