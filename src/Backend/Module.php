@@ -82,7 +82,7 @@ class Module
         $this->table_name = $table_name;
     }
 
-    protected function processTableRequest()
+    protected function processTableRequest(): void
     {
         $this->pagination();
         $this->search();
@@ -90,7 +90,7 @@ class Module
         $this->filterLinks();
     }
 
-    protected function processFormRequest(?string $id = null)
+    protected function processFormRequest(?string $id = null): void
     {
         $this->handleDeleteFile($id);
     }
@@ -270,50 +270,6 @@ class Module
         return "backend/create.latte";
     }
 
-    public function index(): string
-    {
-        $template = !is_null($this->table_name)
-            ? $this->getIndexTemplate()
-            : $this->getCustomIndex();
-        return latte($template, $this->getIndexData());
-    }
-
-    public function indexPartial(): string
-    {
-        $template = !is_null($this->table_name)
-            ? $this->getIndexTemplate()
-            : $this->getCustomIndex();
-        return latte($template, $this->getIndexData(), "content");
-    }
-
-    public function edit(string $id): string
-    {
-        return latte($this->getEditTemplate(), $this->getEditData($id));
-    }
-
-    public function editPartial(string $id): string
-    {
-        return latte(
-            $this->getEditTemplate(),
-            $this->getEditData($id),
-            "content"
-        );
-    }
-
-    public function create(): string
-    {
-        return latte($this->getCreateTemplate(), $this->getCreateData());
-    }
-
-    public function createPartial(): string
-    {
-        return latte(
-            $this->getCreateTemplate(),
-            $this->getCreateData(),
-            "content"
-        );
-    }
-
     protected function handleDatabaseException(PDOException $ex): void
     {
         if (config("app.debug")) {
@@ -339,86 +295,14 @@ class Module
         // Deal with "NULL" string
         array_walk(
             $data,
-            fn(&$value, $key) => ($value = $value === "NULL" ? null : $value)
+            fn (&$value, $key) => ($value = $value === "NULL" ? null : $value)
         );
         return array_filter(
             $data,
-            fn($value, $key) => $key != "csrf_token" &&
+            fn ($value, $key) => $key != "csrf_token" &&
                 !in_array($this->form_controls[$key], $filtered_controls),
             ARRAY_FILTER_USE_BOTH
         );
-    }
-
-    public function store(): string
-    {
-        if ($this->validate($this->validation)) {
-            $columns = $this->getFilteredFormColumns();
-            $qb = QueryBuilder::insert($this->table_name)->columns($columns);
-            try {
-                $result = (bool) db()->run($qb->build(), $qb->values());
-                $id = db()->lastInsertId();
-                if (request()->files()) {
-                    $result &= $this->handleUpload($id);
-                }
-                if ($result) {
-                    Flash::addFlash("success", "Record created successfully");
-                } else {
-                    Flash::addFlash(
-                        "danger",
-                        "Oops! An unknown issue occurred while creating new record"
-                    );
-                }
-            } catch (PDOException $ex) {
-                $this->handleDatabaseException($ex);
-            }
-        }
-        return $this->createPartial();
-    }
-
-    public function update(string $id): string
-    {
-        if ($this->validate($this->validation)) {
-            $columns = $this->getFilteredFormColumns();
-            $qb = QueryBuilder::update($this->table_name)
-                ->columns($columns)
-                ->where(["id", $id]);
-            try {
-                $result = (bool) db()->run($qb->build(), $qb->values());
-                if (request()->files()) {
-                    $result &= $this->handleUpload($id);
-                }
-                if ($result) {
-                    Flash::addFlash("success", "Record updated successfully");
-                } else {
-                    Flash::addFlash(
-                        "danger",
-                        "Oops! An unknown issue occurred while updating record"
-                    );
-                }
-            } catch (PDOException $ex) {
-                $this->handleDatabaseException($ex);
-            }
-        }
-        return $this->editPartial($id);
-    }
-
-    public function destroy(string $id): string
-    {
-        $qb = QueryBuilder::delete($this->table_name)->where(["id", $id]);
-        try {
-            $result = db()->run($qb->build(), $qb->values());
-            if ($result) {
-                Flash::addFlash("success", "Record deleted successfully");
-            } else {
-                Flash::addFlash(
-                    "danger",
-                    "Oops! An unknown issue occurred while deleting record"
-                );
-            }
-        } catch (PDOException $ex) {
-            $this->handleDatabaseException($ex);
-        }
-        return $this->indexPartial();
     }
 
     /**
@@ -476,14 +360,14 @@ class Module
         ) {
             return moduleRoute($route_name, $module_name, $id);
         };
-        $gravatar = fn(string $str) => md5(strtolower(trim($str)));
+        $gravatar = fn (string $str) => md5(strtolower(trim($str)));
         $singular = function (string $str) {
             return substr($str, -1) === "s" ? rtrim($str, "s") : $str;
         };
-        $request = fn(string $column) => request()->has($column)
+        $request = fn (string $column) => request()->has($column)
             ? request()->$column
             : "";
-        $session = fn(string $column) => session()->has($column)
+        $session = fn (string $column) => session()->has($column)
             ? session()->get($column)
             : "";
         return [
@@ -652,8 +536,8 @@ class Module
         try {
             $data = !is_null($qb)
                 ? db()
-                    ->run($qb->build(), $qb->values())
-                    ->fetch()
+                ->run($qb->build(), $qb->values())
+                ->fetch()
                 : [];
         } catch (PDOException $ex) {
             $this->handleDatabaseException($ex);
@@ -672,5 +556,123 @@ class Module
                 "columns" => $this->form_columns,
             ],
         ];
+    }
+
+    /**-------- ROUTES -----------------------------------------------*/
+
+    public function index(): string
+    {
+        $template = !is_null($this->table_name)
+            ? $this->getIndexTemplate()
+            : $this->getCustomIndex();
+        return latte($template, $this->getIndexData());
+    }
+
+    public function indexPartial(): string
+    {
+        $template = !is_null($this->table_name)
+            ? $this->getIndexTemplate()
+            : $this->getCustomIndex();
+        return latte($template, $this->getIndexData(), "content");
+    }
+
+    public function edit(string $id): string
+    {
+        return latte($this->getEditTemplate(), $this->getEditData($id));
+    }
+
+    public function editPartial(string $id): string
+    {
+        return latte(
+            $this->getEditTemplate(),
+            $this->getEditData($id),
+            "content"
+        );
+    }
+
+    public function create(): string
+    {
+        return latte($this->getCreateTemplate(), $this->getCreateData());
+    }
+
+    public function createPartial(): string
+    {
+        return latte(
+            $this->getCreateTemplate(),
+            $this->getCreateData(),
+            "content"
+        );
+    }
+
+    public function store(): string
+    {
+        if ($this->validate($this->validation)) {
+            $columns = $this->getFilteredFormColumns();
+            $qb = QueryBuilder::insert($this->table_name)->columns($columns);
+            try {
+                $result = (bool) db()->run($qb->build(), $qb->values());
+                $id = db()->lastInsertId();
+                if (request()->files()) {
+                    $result &= $this->handleUpload($id);
+                }
+                if ($result) {
+                    Flash::addFlash("success", "Record created successfully");
+                } else {
+                    Flash::addFlash(
+                        "danger",
+                        "Oops! An unknown issue occurred while creating new record"
+                    );
+                }
+            } catch (PDOException $ex) {
+                $this->handleDatabaseException($ex);
+            }
+        }
+        return $this->createPartial();
+    }
+
+    public function update(string $id): string
+    {
+        if ($this->validate($this->validation)) {
+            $columns = $this->getFilteredFormColumns();
+            $qb = QueryBuilder::update($this->table_name)
+                ->columns($columns)
+                ->where(["id", $id]);
+            try {
+                $result = (bool) db()->run($qb->build(), $qb->values());
+                if (request()->files()) {
+                    $result &= $this->handleUpload($id);
+                }
+                if ($result) {
+                    Flash::addFlash("success", "Record updated successfully");
+                } else {
+                    Flash::addFlash(
+                        "danger",
+                        "Oops! An unknown issue occurred while updating record"
+                    );
+                }
+            } catch (PDOException $ex) {
+                $this->handleDatabaseException($ex);
+            }
+        }
+        return $this->editPartial($id);
+    }
+
+    public function destroy(string $id): string
+    {
+        $qb = QueryBuilder::delete($this->table_name)->where(["id", $id]);
+        try {
+            $result = db()->run($qb->build(), $qb->values());
+            if ($result) {
+                Flash::addFlash("success", "Record deleted successfully");
+            } else {
+                Flash::addFlash(
+                    "danger",
+                    "Oops! An unknown issue occurred while deleting record"
+                );
+            }
+        } catch (PDOException $ex) {
+            $this->handleDatabaseException($ex);
+        }
+        return $this->indexPartial();
     }
 }

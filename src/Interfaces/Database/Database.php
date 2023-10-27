@@ -11,7 +11,7 @@ interface Database
     public function selectAll(string $sql, ...$params): ?array;
     public function query(string $sql, ...$params): ?PDOStatement;
     public function beginTransaction(): bool;
-    public function rollback(): bool;
+    public function rollBack(): bool;
     public function commit(): bool;
     public function lastInsertId(): string|false;
 }
