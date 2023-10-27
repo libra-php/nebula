@@ -17,6 +17,8 @@ class Module
     protected string $module_name;
     protected string $module_title;
     protected ?string $table_name;
+    protected string $name_col = "name";
+    protected string $key_col = "id";
     /** Form */
     protected bool $edit_view = true;
     protected bool $create_view = true;
@@ -117,7 +119,7 @@ class Module
                 $this->deleteColumnFile($column, $id);
                 $qb = QueryBuilder::update($this->table_name)
                     ->columns([$column => $target_path])
-                    ->where(["id", $id]);
+                    ->where([$this->key_col, $id]);
                 if (is_null(db()->run($qb->build(), $qb->values()))) {
                     return false;
                 }
@@ -133,7 +135,7 @@ class Module
             $this->deleteColumnFile($column, $id);
             $qb = QueryBuilder::update($this->table_name)
                 ->columns([$column => null])
-                ->where(["id", $id]);
+                ->where([$this->key_col, $id]);
             if (is_null(db()->run($qb->build(), $qb->values()))) {
                 Flash::addFlash(
                     "danger",
@@ -147,7 +149,7 @@ class Module
     protected function deleteColumnFile(string $column, string $id): void
     {
         $row = db()->select(
-            "SELECT $column FROM $this->table_name WHERE id = ?",
+            "SELECT $column FROM $this->table_name WHERE $this->key_col = ?",
             $id
         );
         if (
@@ -336,7 +338,7 @@ class Module
     {
         $qb = QueryBuilder::select($this->table_name)
             ->columns(array_keys($this->form_columns))
-            ->where(["id", $id]);
+            ->where([$this->key_col, $id]);
 
         return $qb;
     }
@@ -418,10 +420,12 @@ class Module
             "module_name" => $this->module_name,
             "module_title" => $this->module_title,
             "module_title_singular" => $singular($this->module_title),
+            "key_col" => $this->key_col,
+            "name_col" => $this->name_col,
         ];
     }
 
-    protected function formControls($id = null)
+    protected function formControls(?string $id = null): \Closure
     {
         $controls = function ($name, $value, ...$args) use ($id) {
             $fc = new FormControls($id);
@@ -595,7 +599,7 @@ class Module
         ];
     }
 
-    /**-------- ROUTES -----------------------------------------------*/
+    /**-------- ENDPOINTS -----------------------------------------------*/
 
     public function index(): string
     {
@@ -649,7 +653,7 @@ class Module
             try {
                 $result = (bool) db()->run($qb->build(), $qb->values());
                 $id = db()->lastInsertId();
-                if (request()->files()) {
+                if ($id && request()->files()) {
                     $result &= $this->handleUpload($id);
                 }
                 if ($result) {
@@ -696,7 +700,7 @@ class Module
 
     public function destroy(string $id): string
     {
-        $qb = QueryBuilder::delete($this->table_name)->where(["id", $id]);
+        $qb = QueryBuilder::delete($this->table_name)->where([$this->key_col, $id]);
         try {
             $result = db()->run($qb->build(), $qb->values());
             if ($result) {

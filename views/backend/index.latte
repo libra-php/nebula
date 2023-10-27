@@ -50,11 +50,15 @@
 					{foreach $table[data] as $datum}
 					<tr class="align-middle">
 						{foreach $table[columns] as $column => $title}
-						<td class="p-1">{$datum[$column]}</td>
+							{if $column == $name_col}
+								<td class="p-1"><a class="module-edit-link" hx-boost="true" href="{$route('module.edit.part', $datum['id'])}" title="Edit record" hx-target="#module">{$datum[$column]}</a></td>
+						    {else}		
+								<td class="p-1">{$datum[$column]}</td>
+							{/if}
 						{/foreach}
 						<td>
 							<div class="d-flex justify-content-end">
-								<a class="row-action btn btn-sm btn-outline-primary ms-1" href={$route('module.edit.part', $datum['id'])}
+								<a class="row-action btn btn-sm btn-outline-primary ms-1" href="{$route('module.edit.part', $datum['id'])}"
 									hx-boost="true" hx-target="#module" title="Edit record">Edit</a>
 								<a class="row-action btn btn-sm btn-outline-danger ms-1" hx-delete="{$route('module.destroy', $datum[id])}"
 									hx-target="#module"

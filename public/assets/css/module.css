@@ -91,6 +91,10 @@
 #table .row-action {
   padding: 2px 4px;
 }
+#table .module-edit-link {
+  text-decoration: none;
+  font-style: italic;
+}
 
 /**
  * Search 
