@@ -20,6 +20,15 @@ class Audit extends Module
             "new_value" => "New Value",
             "message" => "Message",
         ];
+        $this->search = [
+            "table_name",
+            "table_id",
+            "field",
+        ];
+        $this->filter_links = [
+            "Me" => "user_id = " . user()->id,
+            "All" => "1=1",
+        ];
         parent::__construct("audit", "audit");
     }
 }
