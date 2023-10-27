@@ -15,7 +15,7 @@ class MySQLDatabase implements Database
 {
     use Singleton;
 
-    private PDOStatement $statement;
+    public PDOStatement $statement;
     public $query_time = 0;
     public $num_queries = 0;
     public $total_time = 0;

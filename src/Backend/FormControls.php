@@ -158,7 +158,7 @@ class FormControls
 
     public function checkbox(string $name, ?string $value, ...$attrs): string
     {
-        $hidden = $this->input($name, $value, "hidden");
+        $hidden = $this->input($name, intval($value), "hidden");
         $checked = intval($value) ? "checked" : "";
         $checkbox = $this->input(
             "",
@@ -172,7 +172,7 @@ class FormControls
 
     public function switch(string $name, ?string $value): string
     {
-        $hidden = $this->input($name, $value, "hidden");
+        $hidden = $this->input($name, intval($value), "hidden");
         $checked = intval($value) ? "checked" : "";
         $checkbox = $this->input(
             "",

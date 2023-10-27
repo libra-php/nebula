@@ -272,6 +272,57 @@ class Module
         return "backend/create.latte";
     }
 
+    protected function audit(
+        string $user_id,
+        string $table_name,
+        string $table_id,
+        string $field,
+        string $value,
+        string $message = ""
+    ): void {
+        $old = db()->select(
+            "SELECT new_value
+            FROM audit
+            WHERE table_name = ? AND
+            table_id = ? AND
+            field = ?
+            ORDER BY created_at DESC
+            LIMIT 1",
+            $table_name,
+            $table_id,
+            $field
+        );
+        if (db()->statement->rowCount() == 0 || $old->new_value != $value) {
+            db()->run(
+                "INSERT INTO audit SET
+                user_id = ?,
+                table_name = ?,
+                table_id = ?,
+                field = ?,
+                old_value = ?,
+                new_value = ?,
+                message = ?,
+                created_at = NOW()",
+                [
+                    $user_id,
+                    $table_name,
+                    $table_id,
+                    $field,
+                    $old->new_value ?? "NULL",
+                    $value,
+                    $message,
+                ]
+            );
+        }
+    }
+
+    protected function auditColumns(array $columns, string $id, string $message = ""): void
+    {
+        foreach ($columns as $column => $value) {
+            $this->audit(user()->id, $this->table_name, $id, $column, $value, $message);
+        }
+    }
+
     protected function handleDatabaseException(PDOException $ex): void
     {
         if (config("app.debug")) {
@@ -483,8 +534,8 @@ class Module
                         implode(", ", $this->image_extensions)
                     )
                 ),
-                "checkbox" => $fc->checkbox($name, $value),
-                "switch" => $fc->switch($name, $value),
+                "checkbox" => $fc->checkbox($name, $value ?? 0),
+                "switch" => $fc->switch($name, $value ?? 0),
                 default => $fc->plain($name, $value),
             };
         };
@@ -657,6 +708,7 @@ class Module
                     $result &= $this->handleUpload($id);
                 }
                 if ($result) {
+                    $this->auditColumns($columns, $id, 'INSERT');
                     Flash::addFlash("success", "Record created successfully");
                 } else {
                     Flash::addFlash(
@@ -684,6 +736,7 @@ class Module
                     $result &= $this->handleUpload($id);
                 }
                 if ($result) {
+                    $this->auditColumns($columns, $id, 'UPDATE');
                     Flash::addFlash("success", "Record updated successfully");
                 } else {
                     Flash::addFlash(
@@ -704,6 +757,7 @@ class Module
         try {
             $result = db()->run($qb->build(), $qb->values());
             if ($result) {
+                $this->auditColumns([$this->key_col => "NULL"], $id, 'DELETE');
                 Flash::addFlash("success", "Record deleted successfully");
             } else {
                 Flash::addFlash(
