@@ -70,6 +70,8 @@ class Module
     protected array $search = [];
     protected array $filter_links = [];
     protected array $where = [];
+    protected string $order_by = "";
+    protected string $sort = "DESC";
     /** Pagination */
     protected int $page = 1;
     protected int $total_results = 0;
@@ -422,6 +424,13 @@ class Module
         );
         if (!empty($this->where)) {
             $qb->where(...$this->where);
+        }
+        if ($this->order_by) {
+            // Sort by primary key desc
+            $qb->orderBy([$this->order_by => $this->sort]);
+        } else {
+            // Sort by primary key desc
+            $qb->orderBy([$this->key_col => $this->sort]);
         }
         if (!is_null($this->offset)) {
             $qb->limit($this->limit)->offset($this->offset);
