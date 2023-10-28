@@ -9,6 +9,7 @@ class Audit extends Module
     public function __construct()
     {
         $this->table_create = $this->table_edit = $this->table_destroy = false;
+        $this->key_col = "id";
         $this->name_col = "id";
         $this->table_columns = [
             "id" => "ID",
@@ -16,8 +17,7 @@ class Audit extends Module
             "table_name" => "Table",
             "table_id" => "ID",
             "field" => "Field",
-            "old_value" => "Old Value",
-            "new_value" => "New Value",
+            "CONCAT(old_value, ' => ', new_value) AS audit_change" => "Change",
             "message" => "Message",
         ];
         $this->search = [

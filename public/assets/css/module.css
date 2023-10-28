@@ -3,6 +3,7 @@
  */
 #main {
   height: 100%;
+  min-width: 400px;
 }
 
 #module {
@@ -93,7 +94,9 @@
 }
 #table .module-edit-link {
   text-decoration: none;
-  font-style: italic;
+  color: #444;
+  font-weight: 600;
+  /* font-style: italic; */
 }
 
 /**

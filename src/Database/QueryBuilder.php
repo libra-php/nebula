@@ -234,7 +234,11 @@ class QueryBuilder implements QueryBuilderInterface
                 $select_stmt = implode(
                     ", ",
                     array_map(function ($value) {
-                        return "`$value`";
+                        $lower = strtolower($value);
+                        if (preg_match('/( as )/', $lower)) {
+                            return $value;
+                        }
+                        return sprintf("`%s`", $value);
                     }, $this->columns)
                 );
                 $sql = str_replace("*", $select_stmt, $sql);

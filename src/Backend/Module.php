@@ -126,6 +126,7 @@ class Module
                 if (is_null(db()->run($qb->build(), $qb->values()))) {
                     return false;
                 }
+                $this->auditColumns([$column => $target_path], $id, 'UPLOAD');
             }
         }
         return true;
@@ -149,7 +150,7 @@ class Module
         }
     }
 
-    protected function deleteColumnFile(string $column, string $id): void
+    protected function deleteColumnFile(string $column, string $id): bool
     {
         $row = db()->select(
             "SELECT $column FROM $this->table_name WHERE $this->key_col = ?",
@@ -161,8 +162,9 @@ class Module
             trim($row->$column) != "" &&
             file_exists($row->$column)
         ) {
-            unlink($row->$column);
+            return unlink($row->$column);
         }
+        return false;
     }
 
     protected function handleFilterCount(): void
@@ -235,6 +237,9 @@ class Module
         }
     }
 
+    /**
+     * Return module not found response
+     */
     public function moduleNotFound(): never
     {
         Flash::addFlash(
@@ -245,36 +250,57 @@ class Module
         exit();
     }
 
+    /**
+     * Return the module name
+     */
     public function getModuleName(): string
     {
         return $this->module_name;
     }
 
+    /**
+     * Return the table name
+     */
     public function getTableName(): string
     {
         return $this->table_name;
     }
 
+    /**
+     * Return the template used for index
+     */
     protected function getIndexTemplate(): string
     {
         return "backend/index.latte";
     }
 
+    /**
+     * Return the template used for custom index
+     */
     protected function getCustomIndex(): string
     {
         return "backend/custom.latte";
     }
 
+    /**
+     * Return the template used for edit
+     */
     protected function getEditTemplate(): string
     {
         return "backend/edit.latte";
     }
 
+    /**
+     * Return the template used for create
+     */
     protected function getCreateTemplate(): string
     {
         return "backend/create.latte";
     }
 
+    /**
+     * Add a row to the audit table
+     */
     protected function audit(
         string $user_id,
         string $table_name,
@@ -319,6 +345,10 @@ class Module
         }
     }
 
+    /**
+     * Audit table columns
+     * @param array<int,mixed> $columns
+     */
     protected function auditColumns(array $columns, string $id, string $message = ""): void
     {
         foreach ($columns as $column => $value) {
@@ -326,6 +356,9 @@ class Module
         }
     }
 
+    /**
+     * Handle any database PDOException
+     */
     protected function handleDatabaseException(PDOException $ex): void
     {
         if (config("app.debug")) {
@@ -344,6 +377,10 @@ class Module
         exit();
     }
 
+    /**
+     * Filter out columns that should not be used in the 
+     * request for creation of / updating a record.
+     */
     protected function getFilteredFormColumns(): array
     {
         $filtered_controls = ["upload", "image"];
@@ -362,6 +399,7 @@ class Module
     }
 
     /**
+     * Validate request based on user-supplied rules
      * @param array<int,mixed> $rules
      */
     protected function validate(array $rules): bool
@@ -371,6 +409,9 @@ class Module
         return $result;
     }
 
+    /**
+     * Return the index QueryBuilder
+     */
     protected function getIndexQuery(): ?QueryBuilder
     {
         if (is_null($this->table_name)) {
@@ -388,6 +429,9 @@ class Module
         return $qb;
     }
 
+    /**
+     * Return the edit QueryBuilder
+     */
     protected function getEditQuery(string $id): QueryBuilder
     {
         $qb = QueryBuilder::select($this->table_name)
@@ -399,13 +443,15 @@ class Module
 
     /**
      * Override method for rendering custom content
+     * Custom content is rendered if table_name is null
      */
-    protected function customContent()
+    protected function customContent(): string
     {
+        return '';
     }
 
     /**
-     * Profiler
+     * Return the profiler array used in all views
      */
     protected function profiler(): array
     {
@@ -440,6 +486,9 @@ class Module
         ];
     }
 
+    /**
+     * Returns common data array used in all views
+     */
     public function commonData(): array
     {
         $route = function (string $route_name, ?string $id = null) {
@@ -479,6 +528,12 @@ class Module
         ];
     }
 
+    /**
+     * Return a form control closure used edit / create views
+     * There are a couple of different ways to render a form control:
+     * 1. Define a function callback that will render a control manually
+     * 2. Use a pre-defined control type, which will render a control automatically
+     */
     protected function formControls(?string $id = null): \Closure
     {
         $controls = function ($name, $value, ...$args) use ($id) {
@@ -545,6 +600,9 @@ class Module
         return $controls;
     }
 
+    /**
+     * Get the total number of results from the index query
+     */
     protected function getTotalResults(): int
     {
         if (empty($this->table_columns)) return 0;
@@ -553,6 +611,9 @@ class Module
         return $stmt?->rowCount() ?? 0;
     }
 
+    /**
+     * Returns an array of data used for the table view
+     */
     protected function tableData(): array|bool
     {
         if (is_null($this->table_name) || empty($this->table_columns)) {
@@ -576,6 +637,32 @@ class Module
     }
 
     /**
+     * If the subquery has an alias, then we want return an updated
+     * table columns where we only use the alias name as the table
+     * columns key.
+     * @param array<int,mixed> $columns
+     */
+    protected function tableAlias(array $columns): array
+    {
+        $filtered = array_map(function ($column) {
+            $lower = strtolower($column);
+            if (preg_match('/( as )/', $lower)) {
+                $split = explode(' as ', $lower);
+                return end($split);
+            }
+            return $column;
+        }, array_keys($columns));
+        $filtered_table_columns = [];
+        $idx = 0;
+        foreach ($columns as $_ => $value) {
+            $filtered_table_columns[$filtered[$idx]] = $value;
+            $idx++;
+        }
+        return $filtered_table_columns;
+    }
+
+    /**
+     * Return data used for index view
      * @return array<string,mixed>
      */
     protected function getIndexData(): array
@@ -601,13 +688,14 @@ class Module
                 "total_pages" => $this->total_pages,
                 "page" => $this->page,
                 "data" => $data,
-                "columns" => $this->table_columns,
+                "columns" => $this->tableAlias($this->table_columns),
                 "col_span" => count($this->table_columns) + 1,
             ],
         ];
     }
 
     /**
+     * Return data used for create view
      * @return array<string,mixed>
      */
     protected function getCreateData(): array
@@ -625,6 +713,7 @@ class Module
     }
 
     /**
+     * Return data used for edit view
      * @return array<string,mixed>
      */
     protected function getEditData(string $id): array
@@ -739,7 +828,7 @@ class Module
                 ->where(["id", $id]);
             try {
                 $result = (bool) db()->run($qb->build(), $qb->values());
-                if (request()->files()) {
+                if ($result && request()->files()) {
                     $result &= $this->handleUpload($id);
                 }
                 if ($result) {
