@@ -29,7 +29,7 @@
 		{foreach $filter_links as $title => $clause}
 			<a hx-boost="true" href="{$route('module.index.part')}?filter_link={$title|escapeUrl}" hx-target="#module" title="{$title}">
 				<span class="badge filter-link pill me-1 {if $filter_link == $title}active{/if}">{$title} 
-					[<span hx-trigger="load delay:50ms" hx-get="{$route('module.index.part')}?filter_count={$title|escapeUrl}" class="count" hx-target="this">??</span>]
+					[<span hx-trigger="load delay:50ms" hx-get="{$route('module.index.part')}?filter_count={$title|escapeUrl}" class="count" hx-target="this">?</span>]
 				</span>
 			</a>
 		{/foreach}		
