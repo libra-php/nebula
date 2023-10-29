@@ -93,8 +93,8 @@
 				</tbody>
 			</table>
 		</div>
-		<div hx-boost="true" id="pagination" class="mt-3" n:if="$table[total_pages] > 1">
-			<nav aria-label="navigation">
+		<div hx-boost="true" id="pagination" class="mt-3 d-flex">
+			<nav aria-label="navigation" n:if="$table[total_pages] > 1">
 				<ul class="pagination pagination">
 					<li title="Previous" class="page-item {if $table[page] === 1}disabled{/if}">
 						<a class="page-link" href="{$route('module.index.part')}?page={$table[page]-1}" hx-select="#module-table" hx-target="#module-table">⯇ PREV</a>
@@ -106,6 +106,20 @@
 					</li>
 					<li title="Next" class="page-item {if $table[page] === $table[total_pages]}disabled{/if}">
 						<a class="page-link" href="{$route('module.index.part')}?page={$table[page]+1}" hx-select="#module-table" hx-target="#module-table">NEXT ⯈</a>
+					</li>
+				</ul>
+			</nav>
+			<nav aria-label="items per page" class="ms-auto">
+				<ul class="pagination pagination">
+					<li class="page-item disabled">
+						<span class="page-link">Per Page</span>
+					</li>
+					<li class="page-item d-flex align-items-stretch">
+						<select id="per-page-selector" class="border-0" name="limit" hx-get="{$route('module.index.part')}" hx-select="#module-table" hx-target="#module-table">
+							{foreach $table['per_page_options'] as $value}
+							<option value="{$value}" {if $value == $table['per_page']}selected{/if}>{$value}</option>
+							{/foreach}
+						</select>
 					</li>
 				</ul>
 			</nav>

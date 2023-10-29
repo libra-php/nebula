@@ -247,14 +247,26 @@ class Module
     protected function handlePagination(): void
     {
         $page = $this->page;
+        $limit = $this->limit;
         if (request()->has("page")) {
             session()->set(
                 $this->module_name . "_page",
                 intval(request()->page)
             );
         }
+        if (request()->has("limit")) {
+            session()->set(
+                $this->module_name . "_limit",
+                intval(request()->limit)
+            );
+            session()->set(
+                $this->module_name . "_page",
+                1
+            );
+        }
 
         $this->page = session()->get($this->module_name . "_page") ?? $page;
+        $this->limit = session()->get($this->module_name . "_limit") ?? $limit;
     }
 
     /**
@@ -741,6 +753,8 @@ class Module
                 "sort" => $this->sort,
                 "total_results" => $this->total_results,
                 "total_pages" => $this->total_pages,
+                "per_page" => $this->limit,
+                "per_page_options" => [5, 15, 25, 50, 100, 200, 500, 1000],
                 "page" => $this->page,
                 "data" => $data,
                 "columns" => $this->tableAlias($this->table_columns),

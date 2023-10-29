@@ -116,6 +116,9 @@
 /**
  * Search 
  */
+#table #pagination {
+  font-size: 0.9rem;
+}
 #table #pagination li.page-item a.page-link {
   cursor: pointer;
 }
@@ -128,7 +131,16 @@
   border-top: 1px solid #d6dee1 !important;
   border-bottom: 1px solid #d6dee1 !important;
 }
-
+#table #pagination #per-page-selector {
+  color: royalblue;
+  background-color: #fff;
+  border-top: 1px solid #d6dee1 !important;
+  border-bottom: 1px solid #d6dee1 !important;
+}
+#table #pagination #per-page-selector:hover {
+  cursor: pointer;
+  background-color: #eee;
+}
 #table #pagination #page-selector:hover {
   cursor: pointer;
   background-color: #eee;
