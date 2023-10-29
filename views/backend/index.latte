@@ -40,7 +40,22 @@
 				<thead class="text-light">
 					<tr>
 						{foreach $table[columns] as $column => $title}
-						<th scope="col" class="p-1">{$title}</th>
+							<th scope="col" class="p-1">
+								<a href="{$route('module.index.part')}?order_by={$column|escapeUrl}&sort={if $table['order_by'] == $column && $table['sort'] == "DESC"}ASC{else}DESC{/if}" hx-boost="true" hx-select="#module-table" hx-target="#module-table">
+									{if $table['order_by'] == $column}
+										<span class="active">
+											{$title}
+											{if $table['sort'] === 'DESC'}
+												&#11206;
+											{else}
+												&#11205;
+											{/if}
+										</span>
+									{else}	
+										<span>{$title}</span>
+									{/if}
+								</a>
+							</th>
 						{/foreach}
 						<th></th>
 					</tr>

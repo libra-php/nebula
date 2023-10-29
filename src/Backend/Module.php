@@ -91,6 +91,7 @@ class Module
 
     protected function processTableRequest(): void
     {
+        $this->handleOrdering();
         $this->handlePagination();
         $this->handleSearch();
         $this->handleFilterCount();
@@ -198,6 +199,19 @@ class Module
             $this->where[] = [
                 session()->get($this->module_name . "_filter_link"),
             ];
+        }
+    }
+
+    protected function handleOrdering(): void
+    {
+        if (request()->has("order_by") && request()->has("sort")) {
+            session()->set($this->module_name . "_order_by", request()->order_by);
+            session()->set($this->module_name . "_sort", request()->sort);
+        }
+
+        if (session()->has($this->module_name . "_order_by") && $this->module_name . "_sort") {
+            $this->order_by = session()->get($this->module_name . "_order_by");
+            $this->sort = session()->get($this->module_name . "_sort");
         }
     }
 
@@ -425,13 +439,10 @@ class Module
         if (!empty($this->where)) {
             $qb->where(...$this->where);
         }
-        if ($this->order_by) {
-            // Sort by primary key desc
-            $qb->orderBy([$this->order_by => $this->sort]);
-        } else {
-            // Sort by primary key desc
-            $qb->orderBy([$this->key_col => $this->sort]);
+        if ($this->order_by == '') {
+            $this->order_by = $this->key_col;
         }
+        $qb->orderBy([$this->order_by => $this->sort]);
         if (!is_null($this->offset)) {
             $qb->limit($this->limit)->offset($this->offset);
         }
@@ -693,6 +704,8 @@ class Module
                 "create" => $this->table_create,
                 "edit" => $this->table_edit,
                 "destroy" => $this->table_destroy,
+                "order_by" => $this->order_by,
+                "sort" => $this->sort,
                 "total_results" => $this->total_results,
                 "total_pages" => $this->total_pages,
                 "page" => $this->page,

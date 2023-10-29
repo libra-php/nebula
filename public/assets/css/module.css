@@ -69,9 +69,18 @@
 #table .table thead {
   background-image: linear-gradient(45deg, #102a3c, #050e14);
 }
-
+#table .table thead th span {
+  color: #fff;
+}
+#table .table thead th a {
+  text-decoration: none;
+}
 #table .table thead th {
   white-space: nowrap;
+}
+
+#table .table thead th span.active {
+  color: #ffffb3 !important;
 }
 
 #table .table-container {
