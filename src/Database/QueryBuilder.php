@@ -123,6 +123,15 @@ class QueryBuilder implements QueryBuilderInterface
     }
 
     /**
+     * Add tables to a select query
+     */
+    public function join(array $joins): self
+    {
+        $this->table_name = sprintf("%s %s", $this->table_name, implode(" ", $joins));
+        return $this;
+    }
+
+    /**
      * Add a where clause to the query
      */
     public function where(...$args): self
@@ -238,6 +247,7 @@ class QueryBuilder implements QueryBuilderInterface
                         if (preg_match('/( as )/', $lower)) {
                             return $value;
                         }
+                        $value = str_replace('.', "`.`", $value);
                         return sprintf("`%s`", $value);
                     }, $this->columns)
                 );

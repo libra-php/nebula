@@ -13,18 +13,22 @@ class Audit extends Module
         $this->key_col = "id";
         $this->name_col = "id";
         $this->table_columns = [
-            "id" => "ID",
-            "user_id" => "User",
-            "table_name" => "Table",
-            "table_id" => "ID",
-            "field" => "Field",
-            "CONCAT(old_value, ' => ', new_value) AS audit_change" => "Change",
-            "message" => "Message",
+            "audit.id" => "ID",
+            "users.name" => "User",
+            "audit.table_name" => "Table",
+            "audit.table_id" => "ID",
+            "audit.field" => "Field",
+            "CONCAT(audit.old_value, ' => ', audit.new_value) AS audit_change" => "Change",
+            "audit.message" => "Message",
+        ];
+        $this->joins = [
+            "INNER JOIN users ON audit.user_id = users.id"
         ];
         $this->search = [
             "table_name",
             "table_id",
             "field",
+            "name"
         ];
         $this->filter_links = [
             "Me" => "user_id = " . user()->id,

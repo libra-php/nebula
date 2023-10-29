@@ -7,6 +7,18 @@ use Nebula\Database\QueryBuilder;
 
 final class QueryBuilderTest extends TestCase
 {
+    public function test_join(): void
+    {
+        $qb = QueryBuilder::select("audit")
+        ->columns(["audit.id", "user.email"])
+        ->join(["INNER JOIN users ON audit.user_id = users.id"])
+        ->where(["id IS NOT NULL"]);
+        $this->assertSame(
+            "SELECT `audit.id`, `user.email` FROM audit INNER JOIN users ON audit.user_id = users.id WHERE (id IS NOT NULL)",
+            $qb->build()
+        );
+    }
+
     public function test_where_params(): void
     {
         $qb = QueryBuilder::select("users")

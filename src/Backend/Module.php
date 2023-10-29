@@ -67,6 +67,7 @@ class Module
     protected array $select_options = [];
     /** Table */
     protected bool $table_view = true;
+    protected array $joins = []; 
     protected array $table_columns = [];
     protected array $table_data = [];
     protected array $search = [];
@@ -551,9 +552,14 @@ class Module
         if (is_null($this->table_name)) {
             return null;
         }
-        $qb = QueryBuilder::select($this->table_name)->columns(
-            array_keys($this->table_columns)
-        );
+        $qb = QueryBuilder::select($this->table_name);
+        
+        if (!empty($this->joins)) {
+            $qb->join($this->joins);
+        }
+        if (!empty($this->table_columns)) {
+            $qb->columns(array_keys($this->table_columns));
+        }
         if (!empty($this->where)) {
             $qb->where(...$this->where);
         }
@@ -779,6 +785,7 @@ class Module
      * If the subquery has an alias, then we want return an updated
      * table columns where we only use the alias name as the table
      * columns key.
+     * This will also remove the table prefix, if it was provided
      * @param array<int,mixed> $columns
      */
     protected function tableAlias(array $columns): array
@@ -789,7 +796,8 @@ class Module
                 $split = explode(' as ', $lower);
                 return end($split);
             }
-            return $column;
+            $split = explode('.', $lower);
+            return end($split);
         }, array_keys($columns));
         $filtered_table_columns = [];
         $idx = 0;
