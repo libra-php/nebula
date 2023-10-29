@@ -1,26 +1,13 @@
 <nav id="sidebar" class="d-none d-sm-block" hx-boost="true">
   <div class="d-flex flex-column flex-shrink-0 text-light h-100">
     <ul id="sidebar-links" class="nav nav-pills flex-column mb-auto pt-3">
-      <li onClick="handleSidebarActive(event)" class="nav-item {if $module_name === "home"}active{/if}" title="Home" data-module='home'>
-        <a href="{$moduleRoute('module.index.part', 'home')}" class="nav-link d-flex align-items-center text-white" hx-target="#module">
-          <i data-feather="home" /><span class="d-none d-lg-block">Home</span>
-        </a>
-      </li>
-      <li onClick="handleSidebarActive(event)" class="nav-item {if $module_name === "users"}active{/if}" title="Users" data-module='users'>
-        <a href="{$moduleRoute('module.index.part', 'users')}" class="nav-link d-flex align-items-center text-white" hx-target="#module">
-          <i data-feather="users" /><span class="d-none d-lg-block">Users</span>
-        </a>
-      </li>
-      <li onClick="handleSidebarActive(event)" class="nav-item {if $module_name === "test"}active{/if}" title="Test" data-module='test'>
-        <a href="{$moduleRoute('module.index.part', 'test')}" class="nav-link d-flex align-items-center text-white" hx-target="#module">
-          <i data-feather="package" /><span class="d-none d-lg-block">Test</span>
-        </a>
-      </li>
-      <li onClick="handleSidebarActive(event)" class="nav-item {if $module_name === "audit"}active{/if}" title="Audit" data-module='audit'>
-        <a href="{$moduleRoute('module.index.part', 'audit')}" class="nav-link d-flex align-items-center text-white" hx-target="#module">
-          <i data-feather="book-open" /><span class="d-none d-lg-block">Audit</span>
-        </a>
-      </li>
+      {foreach $module_links as $link}
+        <li onClick="handleSidebarActive(event)" class="nav-item {if $module_name === $link['name']}active{/if}" title="{$link['title']}" data-module='{$link['name']}'>
+          <a href="{$moduleRoute('module.index.part', $link['name'])}" class="nav-link d-flex align-items-center text-white" hx-target="#module">
+            <i data-feather="{$link['icon']}" /><span class="d-none d-lg-block">{$link['title']}</span>
+          </a>
+        </li>
+      {/foreach}
     </ul>
     <hr>
     <div class="dropdown mb-2 p-2 p-lg-3">
@@ -33,9 +20,6 @@
         </div>
       </a>
       <ul class="dropdown-menu text-small shadow p-2" aria-labelledby="user-dropdown">
-        <li class="nav-item">
-          <a class="dropdown-item disabled" href="#"><i data-feather="edit-2" /> Profile</a>
-        </li>
         <li class="nav-item">
           <a class="dropdown-item" href="{$route('sign-out.index')}" hx-target="body"><i data-feather="log-out" /> Sign
             out</a>

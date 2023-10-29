@@ -16,6 +16,7 @@ class Module
     /** Module */
     protected string $module_name;
     protected string $module_title;
+    protected string $module_icon = "package";
     protected ?string $table_name;
     protected string $name_col = "name";
     protected string $key_col = "id";
@@ -88,6 +89,43 @@ class Module
         $this->module_name = $module_name;
         $this->module_title = ucfirst($module_name);
         $this->table_name = $table_name;
+    }
+
+    /**
+     * Return module info used in links
+     */
+    public function getLinkInfo()
+    {
+        return [
+            $this->module_name,
+            $this->module_title,
+            $this->module_icon,
+        ];
+    }
+
+    /**
+     * Get the module links for navbar and sidebar
+     */
+    protected function getModuleLinks()
+    {
+        $links = [];
+        $module_map = classMap(config("paths.modules"));
+        foreach ($module_map as $class => $_) {
+            $module = new $class();
+            [$name, $title, $icon] = $module->getLinkInfo();
+            $links[] = [
+                "name" => $name,
+                "title" => $title,
+                "icon" => $icon,
+            ];
+        }
+        // Sort by name
+        usort($links, function($a, $b) { 
+            // Home is always at the top
+            if ($b['name'] === 'home') return 1;
+            return $a['name'] <=> $b['name'];
+        });
+        return $links;
     }
 
     /**
@@ -589,6 +627,7 @@ class Module
             "module_title_singular" => $singular($this->module_title),
             "key_col" => $this->key_col,
             "name_col" => $this->name_col,
+            "module_links" => $this->getModuleLinks(),
         ];
     }
 

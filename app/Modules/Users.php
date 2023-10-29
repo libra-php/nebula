@@ -8,6 +8,7 @@ class Users extends Module
 {
     public function __construct()
     {
+        $this->module_icon = "users";
         $this->table_columns = [
             "id" => "ID",
             "uuid" => "UUID",
