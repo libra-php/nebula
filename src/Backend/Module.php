@@ -119,10 +119,7 @@ class Module
         }
         // Sort by name
         usort($links, function ($a, $b) {
-            // Home is always at the top
-            if ($b["name"] === "home") {
-                return 1;
-            }
+            if ($a["name"] === "home") return -1;
             return $a["name"] <=> $b["name"];
         });
         return $links;
