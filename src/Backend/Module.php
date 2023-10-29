@@ -69,6 +69,7 @@ class Module
     protected array $table_data = [];
     protected array $search = [];
     protected array $filter_links = [];
+    protected string $filter_link = '';
     protected array $where = [];
     protected string $order_by = "";
     protected string $sort = "DESC";
@@ -196,9 +197,9 @@ class Module
         }
 
         if (session()->has($this->module_name . "_filter_link")) {
-            $this->where[] = [
-                session()->get($this->module_name . "_filter_link"),
-            ];
+            $filter = session()->get($this->module_name . "_filter_link");
+            $this->filter_link = array_search($filter, $this->filter_links); 
+            $this->where[] = [$filter];
         }
     }
 
@@ -700,6 +701,7 @@ class Module
             "has_search" => !empty($this->search),
             "has_filter_links" => !empty($this->filter_links),
             "filter_links" => $this->filter_links,
+            "filter_link" => $this->filter_link,
             "table" => [
                 "create" => $this->table_create,
                 "edit" => $this->table_edit,
