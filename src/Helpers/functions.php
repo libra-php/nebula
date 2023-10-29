@@ -41,12 +41,12 @@ function json(mixed $data)
 }
 
 /**
- * Used in a module 
+ * Used in a module
  * for defining select_options values
  */
 function option(string $id, mixed $name)
 {
-    return (object)['id' => $id, 'name' => $name];
+    return (object) ["id" => $id, "name" => $name];
 }
 
 /**

@@ -67,12 +67,12 @@ class Module
     protected array $select_options = [];
     /** Table */
     protected bool $table_view = true;
-    protected array $joins = []; 
+    protected array $joins = [];
     protected array $table_columns = [];
     protected array $table_data = [];
     protected array $search = [];
     protected array $filter_links = [];
-    protected string $filter_link = '';
+    protected string $filter_link = "";
     protected array $where = [];
     protected string $order_by = "";
     protected string $sort = "DESC";
@@ -98,11 +98,7 @@ class Module
      */
     public function getLinkInfo()
     {
-        return [
-            $this->module_name,
-            $this->module_title,
-            $this->module_icon,
-        ];
+        return [$this->module_name, $this->module_title, $this->module_icon];
     }
 
     /**
@@ -122,10 +118,12 @@ class Module
             ];
         }
         // Sort by name
-        usort($links, function($a, $b) { 
+        usort($links, function ($a, $b) {
             // Home is always at the top
-            if ($b['name'] === 'home') return 1;
-            return $a['name'] <=> $b['name'];
+            if ($b["name"] === "home") {
+                return 1;
+            }
+            return $a["name"] <=> $b["name"];
         });
         return $links;
     }
@@ -159,12 +157,17 @@ class Module
         if (request()->has("export_csv")) {
             $name = sprintf("%s_export_%s.csv", $this->module_name, time());
             header("Content-Type: text/csv");
-            header(sprintf('Content-Disposition: attachment; filename="%s.csv"', $name));
+            header(
+                sprintf(
+                    'Content-Disposition: attachment; filename="%s.csv"',
+                    $name
+                )
+            );
             $fp = fopen("php://output", "wb");
             $csv_headers = $skip = [];
             $columns = $this->tableAlias($this->table_columns);
             foreach ($columns as $column => $title) {
-                if (is_null($title) || trim($title) == '') {
+                if (is_null($title) || trim($title) == "") {
                     $skip[] = $column;
                     continue;
                 }
@@ -214,7 +217,7 @@ class Module
                 if (is_null(db()->run($qb->build(), $qb->values()))) {
                     return false;
                 }
-                $this->auditColumns([$column => $target_path], $id, 'UPLOAD');
+                $this->auditColumns([$column => $target_path], $id, "UPLOAD");
             }
         }
         return true;
@@ -306,11 +309,17 @@ class Module
     protected function handleOrdering(): void
     {
         if (request()->has("order_by") && request()->has("sort")) {
-            session()->set($this->module_name . "_order_by", request()->order_by);
+            session()->set(
+                $this->module_name . "_order_by",
+                request()->order_by
+            );
             session()->set($this->module_name . "_sort", request()->sort);
         }
 
-        if (session()->has($this->module_name . "_order_by") && $this->module_name . "_sort") {
+        if (
+            session()->has($this->module_name . "_order_by") &&
+            $this->module_name . "_sort"
+        ) {
             $this->order_by = session()->get($this->module_name . "_order_by");
             $this->sort = session()->get($this->module_name . "_sort");
         }
@@ -334,10 +343,7 @@ class Module
                 $this->module_name . "_limit",
                 intval(request()->limit)
             );
-            session()->set(
-                $this->module_name . "_page",
-                1
-            );
+            session()->set($this->module_name . "_page", 1);
         }
 
         $this->page = session()->get($this->module_name . "_page") ?? $page;
@@ -484,10 +490,20 @@ class Module
      * Audit table columns
      * @param array<int,mixed> $columns
      */
-    protected function auditColumns(array $columns, string $id, string $message = ""): void
-    {
+    protected function auditColumns(
+        array $columns,
+        string $id,
+        string $message = ""
+    ): void {
         foreach ($columns as $column => $value) {
-            $this->audit(user()->id, $this->table_name, $id, $column, $value, $message);
+            $this->audit(
+                user()->id,
+                $this->table_name,
+                $id,
+                $column,
+                $value,
+                $message
+            );
         }
     }
 
@@ -513,7 +529,7 @@ class Module
     }
 
     /**
-     * Filter out columns that should not be used in the 
+     * Filter out columns that should not be used in the
      * request for creation of / updating a record.
      */
     protected function getFilteredFormColumns(): array
@@ -523,11 +539,11 @@ class Module
         // Deal with "NULL" string
         array_walk(
             $data,
-            fn (&$value, $key) => ($value = $value === "NULL" ? null : $value)
+            fn(&$value, $key) => ($value = $value === "NULL" ? null : $value)
         );
         return array_filter(
             $data,
-            fn ($value, $key) => $key != "csrf_token" &&
+            fn($value, $key) => $key != "csrf_token" &&
                 !in_array($this->form_controls[$key], $filtered_controls),
             ARRAY_FILTER_USE_BOTH
         );
@@ -553,7 +569,7 @@ class Module
             return null;
         }
         $qb = QueryBuilder::select($this->table_name);
-        
+
         if (!empty($this->joins)) {
             $qb->join($this->joins);
         }
@@ -563,7 +579,7 @@ class Module
         if (!empty($this->where)) {
             $qb->where(...$this->where);
         }
-        if ($this->order_by == '') {
+        if ($this->order_by == "") {
             $this->order_by = $this->key_col;
         }
         $qb->orderBy([$this->order_by => $this->sort]);
@@ -591,7 +607,7 @@ class Module
      */
     protected function customContent(): string
     {
-        return '';
+        return "";
     }
 
     /**
@@ -604,7 +620,7 @@ class Module
         foreach (["Slow DB:" => db()->trace_counts] as $title => $traces) {
             //$slow_traces[] = $title;
             if ($traces) {
-                uasort($traces, fn ($a, $b) => $b["time"] <=> $a["time"]);
+                uasort($traces, fn($a, $b) => $b["time"] <=> $a["time"]);
                 $i = 0;
                 foreach ($traces as $key => $value) {
                     $i++;
@@ -645,14 +661,14 @@ class Module
         ) {
             return moduleRoute($route_name, $module_name, $id);
         };
-        $gravatar = fn (string $str) => md5(strtolower(trim($str)));
+        $gravatar = fn(string $str) => md5(strtolower(trim($str)));
         $singular = function (string $str) {
             return substr($str, -1) === "s" ? rtrim($str, "s") : $str;
         };
-        $request = fn (string $column) => request()->has($column)
+        $request = fn(string $column) => request()->has($column)
             ? request()->$column
             : "";
-        $session = fn (string $column) => session()->has($column)
+        $session = fn(string $column) => session()->has($column)
             ? session()->get($column)
             : "";
         return [
@@ -750,7 +766,9 @@ class Module
      */
     protected function getTotalResults(): int
     {
-        if (empty($this->table_columns)) return 0;
+        if (empty($this->table_columns)) {
+            return 0;
+        }
         $qb = $this->getIndexQuery();
         $stmt = db()->run($qb->build(), $qb->values());
         return $stmt?->rowCount() ?? 0;
@@ -792,11 +810,11 @@ class Module
     {
         $filtered = array_map(function ($column) {
             $lower = strtolower($column);
-            if (preg_match('/( as )/', $lower)) {
-                $split = explode(' as ', $lower);
+            if (preg_match("/( as )/", $lower)) {
+                $split = explode(" as ", $lower);
                 return end($split);
             }
-            $split = explode('.', $lower);
+            $split = explode(".", $lower);
             return end($split);
         }, array_keys($columns));
         $filtered_table_columns = [];
@@ -877,8 +895,8 @@ class Module
         try {
             $data = !is_null($qb)
                 ? db()
-                ->run($qb->build(), $qb->values())
-                ->fetch()
+                    ->run($qb->build(), $qb->values())
+                    ->fetch()
                 : [];
         } catch (PDOException $ex) {
             $this->handleDatabaseException($ex);
@@ -957,7 +975,7 @@ class Module
                     $result &= $this->handleUpload($id);
                 }
                 if ($result) {
-                    $this->auditColumns($columns, $id, 'INSERT');
+                    $this->auditColumns($columns, $id, "INSERT");
                     Flash::addFlash("success", "Record created successfully");
                 } else {
                     Flash::addFlash(
@@ -985,7 +1003,7 @@ class Module
                     $result &= $this->handleUpload($id);
                 }
                 if ($result) {
-                    $this->auditColumns($columns, $id, 'UPDATE');
+                    $this->auditColumns($columns, $id, "UPDATE");
                     Flash::addFlash("success", "Record updated successfully");
                 } else {
                     Flash::addFlash(
@@ -1003,11 +1021,18 @@ class Module
     public function destroy(string $id): string
     {
         if ($this->table_destroy) {
-            $qb = QueryBuilder::delete($this->table_name)->where([$this->key_col, $id]);
+            $qb = QueryBuilder::delete($this->table_name)->where([
+                $this->key_col,
+                $id,
+            ]);
             try {
                 $result = db()->run($qb->build(), $qb->values());
                 if ($result) {
-                    $this->auditColumns([$this->key_col => "NULL"], $id, 'DELETE');
+                    $this->auditColumns(
+                        [$this->key_col => "NULL"],
+                        $id,
+                        "DELETE"
+                    );
                     Flash::addFlash("success", "Record deleted successfully");
                 } else {
                     Flash::addFlash(

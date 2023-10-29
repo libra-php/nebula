@@ -69,7 +69,6 @@ class MySQLDatabase implements Database
         return php_sapi_name() === "cli";
     }
 
-
     /**
      * Run a query
      * @param string $sql SQL query
@@ -87,13 +86,20 @@ class MySQLDatabase implements Database
         $statement->execute($params);
         $this->query_time = microtime(true) - $this->query_time;
         if ($this->query_time > 1) {
-            $msg = sprintf("DB: slow query took %s: %s", $this->query_time, $sql);
+            $msg = sprintf(
+                "DB: slow query took %s: %s",
+                $this->query_time,
+                $sql
+            );
             error_log($msg);
             logger("debug", $msg);
         }
         $this->num_queries++;
         $this->total_time += $this->query_time;
-        if (config("database.show_profiler") && !$this->isCommandLineInterface()) {
+        if (
+            config("database.show_profiler") &&
+            !$this->isCommandLineInterface()
+        ) {
             $traces = debug_backtrace(0);
             $i = 0;
             while ($traces[$i]["class"] == "Nebula\Database\MySQLDatabase") {

@@ -127,7 +127,11 @@ class QueryBuilder implements QueryBuilderInterface
      */
     public function join(array $joins): self
     {
-        $this->table_name = sprintf("%s %s", $this->table_name, implode(" ", $joins));
+        $this->table_name = sprintf(
+            "%s %s",
+            $this->table_name,
+            implode(" ", $joins)
+        );
         return $this;
     }
 
@@ -244,10 +248,10 @@ class QueryBuilder implements QueryBuilderInterface
                     ", ",
                     array_map(function ($value) {
                         $lower = strtolower($value);
-                        if (preg_match('/( as )/', $lower)) {
+                        if (preg_match("/( as )/", $lower)) {
                             return $value;
                         }
-                        $value = str_replace('.', "`.`", $value);
+                        $value = str_replace(".", "`.`", $value);
                         return sprintf("`%s`", $value);
                     }, $this->columns)
                 );
