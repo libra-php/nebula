@@ -1,22 +1,22 @@
 <nav id="sidebar" class="d-none d-sm-block" hx-boost="true">
   <div class="d-flex flex-column flex-shrink-0 text-light h-100">
     <ul id="sidebar-links" class="nav nav-pills flex-column mb-auto pt-3">
-      <li class="nav-item {if $module_name === "home"}active{/if}" title="Home" data-module='home'>
+      <li onClick="handleSidebarActive(event)" class="nav-item {if $module_name === "home"}active{/if}" title="Home" data-module='home'>
         <a href="{$moduleRoute('module.index.part', 'home')}" class="nav-link d-flex align-items-center text-white" hx-target="#module">
           <i data-feather="home" /><span class="d-none d-lg-block">Home</span>
         </a>
       </li>
-      <li class="nav-item {if $module_name === "users"}active{/if}" title="Users" data-module='users'>
+      <li onClick="handleSidebarActive(event)" class="nav-item {if $module_name === "users"}active{/if}" title="Users" data-module='users'>
         <a href="{$moduleRoute('module.index.part', 'users')}" class="nav-link d-flex align-items-center text-white" hx-target="#module">
           <i data-feather="users" /><span class="d-none d-lg-block">Users</span>
         </a>
       </li>
-      <li class="nav-item {if $module_name === "test"}active{/if}" title="Test" data-module='test'>
+      <li onClick="handleSidebarActive(event)" class="nav-item {if $module_name === "test"}active{/if}" title="Test" data-module='test'>
         <a href="{$moduleRoute('module.index.part', 'test')}" class="nav-link d-flex align-items-center text-white" hx-target="#module">
           <i data-feather="package" /><span class="d-none d-lg-block">Test</span>
         </a>
       </li>
-      <li class="nav-item {if $module_name === "audit"}active{/if}" title="Audit" data-module='test'>
+      <li onClick="handleSidebarActive(event)" class="nav-item {if $module_name === "audit"}active{/if}" title="Audit" data-module='audit'>
         <a href="{$moduleRoute('module.index.part', 'audit')}" class="nav-link d-flex align-items-center text-white" hx-target="#module">
           <i data-feather="book-open" /><span class="d-none d-lg-block">Audit</span>
         </a>

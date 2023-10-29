@@ -11,34 +11,34 @@
 				</div>
 			</a>
 			<ul class="dropdown-menu text-small shadow p-2" aria-labelledby="user-dropdown">
-				<li class="nav-item" title="Home">
+				<li onClick="handleSidebarActive(event)" class="nav-item" title="Home" data-module="home">
 					<a href="{$moduleRoute('module.index.part', 'home')}"
 						class="dropdown-item d-flex align-items-center" hx-target="#module">
 						<i data-feather="home" /><span class="ps-2">Home</span>
 					</a>
 				</li>
-				<li class="nav-item" title="Users">
+				<li onClick="handleSidebarActive(event)" class="nav-item" title="Users" data-module="users">
 					<a href="{$moduleRoute('module.index.part', 'users')}"
 						class="dropdown-item d-flex align-items-center" hx-target="#module">
 						<i data-feather="users" /><span class="ps-2">Users</span>
 					</a>
 				</li>
-				<li class="nav-item" title="Test">
+				<li onClick="handleSidebarActive(event)" class="nav-item" title="Test" data-module="test">
 					<a href="{$moduleRoute('module.index.part', 'test')}"
 						class="dropdown-item d-flex align-items-center" hx-target="#module">
 						<i data-feather="package" /><span class="ps-2">Test</span>
 					</a>
 				</li>
-				<li class="nav-item" title="Audit">
+				<li onClick="handleSidebarActive(event)" class="nav-item" title="Audit" data-module="audit">
 					<a href="{$moduleRoute('module.index.part', 'audit')}"
 						class="dropdown-item d-flex align-items-center" hx-target="#module">
 						<i data-feather="book-open" /><span class="ps-2">Audit</span>
 					</a>
 				</li>
-				<li class="nav-item">
+				<li onClick="handleSidebarActive(event)" class="nav-item">
 					<hr class="dropdown-divider">
 				</li>
-				<li class="nav-item">
+				<li onClick="handleSidebarActive(event)" class="nav-item">
 					<a class="dropdown-item disabled" href="#"><i data-feather="edit-2" /> Profile</a>
 				</li>
 				<li class="nav-item">

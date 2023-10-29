@@ -90,6 +90,9 @@ class Module
         $this->table_name = $table_name;
     }
 
+    /**
+     * Process request for index view
+     */
     protected function processTableRequest(): void
     {
         $this->handleOrdering();
@@ -99,11 +102,17 @@ class Module
         $this->handleFilterLinks();
     }
 
+    /**
+     * Process request for edit / create views
+     */
     protected function processFormRequest(?string $id = null): void
     {
         $this->handleDeleteFile($id);
     }
 
+    /**
+     * Handle uploading a file
+     */
     protected function handleUpload(string $id): bool
     {
         foreach (request()->files() as $column => $file) {
@@ -136,6 +145,9 @@ class Module
         return true;
     }
 
+    /**
+     * Handle deleting an uploaded file
+     */
     protected function handleDeleteFile(?string $id): void
     {
         if (request()->has("delete_file")) {
@@ -154,6 +166,9 @@ class Module
         }
     }
 
+    /**
+     * Handle deleting a file from a column
+     */
     protected function deleteColumnFile(string $column, string $id): bool
     {
         $row = db()->select(
@@ -171,6 +186,9 @@ class Module
         return false;
     }
 
+    /**
+     * Handle filter count request
+     */
     protected function handleFilterCount(): void
     {
         if (request()->has("filter_count")) {
@@ -184,6 +202,9 @@ class Module
         }
     }
 
+    /**
+     * Handle filter link request
+     */
     protected function handleFilterLinks(): void
     {
         if (request()->has("filter_link")) {
@@ -198,11 +219,15 @@ class Module
 
         if (session()->has($this->module_name . "_filter_link")) {
             $filter = session()->get($this->module_name . "_filter_link");
-            $this->filter_link = array_search($filter, $this->filter_links); 
+            // Store the title (key) as the active filter_link
+            $this->filter_link = array_search($filter, $this->filter_links);
             $this->where[] = [$filter];
         }
     }
 
+    /**
+     * Handle order by & sort request
+     */
     protected function handleOrdering(): void
     {
         if (request()->has("order_by") && request()->has("sort")) {
@@ -216,6 +241,9 @@ class Module
         }
     }
 
+    /**
+     * Handle pagination request
+     */
     protected function handlePagination(): void
     {
         $page = $this->page;
@@ -229,6 +257,9 @@ class Module
         $this->page = session()->get($this->module_name . "_page") ?? $page;
     }
 
+    /**
+     * Handle search request
+     */
     protected function handleSearch(): void
     {
         $where = [];
