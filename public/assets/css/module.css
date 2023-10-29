@@ -110,7 +110,9 @@
   text-decoration: none;
   color: #444;
   font-weight: 600;
-  /* font-style: italic; */
+}
+#table .table tbody td {
+  width: 1px;
 }
 
 /**

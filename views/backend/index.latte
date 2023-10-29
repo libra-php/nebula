@@ -10,7 +10,7 @@
 	</div>
 	<div id="actions" class="my-4">
 		<a n:if="$table['create']" class="btn btn-success" href="{$route('module.create.part')}" hx-target="#module" hx-boost="true" title="Create new record">Create new</a>
-		<a n:if="$table['export_csv']" class="btn btn-success" href="{$route('module.index')}?export_csv=true" title="Export to CSV">Export CSV</a>
+		<a n:if="$table['export_csv']" class="btn btn-primary" href="{$route('module.index')}?export_csv=true" title="Export to CSV">Export CSV</a>
 	</div>
 	<div id="filters" class="mb-4">
 		<div id="search" class="d-flex align-items-center" n:if="$has_search">
@@ -47,9 +47,9 @@
 										<span class="active">
 											{$title}
 											{if $table['sort'] === 'DESC'}
-												&#11206;
+												&#9660;
 											{else}
-												&#11205;
+												&#9650;
 											{/if}
 										</span>
 									{else}	
@@ -125,7 +125,7 @@
 				</ul>
 			</nav>
 		</div>
+		{include parent}
 	</section>
 </section>
-{include parent}
 {/block}

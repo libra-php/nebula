@@ -677,12 +677,13 @@ class Module
             "route" => $route,
             "moduleRoute" => $moduleRoute,
             "route_name" => request()->route->getName(),
+            "module_icon" => $this->module_icon,
             "module_name" => $this->module_name,
             "module_title" => $this->module_title,
             "module_title_singular" => $singular($this->module_title),
+            "module_links" => $this->getModuleLinks(),
             "key_col" => $this->key_col,
             "name_col" => $this->name_col,
-            "module_links" => $this->getModuleLinks(),
         ];
     }
 
