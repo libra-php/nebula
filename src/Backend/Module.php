@@ -23,6 +23,7 @@ class Module
     protected bool $table_create = true;
     protected bool $table_edit = true;
     protected bool $table_destroy = true;
+    protected bool $export_csv = true;
     /** Form */
     protected bool $edit_view = true;
     protected bool $create_view = true;
@@ -138,6 +139,7 @@ class Module
         $this->handleSearch();
         $this->handleFilterCount();
         $this->handleFilterLinks();
+        $this->handleExportCsv();
     }
 
     /**
@@ -146,6 +148,40 @@ class Module
     protected function processFormRequest(?string $id = null): void
     {
         $this->handleDeleteFile($id);
+    }
+
+    /**
+     * Handle exporting to csv
+     */
+    protected function handleExportCsv()
+    {
+        if (request()->has("export_csv")) {
+            $name = sprintf("%s_export_%s.csv", $this->module_name, time());
+            header("Content-Type: text/csv");
+            header(sprintf('Content-Disposition: attachment; filename="%s.csv"', $name));
+            $fp = fopen("php://output", "wb");
+            $csv_headers = $skip = [];
+            $columns = $this->tableAlias($this->table_columns);
+            foreach ($columns as $column => $title) {
+                if (is_null($title) || trim($title) == '') {
+                    $skip[] = $column;
+                    continue;
+                }
+                $csv_headers[] = $title;
+            }
+            fputcsv($fp, $csv_headers);
+            $this->limit = 10_000;
+            $this->page = 1;
+            while ($this->page <= $this->total_pages) {
+                $data = $this->tableData();
+                foreach ($data as $item) {
+                    fputcsv($fp, $item);
+                }
+                $this->page++;
+            }
+            fclose($fp);
+            exit();
+        }
     }
 
     /**
@@ -785,6 +821,7 @@ class Module
             "filter_links" => $this->filter_links,
             "filter_link" => $this->filter_link,
             "table" => [
+                "export_csv" => $this->export_csv,
                 "create" => $this->table_create,
                 "edit" => $this->table_edit,
                 "destroy" => $this->table_destroy,
