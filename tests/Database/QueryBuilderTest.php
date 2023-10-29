@@ -14,7 +14,7 @@ final class QueryBuilderTest extends TestCase
         ->join(["INNER JOIN users ON audit.user_id = users.id"])
         ->where(["id IS NOT NULL"]);
         $this->assertSame(
-            "SELECT `audit.id`, `user.email` FROM audit INNER JOIN users ON audit.user_id = users.id WHERE (id IS NOT NULL)",
+            "SELECT `audit`.`id`, `user`.`email` FROM audit INNER JOIN users ON audit.user_id = users.id WHERE (id IS NOT NULL)",
             $qb->build()
         );
     }
