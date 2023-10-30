@@ -75,9 +75,20 @@
 							{/if}
 						{/foreach}
 						<td>
-							<div class="d-flex justify-content-end">
+							<div class="d-flex justify-content-end" hx-boost="true">
+								{foreach $table['row_actions'] as $action}
+									<a n:if="$table['has_row_action_permission']($action['name'], $datum[$key_col])" 
+										class="row-action btn btn-sm btn-outline-{$action['class']} ms-1" 
+										href="{$route('module.index')}?{$action['name']}=true&id={$datum[$key_col]}" 
+										{if $action['confirm']}hx-confirm="{$action['confirm']}"{/if}
+										title="{$action['title']}"
+										hx-replace-url="{$module_name}"
+										hx-target="#module">
+										{$action['title']}
+									</a>
+								{/foreach}
 								<a n:if="$table['edit'] && $has_edit_permission($datum[$key_col])" class="row-action btn btn-sm btn-outline-primary ms-1" href="{$route('module.edit.part', $datum[$key_col])}"
-									hx-boost="true" hx-target="#module" title="Edit record">Edit</a>
+									hx-target="#module" title="Edit record">Edit</a>
 								<a n:if="$table['destroy'] && $has_delete_permission($datum[$key_col])" class="row-action btn btn-sm btn-outline-danger ms-1" hx-delete="{$route('module.destroy', $datum[$key_col])}"
 									hx-target="#module"
 									hx-confirm="Are you sure you want to delete this record? This action cannot be undone."

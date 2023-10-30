@@ -76,6 +76,7 @@ class Module
     protected array $where = [];
     protected string $order_by = "";
     protected string $sort = "DESC";
+    protected array $row_actions = [];
     /** Pagination */
     protected int $page = 1;
     protected int $total_results = 0;
@@ -146,6 +147,16 @@ class Module
     {
         $this->handleDeleteFile($id);
         $this->handleSession();
+    }
+
+    protected function addRowAction(string $name, string $title, ?string $confirm = null, string $class = "primary"): void
+    {
+        $this->row_actions[] = [
+            "name" => $name,
+            "title" => $title,
+            "confirm" => $confirm,
+            "class" => $class,
+        ];
     }
 
     /**
@@ -388,6 +399,11 @@ class Module
         if (session()->has($this->module_name . "_search")) {
             $this->where[] = session()->get($this->module_name . "_search");
         }
+    }
+
+    protected function hasRowActionPermission(string $name, string $id): bool
+    {
+        return true;
     }
 
     protected function hasEditPermission(string $id): bool
@@ -883,6 +899,7 @@ class Module
         $has_delete_permission = fn (string $id) => $this->hasDeletePermission($id);
         $has_edit_permission = fn (string $id) => $this->hasEditPermission($id);
         $has_create_permission = fn () => $this->hasCreatePermission();
+        $has_row_action_permission = fn (string $name, string $id) => $this->hasRowActionPermission($name, $id);
 
         return [
             ...$this->commonData(),
@@ -909,6 +926,8 @@ class Module
                 "data" => $data,
                 "columns" => $this->tableAlias($this->table_columns),
                 "col_span" => count($this->table_columns) + 1,
+                "row_actions" => $this->row_actions,
+                "has_row_action_permission" => $has_row_action_permission,
             ],
         ];
     }

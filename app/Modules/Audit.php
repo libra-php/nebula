@@ -2,6 +2,7 @@
 
 namespace App\Modules;
 
+use Nebula\Alerts\Flash;
 use Nebula\Backend\Module;
 
 class Audit extends Module
@@ -29,6 +30,39 @@ class Audit extends Module
             "Me" => "user_id = " . user()->id,
             "All" => "1=1",
         ];
+        $this->addRowAction("undo_change", "Undo", "Are you sure you want to restore this value?");
         parent::__construct("audit", "audit");
+    }
+
+    protected function hasRowActionPermission(string $name, string $id): bool
+    {
+        $row = db()->select("SELECT * FROM $this->table_name WHERE $this->key_col = ?", $id);
+        if (in_array($row->message, ['UPDATE', 'UNDO'])) return true;
+        return false;
+    }
+
+    protected function processTableRequest(): void
+    {
+        parent::processTableRequest();
+        if (request()->has("undo_change")) {
+            $row = db()->select("SELECT * FROM $this->table_name WHERE $this->key_col = ?", request()->id);
+            $result = db()->query("UPDATE $row->table_name SET $row->field = ? WHERE id = ?", $row->old_value, $row->id);
+            if ($result) {
+                Flash::addFlash(
+                    "success",
+                    "Old value restored successfully"
+                );
+                $this->audit(user()->id, $row->table_name, $row->table_id, $row->field, $row->old_value, "UNDO");
+            } else {
+                Flash::addFlash(
+                    "warning",
+                    "Oops! Couldn't undo change for this record"
+                );
+            }
+            request()->remove("undo_change");
+            echo $this->indexPartial();
+            die;
+            exit;
+        }
     }
 }
