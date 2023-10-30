@@ -145,6 +145,9 @@
   background-color: #fff;
   border-top: 1px solid #d6dee1 !important;
   border-bottom: 1px solid #d6dee1 !important;
+  border-right: 1px solid #d6dee1 !important;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
 }
 #table #pagination #per-page-selector:hover {
   cursor: pointer;
