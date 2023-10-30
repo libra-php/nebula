@@ -136,6 +136,7 @@ class Module
         $this->handleFilterCount();
         $this->handleFilterLinks();
         $this->handleExportCsv();
+        $this->handleSession();
     }
 
     /**
@@ -144,6 +145,15 @@ class Module
     protected function processFormRequest(?string $id = null): void
     {
         $this->handleDeleteFile($id);
+        $this->handleSession();
+    }
+
+    /**
+     * Record the active user session
+     */
+    protected function handleSession()
+    {
+        db()->query("INSERT INTO sessions SET user_id = ?, uri = ?", user()->id, request()->getUri());
     }
 
     /**
@@ -297,6 +307,11 @@ class Module
             // Store the title (key) as the active filter_link
             $this->filter_link = array_search($filter, $this->filter_links);
             $this->where[] = [$filter];
+        } else if (!empty($this->filter_links)) {
+            // Use the first filter_links as the active filter
+            $filter = array_key_first($this->filter_links);
+            $this->filter_link = $filter;
+            $this->where[] = [$this->filter_links[$filter]];
         }
     }
 

@@ -10,7 +10,6 @@ class Audit extends Module
     {
         $this->module_icon = "book-open";
         $this->table_create = $this->table_edit = $this->table_destroy = false;
-        $this->key_col = "id";
         $this->name_col = "id";
         $this->table_columns = [
             "audit.id" => "ID",
