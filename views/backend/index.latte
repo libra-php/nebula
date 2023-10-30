@@ -67,11 +67,11 @@
 					<tr class="align-middle">
 						{foreach $table[columns] as $column => $title}
 							{if $column == $name_col && $table['edit']}
-								<td><a class="module-edit-link" hx-boost="true" href="{$route('module.edit.part', $datum[$key_col])}" title="Edit record" hx-target="#module">{$datum[$column]}</a></td>
+								<td title="{$title}"><a class="module-edit-link" hx-boost="true" href="{$route('module.edit.part', $datum[$key_col])}" title="Edit record" hx-target="#module">{$datum[$column]}</a></td>
 							{elseif $column === $key_col}
-								<td><span class="text-secondary">{$datum[$column]}</span></td>
+								<td title="{$title}"><span class="text-secondary">{$datum[$column]}</span></td>
 						    {else}		
-								<td>{$datum[$column]}</td>
+								<td title="{$title}">{$datum[$column]}</td>
 							{/if}
 						{/foreach}
 						<td>
