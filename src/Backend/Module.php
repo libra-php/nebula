@@ -156,7 +156,7 @@ class Module
             header("Content-Type: text/csv");
             header(
                 sprintf(
-                    'Content-Disposition: attachment; filename="%s.csv"',
+                    'Content-Disposition: attachment; filename="%s"',
                     $name
                 )
             );
