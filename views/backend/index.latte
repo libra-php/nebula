@@ -9,7 +9,7 @@
 		{getFlashMessages()|noescape}
 	</div>
 	<div id="actions" class="my-4">
-		<a n:if="$table['create']" class="btn btn-success" href="{$route('module.create.part')}" hx-target="#module" hx-boost="true" title="Create new record">Create new</a>
+		<a n:if="$table['create'] && $has_create_permission()" class="btn btn-success" href="{$route('module.create.part')}" hx-target="#module" hx-boost="true" title="Create new record">Create new</a>
 		<a n:if="$table['export_csv']" class="btn btn-primary" href="{$route('module.index')}?export_csv=true" title="Export to CSV">Export CSV</a>
 	</div>
 	<div id="filters" class="mb-4">
@@ -67,7 +67,7 @@
 					<tr class="align-middle">
 						{foreach $table[columns] as $column => $title}
 							{if $column == $name_col && $table['edit']}
-								<td><a class="module-edit-link" hx-boost="true" href="{$route('module.edit.part', $datum['id'])}" title="Edit record" hx-target="#module">{$datum[$column]}</a></td>
+								<td><a class="module-edit-link" hx-boost="true" href="{$route('module.edit.part', $datum[$key_col])}" title="Edit record" hx-target="#module">{$datum[$column]}</a></td>
 							{elseif $column === $key_col}
 								<td><span class="text-secondary">{$datum[$column]}</span></td>
 						    {else}		
@@ -76,9 +76,9 @@
 						{/foreach}
 						<td>
 							<div class="d-flex justify-content-end">
-								<a n:if="$table['edit']" class="row-action btn btn-sm btn-outline-primary ms-1" href="{$route('module.edit.part', $datum['id'])}"
+								<a n:if="$table['edit'] && $has_edit_permission($datum[$key_col])" class="row-action btn btn-sm btn-outline-primary ms-1" href="{$route('module.edit.part', $datum[$key_col])}"
 									hx-boost="true" hx-target="#module" title="Edit record">Edit</a>
-								<a n:if="$table['destroy']" class="row-action btn btn-sm btn-outline-danger ms-1" hx-delete="{$route('module.destroy', $datum[id])}"
+								<a n:if="$table['destroy'] && $has_delete_permission($datum[$key_col])" class="row-action btn btn-sm btn-outline-danger ms-1" hx-delete="{$route('module.destroy', $datum[$key_col])}"
 									hx-target="#module"
 									hx-confirm="Are you sure you want to delete this record? This action cannot be undone."
 									title="Delete record">Delete</a>

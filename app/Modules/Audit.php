@@ -22,6 +22,7 @@ class Audit extends Module
             "'🠮' as sep" => "",
             "audit.new_value" => "New",
             "audit.message" => "Message",
+            "audit.created_at" => "Created At",
         ];
         $this->joins = ["INNER JOIN users ON audit.user_id = users.id"];
         $this->search = ["table_name", "table_id", "field", "name"];

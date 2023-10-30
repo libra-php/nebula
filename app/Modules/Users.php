@@ -34,4 +34,14 @@ class Users extends Module
 
         parent::__construct("users", "users");
     }
+
+    protected function hasEditPermission(string $id): bool
+    {
+        return $id != user()->id;
+    }
+
+    protected function hasDeletePermission(string $id): bool
+    {
+        return $id != user()->id;
+    }
 }

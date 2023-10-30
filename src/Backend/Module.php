@@ -375,6 +375,21 @@ class Module
         }
     }
 
+    protected function hasEditPermission(string $id): bool
+    {
+        return true;
+    }
+
+    protected function hasCreatePermission(): bool
+    {
+        return true;
+    }
+
+    protected function hasDeletePermission(string $id): bool
+    {
+        return true;
+    }
+
     /**
      * Return module not found response
      */
@@ -383,6 +398,19 @@ class Module
         Flash::addFlash(
             "warning",
             "Oops! The requested record could not be found"
+        );
+        echo $this->indexPartial();
+        exit();
+    }
+
+    /**
+     * Return permission denied response
+     */
+    public function permissionDenied(): never
+    {
+        Flash::addFlash(
+            "warning",
+            "Permission denied"
         );
         echo $this->indexPartial();
         exit();
@@ -536,11 +564,11 @@ class Module
         // Deal with "NULL" string
         array_walk(
             $data,
-            fn(&$value, $key) => ($value = $value === "NULL" ? null : $value)
+            fn (&$value, $key) => ($value = $value === "NULL" ? null : $value)
         );
         return array_filter(
             $data,
-            fn($value, $key) => $key != "csrf_token" &&
+            fn ($value, $key) => $key != "csrf_token" &&
                 !in_array($this->form_controls[$key], $filtered_controls),
             ARRAY_FILTER_USE_BOTH
         );
@@ -617,7 +645,7 @@ class Module
         foreach (["Slow DB:" => db()->trace_counts] as $title => $traces) {
             //$slow_traces[] = $title;
             if ($traces) {
-                uasort($traces, fn($a, $b) => $b["time"] <=> $a["time"]);
+                uasort($traces, fn ($a, $b) => $b["time"] <=> $a["time"]);
                 $i = 0;
                 foreach ($traces as $key => $value) {
                     $i++;
@@ -658,14 +686,14 @@ class Module
         ) {
             return moduleRoute($route_name, $module_name, $id);
         };
-        $gravatar = fn(string $str) => md5(strtolower(trim($str)));
+        $gravatar = fn (string $str) => md5(strtolower(trim($str)));
         $singular = function (string $str) {
             return substr($str, -1) === "s" ? rtrim($str, "s") : $str;
         };
-        $request = fn(string $column) => request()->has($column)
+        $request = fn (string $column) => request()->has($column)
             ? request()->$column
             : "";
-        $session = fn(string $column) => session()->has($column)
+        $session = fn (string $column) => session()->has($column)
             ? session()->get($column)
             : "";
         return [
@@ -837,9 +865,16 @@ class Module
             $this->handleDatabaseException($ex);
         }
 
+        $has_delete_permission = fn (string $id) => $this->hasDeletePermission($id);
+        $has_edit_permission = fn (string $id) => $this->hasEditPermission($id);
+        $has_create_permission = fn () => $this->hasCreatePermission();
+
         return [
             ...$this->commonData(),
             "custom_content" => $this->customContent(),
+            "has_delete_permission" => $has_delete_permission,
+            "has_edit_permission" => $has_edit_permission,
+            "has_create_permission" => $has_create_permission,
             "has_search" => !empty($this->search),
             "has_filter_links" => !empty($this->filter_links),
             "filter_links" => $this->filter_links,
@@ -893,8 +928,8 @@ class Module
         try {
             $data = !is_null($qb)
                 ? db()
-                    ->run($qb->build(), $qb->values())
-                    ->fetch()
+                ->run($qb->build(), $qb->values())
+                ->fetch()
                 : [];
         } catch (PDOException $ex) {
             $this->handleDatabaseException($ex);
@@ -963,7 +998,7 @@ class Module
 
     public function store(): string
     {
-        if ($this->validate($this->validation) && $this->table_create) {
+        if ($this->validate($this->validation) && $this->table_create && $this->hasCreatePermission()) {
             $columns = $this->getFilteredFormColumns();
             $qb = QueryBuilder::insert($this->table_name)->columns($columns);
             try {
@@ -990,7 +1025,7 @@ class Module
 
     public function update(string $id): string
     {
-        if ($this->validate($this->validation) && $this->table_edit) {
+        if ($this->validate($this->validation) && $this->table_edit && $this->hasEditPermission($id)) {
             $columns = $this->getFilteredFormColumns();
             $qb = QueryBuilder::update($this->table_name)
                 ->columns($columns)
@@ -1018,7 +1053,7 @@ class Module
 
     public function destroy(string $id): string
     {
-        if ($this->table_destroy) {
+        if ($this->table_destroy && $this->hasDeletePermission($id)) {
             $qb = QueryBuilder::delete($this->table_name)->where([
                 $this->key_col,
                 $id,
