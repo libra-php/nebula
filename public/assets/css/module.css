@@ -113,8 +113,15 @@
 }
 #table .table tbody td {
   width: 1px;
+  white-space: nowrap;
 }
-
+#table .table tbody td:nth-last-child(-n + 1) {
+  width: 100%;
+}
+#table .table thead th,
+#table .table tbody td {
+  padding: 2px 6px;
+}
 /**
  * Search 
  */

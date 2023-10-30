@@ -18,8 +18,9 @@ class Audit extends Module
             "audit.table_name" => "Table",
             "audit.table_id" => "ID",
             "audit.field" => "Field",
-            "CONCAT(audit.old_value, ' => ', audit.new_value) AS audit_change" =>
-                "Change",
+            "audit.old_value" => "Old",
+            "'🠮' as sep" => "",
+            "audit.new_value" => "New",
             "audit.message" => "Message",
         ];
         $this->joins = ["INNER JOIN users ON audit.user_id = users.id"];

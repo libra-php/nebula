@@ -28,7 +28,7 @@
 	</div>
 	<div n:if="$has_filter_links" class="d-flex my-1">
 		{foreach $filter_links as $title => $clause}
-			<a hx-boost="true" href="{$route('module.index.part')}?filter_link={$title|escapeUrl}" hx-target="#module" title="{$title}">
+			<a hx-boost="true" href="{$route('module.index.part')}?filter_link={$title|escapeUrl}" hx-target="#module" title="Filter on {$title}">
 				<span class="badge filter-link pill me-1 {if $filter_link == $title}active{/if}">{$title} 
 					[<span hx-trigger="load delay:50ms" hx-get="{$route('module.index.part')}?filter_count={$title|escapeUrl}" class="count" hx-target="this">?</span>]
 				</span>
@@ -41,8 +41,8 @@
 				<thead class="text-light">
 					<tr>
 						{foreach $table[columns] as $column => $title}
-							<th scope="col" class="p-1">
-								<a href="{$route('module.index.part')}?order_by={$column|escapeUrl}&sort={if $table['order_by'] == $column && $table['sort'] == "DESC"}ASC{else}DESC{/if}" hx-boost="true" hx-select="#module-table" hx-target="#module-table">
+							<th scope="col">
+								<a title="Sort by {$title}" href="{$route('module.index.part')}?order_by={$column|escapeUrl}&sort={if $table['order_by'] == $column && $table['sort'] == "DESC"}ASC{else}DESC{/if}" hx-boost="true" hx-select="#module-table" hx-target="#module-table">
 									{if $table['order_by'] == $column}
 										<span class="active">
 											{$title}
@@ -67,11 +67,11 @@
 					<tr class="align-middle">
 						{foreach $table[columns] as $column => $title}
 							{if $column == $name_col && $table['edit']}
-								<td class="p-1"><a class="module-edit-link" hx-boost="true" href="{$route('module.edit.part', $datum['id'])}" title="Edit record" hx-target="#module">{$datum[$column]}</a></td>
+								<td><a class="module-edit-link" hx-boost="true" href="{$route('module.edit.part', $datum['id'])}" title="Edit record" hx-target="#module">{$datum[$column]}</a></td>
 							{elseif $column === $key_col}
-								<td class="p-1"><span class="text-secondary">{$datum[$column]}</span></td>
+								<td><span class="text-secondary">{$datum[$column]}</span></td>
 						    {else}		
-								<td class="p-1">{$datum[$column]}</td>
+								<td>{$datum[$column]}</td>
 							{/if}
 						{/foreach}
 						<td>
