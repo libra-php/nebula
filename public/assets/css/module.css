@@ -88,10 +88,19 @@
   overflow-x: auto;
   background-color: #fff;
 }
+#table #filters {
 
-#table #search-input {
-  width: 200px;
-  padding: 7px 0 7px 30px;
+} 
+#table #filters label {
+  width: 75px; 
+  text-align: right;
+} 
+#table #filters #filter-datetime .input-group {
+  width: 210px;
+}
+#table #filters #search-input {
+  width: 210px;
+  padding: 0 0 0 30px;
   background-image: url("/assets/img/magnifying_glass.svg");
   background-size: 13px;
   background-repeat: no-repeat;
@@ -336,9 +345,6 @@
   }
   #main {
     height: calc(100% - 56px);
-  }
-  #table #search-input {
-    width: 100%;
   }
 }
 

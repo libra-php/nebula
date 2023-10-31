@@ -71,7 +71,12 @@ class Module
     protected array $table_columns = [];
     protected array $table_data = [];
     protected array $search = [];
-    protected string $filter_date = "";
+    // Column to filter by datetime
+    protected string $filter_datetime = "";
+    // Datetime control from
+    protected string $filter_date_from = "";
+    // Datetime control to
+    protected string $filter_date_to = "";
     protected array $filter_links = [];
     protected string $filter_link = "";
     protected array $where = [];
@@ -134,11 +139,12 @@ class Module
      */
     protected function processTableRequest(): void
     {
-        $this->handleOrdering();
-        $this->handlePagination();
         $this->handleSearch();
+        $this->handleDateTime();
+        $this->handleOrdering();
         $this->handleFilterCount();
         $this->handleFilterLinks();
+        $this->handlePagination();
         $this->handleExportCsv();
         $this->handleSession();
     }
@@ -406,6 +412,49 @@ class Module
 
         if (session()->has($this->module_name . "_search")) {
             $this->where[] = session()->get($this->module_name . "_search");
+        }
+    }
+
+    protected function handleDateTime(): void
+    {
+        if (request()->has("date_from")) {
+            session()->set(
+                $this->module_name . "_date_from",
+                request()->date_from
+            );
+            $this->filter_date_from = request()->date_from;
+            session()->set($this->module_name . "_page", 1);
+        }
+        if (request()->has("date_to")) {
+            session()->set(
+                $this->module_name . "_date_to",
+                request()->date_to
+            );
+            $this->filter_date_to = request()->date_to;
+            session()->set($this->module_name . "_page", 1);
+        }
+
+        if (
+            $this->filter_datetime &&
+            session()->has($this->module_name . "_date_from")
+        ) {
+            $this->filter_date_from = session()->get(
+                $this->module_name . "_date_from"
+            );
+            if ($this->filter_date_from != '') {
+                $this->where[] = [$this->table_name . '.' . $this->filter_datetime, '>=', $this->filter_date_from];
+            }
+        }
+        if (
+            $this->filter_datetime &&
+            session()->has($this->module_name . "_date_to")
+        ) {
+            $this->filter_date_to = session()->get(
+                $this->module_name . "_date_to"
+            );
+            if ($this->filter_date_to != '') {
+                $this->where[] = [$this->table_name . '.' . $this->filter_datetime, '<=', $this->filter_date_to];
+            }
         }
     }
 
@@ -954,12 +1003,14 @@ class Module
             "has_delete_permission" => $has_delete_permission,
             "has_edit_permission" => $has_edit_permission,
             "has_create_permission" => $has_create_permission,
-            "has_search" => !empty($this->search),
+            "has_filter_search" => !empty($this->search),
             "has_filter_links" => !empty($this->filter_links),
+            "has_filter_datetime" => $this->filter_datetime != "",
             "filter_links" => $this->filter_links,
             "filter_link" => $this->filter_link,
+            "filter_date_from" => $this->filter_date_from,
+            "filter_date_to" => $this->filter_date_to,
             "table" => [
-                "filter_date" => $this->filter_date,
                 "export_csv" => $this->export_csv,
                 "create" => $this->table_create,
                 "edit" => $this->table_edit,

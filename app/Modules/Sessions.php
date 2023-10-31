@@ -16,6 +16,7 @@ class Sessions extends Module
             "users.name" => "User",
             "sessions.created_at" => "Created At",
         ];
+        $this->filter_datetime = "created_at";
         $this->joins = ["INNER JOIN users ON sessions.user_id = users.id"];
         $this->filter_links = [
             "Me" => "user_id = " . user()->id,
