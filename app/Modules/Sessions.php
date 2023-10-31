@@ -24,4 +24,3 @@ class Sessions extends Module
         parent::__construct("sessions", "sessions");
     }
 }
-

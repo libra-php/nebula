@@ -121,7 +121,9 @@ class Module
         }
         // Sort by name
         usort($links, function ($a, $b) {
-            if ($a["name"] === "home") return -1;
+            if ($a["name"] === "home") {
+                return -1;
+            }
             return $a["name"] <=> $b["name"];
         });
         return $links;
@@ -150,8 +152,12 @@ class Module
         $this->handleSession();
     }
 
-    protected function addRowAction(string $name, string $title, ?string $confirm = null, string $class = "primary"): void
-    {
+    protected function addRowAction(
+        string $name,
+        string $title,
+        ?string $confirm = null,
+        string $class = "primary"
+    ): void {
         $this->row_actions[] = [
             "name" => $name,
             "title" => $title,
@@ -165,7 +171,11 @@ class Module
      */
     protected function handleSession()
     {
-        db()->query("INSERT INTO sessions SET user_id = ?, uri = ?", user()->id, request()->getUri());
+        db()->query(
+            "INSERT INTO sessions SET user_id = ?, uri = ?",
+            user()->id,
+            request()->getUri()
+        );
     }
 
     /**
@@ -177,10 +187,7 @@ class Module
             $name = sprintf("%s_export_%s.csv", $this->module_name, time());
             header("Content-Type: text/csv");
             header(
-                sprintf(
-                    'Content-Disposition: attachment; filename="%s"',
-                    $name
-                )
+                sprintf('Content-Disposition: attachment; filename="%s"', $name)
             );
             $fp = fopen("php://output", "wb");
             $csv_headers = $skip = [];
@@ -319,7 +326,7 @@ class Module
             // Store the title (key) as the active filter_link
             $this->filter_link = array_search($filter, $this->filter_links);
             $this->where[] = [$filter];
-        } else if (!empty($this->filter_links)) {
+        } elseif (!empty($this->filter_links)) {
             // Use the first filter_links as the active filter
             $filter = array_key_first($this->filter_links);
             $this->filter_link = $filter;
@@ -456,10 +463,13 @@ class Module
             "warning",
             "Oops! The requested record could not be found"
         );
-        $response = $this->response(404, latte($this->getCustomIndex(), [
-            ...$this->getIndexData(),
-            "module_title" => "Module not found"
-        ]));
+        $response = $this->response(
+            404,
+            latte($this->getCustomIndex(), [
+                ...$this->getIndexData(),
+                "module_title" => "Module not found",
+            ])
+        );
         echo $response->send();
         exit();
     }
@@ -469,11 +479,11 @@ class Module
      */
     public function permissionDenied(): never
     {
-        Flash::addFlash(
-            "error",
-            "Permission denied"
+        Flash::addFlash("error", "Permission denied");
+        $response = $this->response(
+            200,
+            latte($this->getCustomIndex(), $this->getIndexData(), "content")
         );
-        $response = $this->response(200, latte($this->getCustomIndex(), $this->getIndexData(), "content"));
         $response->setHeader("HX-Push-Url", $this->module_name);
         echo $response->send();
         exit();
@@ -627,11 +637,11 @@ class Module
         // Deal with "NULL" string
         array_walk(
             $data,
-            fn (&$value, $key) => ($value = $value === "NULL" ? null : $value)
+            fn(&$value, $key) => ($value = $value === "NULL" ? null : $value)
         );
         return array_filter(
             $data,
-            fn ($value, $key) => $key != "csrf_token" &&
+            fn($value, $key) => $key != "csrf_token" &&
                 !in_array($this->form_controls[$key], $filtered_controls),
             ARRAY_FILTER_USE_BOTH
         );
@@ -708,7 +718,7 @@ class Module
         foreach (["Slow DB:" => db()->trace_counts] as $title => $traces) {
             //$slow_traces[] = $title;
             if ($traces) {
-                uasort($traces, fn ($a, $b) => $b["time"] <=> $a["time"]);
+                uasort($traces, fn($a, $b) => $b["time"] <=> $a["time"]);
                 $i = 0;
                 foreach ($traces as $key => $value) {
                     $i++;
@@ -749,14 +759,14 @@ class Module
         ) {
             return moduleRoute($route_name, $module_name, $id);
         };
-        $gravatar = fn (string $str) => md5(strtolower(trim($str)));
+        $gravatar = fn(string $str) => md5(strtolower(trim($str)));
         $singular = function (string $str) {
             return substr($str, -1) === "s" ? rtrim($str, "s") : $str;
         };
-        $request = fn (string $column) => request()->has($column)
+        $request = fn(string $column) => request()->has($column)
             ? request()->$column
             : "";
-        $session = fn (string $column) => session()->has($column)
+        $session = fn(string $column) => session()->has($column)
             ? session()->get($column)
             : "";
         return [
@@ -928,10 +938,15 @@ class Module
             $this->handleDatabaseException($ex);
         }
 
-        $has_delete_permission = fn (string $id) => $this->hasDeletePermission($id);
-        $has_edit_permission = fn (string $id) => $this->hasEditPermission($id);
-        $has_create_permission = fn () => $this->hasCreatePermission();
-        $has_row_action_permission = fn (string $name, string $id) => $this->hasRowActionPermission($name, $id);
+        $has_delete_permission = fn(string $id) => $this->hasDeletePermission(
+            $id
+        );
+        $has_edit_permission = fn(string $id) => $this->hasEditPermission($id);
+        $has_create_permission = fn() => $this->hasCreatePermission();
+        $has_row_action_permission = fn(
+            string $name,
+            string $id
+        ) => $this->hasRowActionPermission($name, $id);
 
         return [
             ...$this->commonData(),
@@ -995,8 +1010,8 @@ class Module
         try {
             $data = !is_null($qb)
                 ? db()
-                ->run($qb->build(), $qb->values())
-                ->fetch()
+                    ->run($qb->build(), $qb->values())
+                    ->fetch()
                 : [];
         } catch (PDOException $ex) {
             $this->handleDatabaseException($ex);
@@ -1021,7 +1036,9 @@ class Module
 
     public function index(): string
     {
-        if (!$this->hasIndexPermission()) $this->permissionDenied();
+        if (!$this->hasIndexPermission()) {
+            $this->permissionDenied();
+        }
         $template = !is_null($this->table_name)
             ? $this->getIndexTemplate()
             : $this->getCustomIndex();
@@ -1030,7 +1047,9 @@ class Module
 
     public function indexPartial(): string
     {
-        if (!$this->hasIndexPermission()) $this->permissionDenied();
+        if (!$this->hasIndexPermission()) {
+            $this->permissionDenied();
+        }
         $template = !is_null($this->table_name)
             ? $this->getIndexTemplate()
             : $this->getCustomIndex();
@@ -1039,13 +1058,17 @@ class Module
 
     public function edit(string $id): string
     {
-        if (!$this->hasEditPermission($id)) $this->permissionDenied();
+        if (!$this->hasEditPermission($id)) {
+            $this->permissionDenied();
+        }
         return latte($this->getEditTemplate(), $this->getEditData($id));
     }
 
     public function editPartial(string $id): string
     {
-        if (!$this->hasEditPermission($id)) $this->permissionDenied();
+        if (!$this->hasEditPermission($id)) {
+            $this->permissionDenied();
+        }
         return latte(
             $this->getEditTemplate(),
             $this->getEditData($id),
@@ -1055,13 +1078,17 @@ class Module
 
     public function create(): string
     {
-        if (!$this->hasCreatePermission()) $this->permissionDenied();
+        if (!$this->hasCreatePermission()) {
+            $this->permissionDenied();
+        }
         return latte($this->getCreateTemplate(), $this->getCreateData());
     }
 
     public function createPartial(): string
     {
-        if (!$this->hasCreatePermission()) $this->permissionDenied();
+        if (!$this->hasCreatePermission()) {
+            $this->permissionDenied();
+        }
         return latte(
             $this->getCreateTemplate(),
             $this->getCreateData(),
@@ -1071,7 +1098,9 @@ class Module
 
     public function store(): string
     {
-        if (!$this->hasCreatePermission()) $this->permissionDenied();
+        if (!$this->hasCreatePermission()) {
+            $this->permissionDenied();
+        }
         if ($this->validate($this->validation) && $this->table_create) {
             $columns = $this->getFilteredFormColumns();
             $qb = QueryBuilder::insert($this->table_name)->columns($columns);
@@ -1099,7 +1128,9 @@ class Module
 
     public function update(string $id): string
     {
-        if (!$this->hasEditPermission($id)) $this->permissionDenied();
+        if (!$this->hasEditPermission($id)) {
+            $this->permissionDenied();
+        }
         if ($this->validate($this->validation) && $this->table_edit) {
             $columns = $this->getFilteredFormColumns();
             $qb = QueryBuilder::update($this->table_name)
@@ -1128,7 +1159,9 @@ class Module
 
     public function destroy(string $id): string
     {
-        if (!$this->hasDeletePermission($id)) $this->permissionDenied();
+        if (!$this->hasDeletePermission($id)) {
+            $this->permissionDenied();
+        }
         if ($this->table_destroy) {
             $qb = QueryBuilder::delete($this->table_name)->where([
                 $this->key_col,
