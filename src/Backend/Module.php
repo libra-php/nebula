@@ -71,6 +71,7 @@ class Module
     protected array $table_columns = [];
     protected array $table_data = [];
     protected array $search = [];
+    protected string $filter_date = "";
     protected array $filter_links = [];
     protected string $filter_link = "";
     protected array $where = [];
@@ -401,24 +402,49 @@ class Module
         }
     }
 
+    /**
+     * Does the current user have row action permission?
+     * This method is overrideable
+     */
     protected function hasRowActionPermission(string $name, string $id): bool
     {
         return true;
     }
 
+    /**
+     * Does the current user have index permission?
+     * This method is overrideable
+     */
+    protected function hasIndexPermission(): bool
+    {
+        return true;
+    }
+
+    /**
+     * Does the current user have edit permission?
+     * This method is overrideable
+     */
     protected function hasEditPermission(string $id): bool
     {
-        return true;
+        return $this->table_edit;
     }
 
+    /**
+     * Does the current user have create permission?
+     * This method is overrideable
+     */
     protected function hasCreatePermission(): bool
     {
-        return true;
+        return $this->table_create;
     }
 
+    /**
+     * Does the current user have delete permission?
+     * This method is overrideable
+     */
     protected function hasDeletePermission(string $id): bool
     {
-        return true;
+        return $this->table_destroy;
     }
 
     /**
@@ -430,7 +456,11 @@ class Module
             "warning",
             "Oops! The requested record could not be found"
         );
-        echo $this->indexPartial();
+        $response = $this->response(404, latte($this->getCustomIndex(), [
+            ...$this->getIndexData(),
+            "module_title" => "Module not found"
+        ]));
+        echo $response->send();
         exit();
     }
 
@@ -440,10 +470,12 @@ class Module
     public function permissionDenied(): never
     {
         Flash::addFlash(
-            "warning",
+            "error",
             "Permission denied"
         );
-        echo $this->indexPartial();
+        $response = $this->response(200, latte($this->getCustomIndex(), $this->getIndexData(), "content"));
+        $response->setHeader("HX-Push-Url", $this->module_name);
+        echo $response->send();
         exit();
     }
 
@@ -912,6 +944,7 @@ class Module
             "filter_links" => $this->filter_links,
             "filter_link" => $this->filter_link,
             "table" => [
+                "filter_date" => $this->filter_date,
                 "export_csv" => $this->export_csv,
                 "create" => $this->table_create,
                 "edit" => $this->table_edit,
@@ -988,6 +1021,7 @@ class Module
 
     public function index(): string
     {
+        if (!$this->hasIndexPermission()) $this->permissionDenied();
         $template = !is_null($this->table_name)
             ? $this->getIndexTemplate()
             : $this->getCustomIndex();
@@ -996,6 +1030,7 @@ class Module
 
     public function indexPartial(): string
     {
+        if (!$this->hasIndexPermission()) $this->permissionDenied();
         $template = !is_null($this->table_name)
             ? $this->getIndexTemplate()
             : $this->getCustomIndex();
@@ -1004,11 +1039,13 @@ class Module
 
     public function edit(string $id): string
     {
+        if (!$this->hasEditPermission($id)) $this->permissionDenied();
         return latte($this->getEditTemplate(), $this->getEditData($id));
     }
 
     public function editPartial(string $id): string
     {
+        if (!$this->hasEditPermission($id)) $this->permissionDenied();
         return latte(
             $this->getEditTemplate(),
             $this->getEditData($id),
@@ -1018,11 +1055,13 @@ class Module
 
     public function create(): string
     {
+        if (!$this->hasCreatePermission()) $this->permissionDenied();
         return latte($this->getCreateTemplate(), $this->getCreateData());
     }
 
     public function createPartial(): string
     {
+        if (!$this->hasCreatePermission()) $this->permissionDenied();
         return latte(
             $this->getCreateTemplate(),
             $this->getCreateData(),
@@ -1032,7 +1071,8 @@ class Module
 
     public function store(): string
     {
-        if ($this->validate($this->validation) && $this->table_create && $this->hasCreatePermission()) {
+        if (!$this->hasCreatePermission()) $this->permissionDenied();
+        if ($this->validate($this->validation) && $this->table_create) {
             $columns = $this->getFilteredFormColumns();
             $qb = QueryBuilder::insert($this->table_name)->columns($columns);
             try {
@@ -1059,7 +1099,8 @@ class Module
 
     public function update(string $id): string
     {
-        if ($this->validate($this->validation) && $this->table_edit && $this->hasEditPermission($id)) {
+        if (!$this->hasEditPermission($id)) $this->permissionDenied();
+        if ($this->validate($this->validation) && $this->table_edit) {
             $columns = $this->getFilteredFormColumns();
             $qb = QueryBuilder::update($this->table_name)
                 ->columns($columns)
@@ -1087,7 +1128,8 @@ class Module
 
     public function destroy(string $id): string
     {
-        if ($this->table_destroy && $this->hasDeletePermission($id)) {
+        if (!$this->hasDeletePermission($id)) $this->permissionDenied();
+        if ($this->table_destroy) {
             $qb = QueryBuilder::delete($this->table_name)->where([
                 $this->key_col,
                 $id,
