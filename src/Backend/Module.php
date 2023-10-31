@@ -529,6 +529,21 @@ class Module
     }
 
     /**
+     * Return a server error response
+     */
+    public function serverError(): never
+    {
+        Flash::addFlash("error", "Server error");
+        $response = $this->response(
+            200,
+            latte($this->getCustomIndex(), $this->getIndexData(), "content")
+        );
+        $response->setHeader("HX-Push-Url", $this->module_name);
+        echo $response->send();
+        exit();
+    }
+
+    /**
      * Return permission denied response
      */
     public function permissionDenied(): never

@@ -13,7 +13,7 @@
 	{foreach $form['columns'] as $column => $title}
 		<div class="container-fluid d-flex form-row w-100">
 			<div class="label d-flex align-items-start justify-content-end text-end">
-				<strong class="form-label truncate" title="{$title}"><strong>{$title}</strong></strong>
+				<strong class="form-label truncate" title="{$title}">{$title}</strong>
 			</div>
 			<div class="control ms-2 flex-grow-1">
 				{$controls($column, '')|noescape}

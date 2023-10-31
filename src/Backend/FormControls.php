@@ -26,11 +26,11 @@ class FormControls
     ): string {
         $attrs = implode(" ", $attrs);
         return sprintf(
-            '<input type="%s" class="%s control-%s" id="%s" name="%s" value="%s" placeholder="..." %s>',
+            '<input type="%s" class="%s control-%s" id="%s" name="%s" value="%s" placeholder="..." autocomplete="off" %s>',
             $type,
             $class,
             $type,
-            $name,
+            $name ? $name : uniqid(),
             $name,
             htmlspecialchars($value ?? ""),
             $attrs
