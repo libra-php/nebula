@@ -17,12 +17,19 @@ class Test extends Module
             "id" => "ID",
             "name" => "Name",
             "number" => "Number",
+            "updated_at" => "Updated At",
+            "created_at" => "Created At",
         ];
 
         /**
          * Searchable table columns
          */
         $this->search = ["number", "name", "comment"];
+
+        /**
+         * Date fitler column
+         */
+        $this->filter_datetime = "created_at";
 
         /**
          * Table filter links

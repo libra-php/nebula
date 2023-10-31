@@ -26,6 +26,7 @@ class Audit extends Module
         ];
         $this->joins = ["INNER JOIN users ON audit.user_id = users.id"];
         $this->search = ["table_name", "table_id", "field", "name"];
+        $this->filter_datetime = "created_at";
         $this->filter_links = [
             "Me" => "user_id = " . user()->id,
             "All" => "1=1",
