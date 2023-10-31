@@ -426,10 +426,7 @@ class Module
             session()->set($this->module_name . "_page", 1);
         }
         if (request()->has("date_to")) {
-            session()->set(
-                $this->module_name . "_date_to",
-                request()->date_to
-            );
+            session()->set($this->module_name . "_date_to", request()->date_to);
             $this->filter_date_to = request()->date_to;
             session()->set($this->module_name . "_page", 1);
         }
@@ -441,8 +438,12 @@ class Module
             $this->filter_date_from = session()->get(
                 $this->module_name . "_date_from"
             );
-            if ($this->filter_date_from != '') {
-                $this->where[] = [$this->table_name . '.' . $this->filter_datetime, '>=', $this->filter_date_from];
+            if ($this->filter_date_from != "") {
+                $this->where[] = [
+                    $this->table_name . "." . $this->filter_datetime,
+                    ">=",
+                    $this->filter_date_from,
+                ];
             }
         }
         if (
@@ -452,8 +453,12 @@ class Module
             $this->filter_date_to = session()->get(
                 $this->module_name . "_date_to"
             );
-            if ($this->filter_date_to != '') {
-                $this->where[] = [$this->table_name . '.' . $this->filter_datetime, '<=', $this->filter_date_to];
+            if ($this->filter_date_to != "") {
+                $this->where[] = [
+                    $this->table_name . "." . $this->filter_datetime,
+                    "<=",
+                    $this->filter_date_to,
+                ];
             }
         }
     }
