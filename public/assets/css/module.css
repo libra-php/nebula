@@ -131,6 +131,17 @@
 #table .table tbody td {
   padding: 2px 6px;
 }
+
+/**
+ * Breadcrumbs
+ */
+.breadcrumb .breadcrumb-item {
+  font-size: 0.9rem;
+}
+.breadcrumb .breadcrumb-item a {
+  color: #666;
+}
+
 /**
  * Search 
  */

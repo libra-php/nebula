@@ -2,12 +2,7 @@
 
 {block content}
 <section id="create">
-	<div class="module-title">
-		<h1>Create {$module_title_singular}</h1>
-	</div>
-	<div class="alerts" n:if="$has_flash">
-		{getFlashMessages()|noescape}
-	</div>
+	{include parent}
 	<form method="POST" hx-encoding="multipart/form-data">
 	{csrf()|noescape}
 	{foreach $form['columns'] as $column => $title}
@@ -33,6 +28,6 @@
 		</div>
 	</form>
 </section>
-{include parent}
+{include 'profiler.latte'}
 <script src='/assets/js/form.js'></script>
 {/block}

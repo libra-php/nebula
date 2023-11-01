@@ -1033,8 +1033,14 @@ class Module
             return $control;
         };
 
+        $breadcrumbs = [
+            "Home" => moduleRoute("module.index.part", "home"),
+            $this->module_title => moduleRoute("module.index.part", $this->module_name),
+        ];
+
         return [
             ...$this->commonData(),
+            "breadcrumbs" => $breadcrumbs,
             "custom_content" => $this->customContent(),
             "has_delete_permission" => $has_delete_permission,
             "has_edit_permission" => $has_edit_permission,
@@ -1079,8 +1085,14 @@ class Module
     {
         $this->processFormRequest();
         $fc = $this->formControls();
+        $breadcrumbs = [
+            "Home" => moduleRoute("module.index.part", "home"),
+            $this->module_title => moduleRoute("module.index.part", $this->module_name),
+            "Create" => moduleRoute("module.create.part", $this->module_name),
+        ];
         return [
             ...$this->commonData(),
+            "breadcrumbs" => $breadcrumbs,
             "controls" => $fc,
             "form" => [
                 "data" => [],
@@ -1107,9 +1119,15 @@ class Module
             $this->moduleNotFound();
         }
         $fc = $this->formControls($id);
+        $breadcrumbs = [
+            "Home" => moduleRoute("module.index.part", "home"),
+            $this->module_title => moduleRoute("module.index.part", $this->module_name),
+            "Edit" => moduleRoute("module.edit.part", $this->module_name, $id),
+        ];
 
         return [
             ...$this->commonData(),
+            "breadcrumbs" => $breadcrumbs,
             "id" => $id,
             "controls" => $fc,
             "form" => [
