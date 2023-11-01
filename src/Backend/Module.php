@@ -404,13 +404,15 @@ class Module
             foreach (request()->filter_select as $column => $value) {
                 // Note the [[ ... ]]
                 // This will store the array on the session
-                $filter_options = [[
+                $filter_options = [
                     "column" => $column,
                     "value" => $value,
-                ]];
+                ];
+                $session = session()->get($this->module_name . "_filter_select");
+                $session[$column] = $filter_options;
                 session()->set(
                     $this->module_name . "_filter_select",
-                    $filter_options
+                    $session
                 );
             }
         }
