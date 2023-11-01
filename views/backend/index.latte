@@ -73,7 +73,7 @@
 				<div id="filter-select" class="d-flex flex-column" n:if="$has_filter_select">
 					{foreach $filter_select as $column => $title}
 						<div class="d-flex align-items-center justify-content-start">
-						<label class="p-1 pe-2 truncate flex-break" for=""><strong>{$title}</strong></label>
+						<label for="filter_select[{$column}]" class="p-1 pe-2 truncate flex-break" for=""><strong>{$title}</strong></label>
 						{$filter_select_control($column, $filter_selections[$column] ?? '')|noescape}
 						</div>
 					{/foreach}

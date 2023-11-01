@@ -82,12 +82,13 @@ class FormControls
             );
         }
         return sprintf(
-            '<select name="%s" class="%s" %s>
+            '<select name="%s" class="%s" id=%s %s>
             <option disabled>Please select an option</option>
             %s
             </select>',
             $name,
             $class,
+            $name,
             $attrs,
             implode("", $options)
         );
