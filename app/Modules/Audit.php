@@ -31,6 +31,14 @@ class Audit extends Module
             "Me" => "user_id = " . user()->id,
             "All" => "1=1",
         ];
+        $this->filter_select = [
+            "users.name" => "User",
+            "table_name" => "Table"
+        ];
+        $this->select_options = [
+            "users.name" => db()->selectAll("SELECT name as id, name FROM users ORDER BY name"),
+            "table_name" => db()->selectAll("SELECT distinct table_name as id, table_name as name FROM audit ORDER BY table_name"),
+        ];
         $this->addRowAction(
             "undo_change",
             "Undo",

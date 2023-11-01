@@ -81,6 +81,8 @@ class Kernel implements NebulaKernel
                 $response->setContent($content);
             } catch (\Exception $ex) {
                 return $this->handleException($ex);
+            } catch (\Error $err) {
+                return $this->handleError($err);
             }
         } else {
             return $this->response(404, "Page not found");
@@ -128,6 +130,28 @@ class Kernel implements NebulaKernel
         error_log("Trace: " . $exception->getTraceAsString() . PHP_EOL);
         return $config["debug"]
             ? $this->whoops($exception)
+            : $this->response(500, "Server error");
+    }
+
+    /**
+     * Handle any application errors
+     */
+    public function handleError(Throwable $error): Response
+    {
+        $config = config("app");
+        error_log("\n");
+        error_log("Nebula Error" . PHP_EOL);
+        error_log(
+            "File: " .
+                $error->getFile() .
+                ":" .
+                $error->getLine() .
+                PHP_EOL
+        );
+        error_log("Message: " . $error->getMessage() . PHP_EOL);
+        error_log("Trace: " . $error->getTraceAsString() . PHP_EOL);
+        return $config["debug"]
+            ? $this->whoops($error)
             : $this->response(500, "Server error");
     }
 

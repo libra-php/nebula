@@ -32,6 +32,11 @@ class Users extends Module
             "email" => "disabled",
         ];
 
+        $this->filter_links = [
+            "Me" => "id = " . user()->id,
+            "Others" => "id != " . user()->id,
+        ];
+
         parent::__construct("users", "users");
     }
 
