@@ -334,7 +334,19 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
+.accordion-button:not(.collapsed) {
+  background-color: transparent !important;
+  color: inherit;
+  box-shadow: 0 !important;
+}
+#filters {
+  border: 0;
+  padding: 20px;
+}
+button.accordion-button {
+  padding: 6px;
+  box-shadow: none;
+}
 /**
  * Mobile
  */
