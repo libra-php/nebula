@@ -81,117 +81,120 @@
 			</div>
 		</div>
 	</div>
-	<div n:if="$has_filter_links" class="d-flex my-1">
-		{foreach $filter_links as $title => $clause}
-			<a hx-boost="true" href="{$route('module.index.part')}?filter_link={$title|escapeUrl}" hx-target="#module" title="Filter on {$title}">
-				<span class="badge filter-link pill me-1 {if $filter_link == $title}active{/if}">{$title} 
-					[<span hx-trigger="load delay:50ms" hx-get="{$route('module.index.part')}?filter_count={$title|escapeUrl}" class="count" hx-target="this">?</span>]
-				</span>
-			</a>
-		{/foreach}		
-	</div>
-	<section id="module-table">
-		<div class="table-container rounded-3">
-			<table class="table table-sm rounded-3">
-				<thead class="text-light">
-					<tr>
-						{foreach $table[columns] as $column => $title}
-							<th scope="col">
-								<a title="Sort by {$title}" href="{$route('module.index.part')}?order_by={$column|escapeUrl}&sort={if $table['order_by'] == $column && $table['sort'] == "DESC"}ASC{else}DESC{/if}" hx-boost="true" hx-select="#module-table" hx-target="#module-table">
-									{if $table['order_by'] == $column}
-										<span class="active">
-											{$title}
-											{if $table['sort'] === 'DESC'}
-												&#9660;
-											{else}
-												&#9650;
-											{/if}
-										</span>
-									{else}	
-										<span>{$title}</span>
-									{/if}
-								</a>
-							</th>
-						{/foreach}
-						<th></th>
-					</tr>
-				</thead>
-				<tbody>
-					{if $table[data]}
-					{foreach $table[data] as $datum}
-					<tr class="align-middle">
-						{foreach $table[columns] as $column => $title}
-							{if $column == $name_col && $table['edit']}
-								<td title="{$title}"><a class="module-edit-link" hx-boost="true" href="{$route('module.edit.part', $datum[$key_col])}" title="Edit record" hx-target="#module">{$datum[$column]}</a></td>
-							{elseif $column === $key_col}
-								<td title="{$title}"><span class="text-secondary">{$datum[$column]}</span></td>
-						    {else}		
-								<td title="{$title}">{$datum[$column]}</td>
-							{/if}
-						{/foreach}
-						<td>
-							<div class="d-flex justify-content-end" hx-boost="true">
-								{foreach $table['row_actions'] as $action}
-									<a n:if="$table['has_row_action_permission']($action['name'], $datum[$key_col])" 
-										class="row-action btn btn-sm btn-outline-{$action['class']} ms-1" 
-										href="{$route('module.index')}?{$action['name']}=true&id={$datum[$key_col]}" 
-										{if $action['confirm']}hx-confirm="{$action['confirm']}"{/if}
-										title="{$action['title']}"
-										hx-replace-url="{$module_name}"
-										hx-target="#module">
-										{$action['title']}
+	<section id="module-table-links">
+		<div n:if="$has_filter_links" class="d-flex my-1">
+			{foreach $filter_links as $title => $clause}
+				<a hx-boost="true" href="{$route('module.index.part')}?filter_link={$title|escapeUrl}" hx-target="#module-table-links" hx-select="#module-table-links" title="Filter on {$title}">
+					<span class="badge filter-link pill me-1 {if $filter_link == $title}active{/if}">{$title} 
+						[<span class="count">?</span>]
+					</span>
+				</a>
+				<span hx-trigger="load delay:50ms" hx-get="{$route('module.index.part')}?filter_count={$title|escapeUrl}" class="count" hx-target="previous .count"></span>
+			{/foreach}		
+		</div>
+		<section id="module-table">
+			<div class="table-container rounded-3">
+				<table class="table table-sm rounded-3">
+					<thead class="text-light">
+						<tr>
+							{foreach $table[columns] as $column => $title}
+								<th scope="col">
+									<a title="Sort by {$title}" href="{$route('module.index.part')}?order_by={$column|escapeUrl}&sort={if $table['order_by'] == $column && $table['sort'] == "DESC"}ASC{else}DESC{/if}" hx-boost="true" hx-select="#module-table" hx-target="#module-table">
+										{if $table['order_by'] == $column}
+											<span class="active">
+												{$title}
+												{if $table['sort'] === 'DESC'}
+													&#9660;
+												{else}
+													&#9650;
+												{/if}
+											</span>
+										{else}	
+											<span>{$title}</span>
+										{/if}
 									</a>
-								{/foreach}
-								<a n:if="$table['edit'] && $has_edit_permission($datum[$key_col])" class="row-action btn btn-sm btn-outline-primary ms-1" href="{$route('module.edit.part', $datum[$key_col])}"
-									hx-target="#module" title="Edit record">Edit</a>
-								<a n:if="$table['destroy'] && $has_delete_permission($datum[$key_col])" class="row-action btn btn-sm btn-outline-danger ms-1" hx-delete="{$route('module.destroy', $datum[$key_col])}"
-									hx-target="#module"
-									hx-confirm="Are you sure you want to delete this record? This action cannot be undone."
-									title="Delete record">Delete</a>
-							</div>
-						</td>
-					</tr>
-					{/foreach}
-					{else}
-					<tr>
-						<td class="text-center" colspan="{$table[col_span]}"><em>No results found</em></td>
-					</tr>
-					{/if}
-				</tbody>
-			</table>
-		</div>
-		<div hx-boost="true" id="pagination" class="mt-3 d-flex">
-			<nav aria-label="navigation" n:if="$table[total_pages] > 1">
-				<ul class="pagination pagination">
-					<li title="Previous" class="page-item {if $table[page] === 1}disabled{/if}">
-						<a class="page-link" href="{$route('module.index.part')}?page={$table[page]-1}" hx-select="#module-table" hx-target="#module-table">⯇ PREV</a>
-					</li>
-					<li class="page-item d-flex align-items-stretch">
-						<select id="page-selector" class="border-0" name="page" hx-get="{$route('module.index.part')}" hx-select="#module-table" hx-target="#module-table">
-							<option value="{$i}" n:for="$i = 1; $i < $table[total_pages] + 1; $i++" {if $table[page] === $i}selected{/if}>{$i} / {$table[total_pages]}</option>
-						</select>
-					</li>
-					<li title="Next" class="page-item {if $table[page] === $table[total_pages]}disabled{/if}">
-						<a class="page-link" href="{$route('module.index.part')}?page={$table[page]+1}" hx-select="#module-table" hx-target="#module-table">NEXT ⯈</a>
-					</li>
-				</ul>
-			</nav>
-			<nav aria-label="items per page" class="ms-auto" n:if="$table[total_results] >= 5">
-				<ul class="pagination pagination">
-					<li class="page-item disabled">
-						<span class="page-link">Per Page</span>
-					</li>
-					<li class="page-item d-flex align-items-stretch">
-						<select id="per-page-selector" class="border-0" name="limit" hx-get="{$route('module.index.part')}" hx-select="#module-table" hx-target="#module-table">
-							{foreach $table['per_page_options'] as $value}
-							<option value="{$value}" {if $value == $table['per_page']}selected{/if}>{$value}</option>
+								</th>
 							{/foreach}
-						</select>
-					</li>
-				</ul>
-			</nav>
-		</div>
-		{include parent}
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						{if $table[data]}
+						{foreach $table[data] as $datum}
+						<tr class="align-middle">
+							{foreach $table[columns] as $column => $title}
+								{if $column == $name_col && $table['edit']}
+									<td title="{$title}"><a class="module-edit-link" hx-boost="true" href="{$route('module.edit.part', $datum[$key_col])}" title="Edit record" hx-target="#module">{$datum[$column]}</a></td>
+								{elseif $column === $key_col}
+									<td title="{$title}"><span class="text-secondary">{$datum[$column]}</span></td>
+								{else}		
+									<td title="{$title}">{$datum[$column]}</td>
+								{/if}
+							{/foreach}
+							<td>
+								<div class="d-flex justify-content-end" hx-boost="true">
+									{foreach $table['row_actions'] as $action}
+										<a n:if="$table['has_row_action_permission']($action['name'], $datum[$key_col])" 
+											class="row-action btn btn-sm btn-outline-{$action['class']} ms-1" 
+											href="{$route('module.index')}?{$action['name']}=true&id={$datum[$key_col]}" 
+											{if $action['confirm']}hx-confirm="{$action['confirm']}"{/if}
+											title="{$action['title']}"
+											hx-replace-url="{$module_name}"
+											hx-target="#module">
+											{$action['title']}
+										</a>
+									{/foreach}
+									<a n:if="$table['edit'] && $has_edit_permission($datum[$key_col])" class="row-action btn btn-sm btn-outline-primary ms-1" href="{$route('module.edit.part', $datum[$key_col])}"
+										hx-target="#module" title="Edit record">Edit</a>
+									<a n:if="$table['destroy'] && $has_delete_permission($datum[$key_col])" class="row-action btn btn-sm btn-outline-danger ms-1" hx-delete="{$route('module.destroy', $datum[$key_col])}"
+										hx-target="#module"
+										hx-confirm="Are you sure you want to delete this record? This action cannot be undone."
+										title="Delete record">Delete</a>
+								</div>
+							</td>
+						</tr>
+						{/foreach}
+						{else}
+						<tr>
+							<td class="text-center" colspan="{$table[col_span]}"><em>No results found</em></td>
+						</tr>
+						{/if}
+					</tbody>
+				</table>
+			</div>
+			<div hx-boost="true" id="pagination" class="mt-3 d-flex">
+				<nav aria-label="navigation" n:if="$table[total_pages] > 1">
+					<ul class="pagination pagination">
+						<li title="Previous" class="page-item {if $table[page] === 1}disabled{/if}">
+							<a class="page-link" href="{$route('module.index.part')}?page={$table[page]-1}" hx-select="#module-table" hx-target="#module-table">⯇ PREV</a>
+						</li>
+						<li class="page-item d-flex align-items-stretch">
+							<select id="page-selector" class="border-0" name="page" hx-get="{$route('module.index.part')}" hx-select="#module-table" hx-target="#module-table">
+								<option value="{$i}" n:for="$i = 1; $i < $table[total_pages] + 1; $i++" {if $table[page] === $i}selected{/if}>{$i} / {$table[total_pages]}</option>
+							</select>
+						</li>
+						<li title="Next" class="page-item {if $table[page] === $table[total_pages]}disabled{/if}">
+							<a class="page-link" href="{$route('module.index.part')}?page={$table[page]+1}" hx-select="#module-table" hx-target="#module-table">NEXT ⯈</a>
+						</li>
+					</ul>
+				</nav>
+				<nav aria-label="items per page" class="ms-auto" n:if="$table[total_results] >= 5">
+					<ul class="pagination pagination">
+						<li class="page-item disabled">
+							<span class="page-link">Per Page</span>
+						</li>
+						<li class="page-item d-flex align-items-stretch">
+							<select id="per-page-selector" class="border-0" name="limit" hx-get="{$route('module.index.part')}" hx-select="#module-table" hx-target="#module-table">
+								{foreach $table['per_page_options'] as $value}
+								<option value="{$value}" {if $value == $table['per_page']}selected{/if}>{$value}</option>
+								{/foreach}
+							</select>
+						</li>
+					</ul>
+				</nav>
+			</div>
+			{include parent}
+		</section>
 	</section>
 </section>
 {/block}
