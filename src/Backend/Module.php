@@ -70,6 +70,7 @@ class Module
     protected array $joins = [];
     protected array $table_columns = [];
     protected array $table_data = [];
+    // Columns that are searchable
     protected array $search = [];
     // Column to filter by datetime
     protected string $filter_datetime = "";
@@ -77,8 +78,13 @@ class Module
     protected string $filter_date_from = "";
     // Datetime control to
     protected string $filter_date_to = "";
+    // Filter links (shown above table)
     protected array $filter_links = [];
     protected string $filter_link = "";
+    // Select filters (dropdown filters shown above table)
+    protected array $filter_select = [];
+    // Stores values of active select filters
+    protected array $filter_selections = [];
     protected array $where = [];
     protected string $order_by = "";
     protected string $sort = "DESC";
@@ -139,6 +145,7 @@ class Module
      */
     protected function processTableRequest(): void
     {
+        $this->handleSelectFilter();
         $this->handleSearch();
         $this->handleDateTime();
         $this->handleOrdering();
@@ -385,6 +392,40 @@ class Module
 
         $this->page = session()->get($this->module_name . "_page") ?? $page;
         $this->limit = session()->get($this->module_name . "_limit") ?? $limit;
+    }
+
+    /**
+     * Handle select filters (dropdowns)
+     */
+    protected function handleSelectFilter(): void
+    {
+        if (request()->has('filter_select')) {
+            // filter_select is an array of select controls
+            foreach (request()->filter_select as $column => $value) {
+                // Note the [[ ... ]]
+                // This will store the array on the session
+                $filter_options = [[
+                    "column" => $column,
+                    "value" => $value,
+                ]];
+                session()->set(
+                    $this->module_name . "_filter_select",
+                    $filter_options
+                );
+            }
+        }
+
+        if (session()->has($this->module_name . "_filter_select")) {
+            $filters = session()->get($this->module_name . "_filter_select");
+            foreach ($filters as $filter) {
+                // Remember the selection for the view
+                $this->filter_selections[$filter['column']] = $filter['value'];
+                if ($filter['value'] !== 'NULL') {
+                    // Add the select filter where clause
+                    $this->where[] = [$filter['column'], $filter['value']];
+                }
+            }
+        }
     }
 
     /**
@@ -706,11 +747,11 @@ class Module
         // Deal with "NULL" string
         array_walk(
             $data,
-            fn(&$value, $key) => ($value = $value === "NULL" ? null : $value)
+            fn (&$value, $key) => ($value = $value === "NULL" ? null : $value)
         );
         return array_filter(
             $data,
-            fn($value, $key) => $key != "csrf_token" &&
+            fn ($value, $key) => $key != "csrf_token" &&
                 !in_array($this->form_controls[$key], $filtered_controls),
             ARRAY_FILTER_USE_BOTH
         );
@@ -787,7 +828,7 @@ class Module
         foreach (["Slow DB:" => db()->trace_counts] as $title => $traces) {
             //$slow_traces[] = $title;
             if ($traces) {
-                uasort($traces, fn($a, $b) => $b["time"] <=> $a["time"]);
+                uasort($traces, fn ($a, $b) => $b["time"] <=> $a["time"]);
                 $i = 0;
                 foreach ($traces as $key => $value) {
                     $i++;
@@ -828,14 +869,14 @@ class Module
         ) {
             return moduleRoute($route_name, $module_name, $id);
         };
-        $gravatar = fn(string $str) => md5(strtolower(trim($str)));
+        $gravatar = fn (string $str) => md5(strtolower(trim($str)));
         $singular = function (string $str) {
             return substr($str, -1) === "s" ? rtrim($str, "s") : $str;
         };
-        $request = fn(string $column) => request()->has($column)
+        $request = fn (string $column) => request()->has($column)
             ? request()->$column
             : "";
-        $session = fn(string $column) => session()->has($column)
+        $session = fn (string $column) => session()->has($column)
             ? session()->get($column)
             : "";
         return [
@@ -1007,15 +1048,31 @@ class Module
             $this->handleDatabaseException($ex);
         }
 
-        $has_delete_permission = fn(string $id) => $this->hasDeletePermission(
+        $has_delete_permission = fn (string $id) => $this->hasDeletePermission(
             $id
         );
-        $has_edit_permission = fn(string $id) => $this->hasEditPermission($id);
-        $has_create_permission = fn() => $this->hasCreatePermission();
-        $has_row_action_permission = fn(
+        $has_edit_permission = fn (string $id) => $this->hasEditPermission($id);
+        $has_create_permission = fn () => $this->hasCreatePermission();
+        $has_row_action_permission = fn (
             string $name,
             string $id
         ) => $this->hasRowActionPermission($name, $id);
+        // Renders a select filter
+        $filter_select_control = function (string $name, ?string $value) {
+            $options = $this->select_options[$name];
+            $fc = new FormControls(null);
+            $name = "filter_select[$name]";
+            $control = $fc->nselect(
+                $name, 
+                $value, 
+                $options, 
+                "form-select form-select-sm filter-select",
+                "hx-get='". moduleRoute('module.index.part', $this->module_name) . "'",
+                "hx-target='#module'",
+                "hx-trigger='change'",
+            );
+            return $control;
+        };
 
         return [
             ...$this->commonData(),
@@ -1026,10 +1083,14 @@ class Module
             "has_filter_search" => !empty($this->search),
             "has_filter_links" => !empty($this->filter_links),
             "has_filter_datetime" => $this->filter_datetime != "",
+            "has_filter_select" => !empty($this->filter_select),
+            "filter_select" => $this->filter_select,
             "filter_links" => $this->filter_links,
             "filter_link" => $this->filter_link,
             "filter_date_from" => $this->filter_date_from,
             "filter_date_to" => $this->filter_date_to,
+            "filter_select_control" => $filter_select_control,
+            "filter_selections" => $this->filter_selections,
             "table" => [
                 "export_csv" => $this->export_csv,
                 "create" => $this->table_create,
@@ -1081,8 +1142,8 @@ class Module
         try {
             $data = !is_null($qb)
                 ? db()
-                    ->run($qb->build(), $qb->values())
-                    ->fetch()
+                ->run($qb->build(), $qb->values())
+                ->fetch()
                 : [];
         } catch (PDOException $ex) {
             $this->handleDatabaseException($ex);

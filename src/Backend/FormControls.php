@@ -53,6 +53,7 @@ class FormControls
         string $name,
         ?string $value,
         array $options,
+        string $class = "form-select control-select",
         ...$attrs
     ): string {
         $attrs = implode(" ", $attrs);
@@ -81,12 +82,12 @@ class FormControls
             );
         }
         return sprintf(
-            '<select name="%s" class="form-select control-select" %s>
+            '<select name="%s" class="%s" %s>
             <option disabled>Please select an option</option>
-            <option value="">None</option>
             %s
             </select>',
             $name,
+            $class,
             $attrs,
             implode("", $options)
         );

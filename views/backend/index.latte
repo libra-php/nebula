@@ -51,7 +51,7 @@
 				</div>
 			</div>
 		</div>
-		<div id="search" class="d-flex align-items-center" n:if="$has_filter_search">
+		<div id="filter-search" class="d-flex align-items-center" n:if="$has_filter_search">
 			<label class="p-1 pe-2 tuncate" for="search-input"><strong>Search</strong></label>
 			<input id="search-input"
 				type="search" 
@@ -62,6 +62,12 @@
 				value="{$session($module_name . '_term')}"
 				hx-trigger="keyup changed delay:500ms, search" 
 				hx-target="#module"/>
+		</div>
+		<div id="filter-select" class="d-flex align-items-center" n:if="$has_filter_select">
+			{foreach $filter_select as $column => $title}
+				<label class="p-1 pe-2 truncate" for=""><strong>{$title}</strong></label>
+				{$filter_select_control($column, $filter_selections[$column] ?? '')|noescape}
+			{/foreach}
 		</div>
 	</div>
 	<div n:if="$has_filter_links" class="d-flex my-1">

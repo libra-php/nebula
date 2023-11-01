@@ -89,6 +89,15 @@ class Test extends Module
         ];
 
         /**
+         * Select filters
+         * key: column to filter on
+         * value: title of select
+         */
+        $this->filter_select = [
+            "dropdown" => "Animals"
+        ];
+
+        /**
          * The options for a select control
          * key: form column
          * value: query or array

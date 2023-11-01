@@ -9,7 +9,7 @@ class Audit extends Module
 {
     public function __construct()
     {
-        $this->module_icon = "book-open";
+        $this->module_icon = "flag";
         $this->table_create = $this->table_edit = $this->table_destroy = false;
         $this->name_col = "id";
         $this->table_columns = [
