@@ -398,7 +398,7 @@ class Module
      */
     protected function handleSelectFilter(): void
     {
-        if (request()->has('filter_select')) {
+        if (request()->has("filter_select")) {
             // filter_select is an array of select controls
             foreach (request()->filter_select as $column => $value) {
                 // Note the [[ ... ]]
@@ -407,12 +407,11 @@ class Module
                     "column" => $column,
                     "value" => $value,
                 ];
-                $session = session()->get($this->module_name . "_filter_select");
-                $session[$column] = $filter_options;
-                session()->set(
-                    $this->module_name . "_filter_select",
-                    $session
+                $session = session()->get(
+                    $this->module_name . "_filter_select"
                 );
+                $session[$column] = $filter_options;
+                session()->set($this->module_name . "_filter_select", $session);
             }
         }
 
@@ -420,10 +419,10 @@ class Module
             $filters = session()->get($this->module_name . "_filter_select");
             foreach ($filters as $filter) {
                 // Remember the selection for the view
-                $this->filter_selections[$filter['column']] = $filter['value'];
-                if ($filter['value'] !== 'NULL') {
+                $this->filter_selections[$filter["column"]] = $filter["value"];
+                if ($filter["value"] !== "NULL") {
                     // Add the select filter where clause
-                    $this->where[] = [$filter['column'], $filter['value']];
+                    $this->where[] = [$filter["column"], $filter["value"]];
                 }
             }
         }
@@ -698,7 +697,6 @@ class Module
         }
     }
 
-
     /**
      * Filter out columns that should not be used in the
      * request for creation of / updating a record.
@@ -710,11 +708,11 @@ class Module
         // Deal with "NULL" string
         array_walk(
             $data,
-            fn (&$value, $key) => ($value = $value === "NULL" ? null : $value)
+            fn(&$value, $key) => ($value = $value === "NULL" ? null : $value)
         );
         return array_filter(
             $data,
-            fn ($value, $key) => $key != "csrf_token" &&
+            fn($value, $key) => $key != "csrf_token" &&
                 !in_array($this->form_controls[$key], $filtered_controls),
             ARRAY_FILTER_USE_BOTH
         );
@@ -791,7 +789,7 @@ class Module
         foreach (["Slow DB:" => db()->trace_counts] as $title => $traces) {
             //$slow_traces[] = $title;
             if ($traces) {
-                uasort($traces, fn ($a, $b) => $b["time"] <=> $a["time"]);
+                uasort($traces, fn($a, $b) => $b["time"] <=> $a["time"]);
                 $i = 0;
                 foreach ($traces as $key => $value) {
                     $i++;
@@ -832,14 +830,14 @@ class Module
         ) {
             return moduleRoute($route_name, $module_name, $id);
         };
-        $gravatar = fn (string $str) => md5(strtolower(trim($str)));
+        $gravatar = fn(string $str) => md5(strtolower(trim($str)));
         $singular = function (string $str) {
             return substr($str, -1) === "s" ? rtrim($str, "s") : $str;
         };
-        $request = fn (string $column) => request()->has($column)
+        $request = fn(string $column) => request()->has($column)
             ? request()->$column
             : "";
-        $session = fn (string $column) => session()->has($column)
+        $session = fn(string $column) => session()->has($column)
             ? session()->get($column)
             : "";
         return [
@@ -1007,12 +1005,12 @@ class Module
         $this->processTableRequest();
         $data = $this->tableData();
 
-        $has_delete_permission = fn (string $id) => $this->hasDeletePermission(
+        $has_delete_permission = fn(string $id) => $this->hasDeletePermission(
             $id
         );
-        $has_edit_permission = fn (string $id) => $this->hasEditPermission($id);
-        $has_create_permission = fn () => $this->hasCreatePermission();
-        $has_row_action_permission = fn (
+        $has_edit_permission = fn(string $id) => $this->hasEditPermission($id);
+        $has_create_permission = fn() => $this->hasCreatePermission();
+        $has_row_action_permission = fn(
             string $name,
             string $id
         ) => $this->hasRowActionPermission($name, $id);
@@ -1022,13 +1020,15 @@ class Module
             $fc = new FormControls(null);
             $name = "filter_select[$name]";
             $control = $fc->nselect(
-                $name, 
-                $value, 
-                $options, 
+                $name,
+                $value,
+                $options,
                 "form-select form-select-sm filter-select",
-                "hx-get='". moduleRoute('module.index.part', $this->module_name) . "'",
+                "hx-get='" .
+                    moduleRoute("module.index.part", $this->module_name) .
+                    "'",
                 "hx-target='#module'",
-                "hx-trigger='change'",
+                "hx-trigger='change'"
             );
             return $control;
         };
@@ -1100,8 +1100,8 @@ class Module
         $data = null;
         $data = !is_null($qb)
             ? db()
-            ->run($qb->build(), $qb->values())
-            ->fetch()
+                ->run($qb->build(), $qb->values())
+                ->fetch()
             : [];
         if (!$data) {
             $this->moduleNotFound();
@@ -1248,11 +1248,7 @@ class Module
             ]);
             $result = db()->run($qb->build(), $qb->values());
             if ($result) {
-                $this->auditColumns(
-                    [$this->key_col => "NULL"],
-                    $id,
-                    "DELETE"
-                );
+                $this->auditColumns([$this->key_col => "NULL"], $id, "DELETE");
                 Flash::addFlash("success", "Record deleted successfully");
             } else {
                 Flash::addFlash(

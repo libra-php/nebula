@@ -38,9 +38,15 @@ class Audit extends Module
             "field" => "Field",
         ];
         $this->select_options = [
-            "users.name" => db()->selectAll("SELECT name as id, name FROM users ORDER BY name"),
-            "table_name" => db()->selectAll("SELECT distinct table_name as id, table_name as name FROM audit ORDER BY table_name"),
-            "field" => db()->selectAll("SELECT distinct field as id, field as name FROM audit ORDER BY field"),
+            "users.name" => db()->selectAll(
+                "SELECT name as id, name FROM users ORDER BY name"
+            ),
+            "table_name" => db()->selectAll(
+                "SELECT distinct table_name as id, table_name as name FROM audit ORDER BY table_name"
+            ),
+            "field" => db()->selectAll(
+                "SELECT distinct field as id, field as name FROM audit ORDER BY field"
+            ),
         ];
         $this->addRowAction(
             "undo_change",

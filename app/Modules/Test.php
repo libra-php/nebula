@@ -94,7 +94,7 @@ class Test extends Module
          * value: title of select
          */
         $this->filter_select = [
-            "dropdown" => "Animals"
+            "dropdown" => "Animals",
         ];
 
         /**

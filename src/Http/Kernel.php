@@ -142,11 +142,7 @@ class Kernel implements NebulaKernel
         error_log("\n");
         error_log("Nebula Error" . PHP_EOL);
         error_log(
-            "File: " .
-                $error->getFile() .
-                ":" .
-                $error->getLine() .
-                PHP_EOL
+            "File: " . $error->getFile() . ":" . $error->getLine() . PHP_EOL
         );
         error_log("Message: " . $error->getMessage() . PHP_EOL);
         error_log("Trace: " . $error->getTraceAsString() . PHP_EOL);
