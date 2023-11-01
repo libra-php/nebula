@@ -7,7 +7,6 @@ use Nebula\Database\QueryBuilder;
 use Nebula\Traits\Http\Response;
 use Nebula\Validation\Validate;
 use Nebula\Backend\FormControls;
-use PDOException;
 
 class Module
 {
@@ -558,30 +557,12 @@ class Module
     {
         Flash::addFlash(
             "warning",
-            "Oops! The requested record could not be found"
+            "Oops! The requested module could not be found"
         );
         $response = $this->response(
             404,
-            latte($this->getCustomIndex(), [
-                ...$this->getIndexData(),
-                "module_title" => "Module not found",
-            ])
+            latte($this->getCustomIndex(), $this->getIndexData())
         );
-        echo $response->send();
-        exit();
-    }
-
-    /**
-     * Return a server error response
-     */
-    public function serverError(): never
-    {
-        Flash::addFlash("error", "Server error");
-        $response = $this->response(
-            200,
-            latte($this->getCustomIndex(), $this->getIndexData(), "content")
-        );
-        $response->setHeader("HX-Push-Url", $this->module_name);
         echo $response->send();
         exit();
     }
@@ -717,26 +698,6 @@ class Module
         }
     }
 
-    /**
-     * Handle any database PDOException
-     */
-    protected function handleDatabaseException(PDOException $ex): void
-    {
-        if (config("app.debug")) {
-            Flash::addFlash("database", $ex->getMessage());
-        } else {
-            logger(
-                "error",
-                $ex->getMessage(),
-                sprintf("%s[%s]", $ex->getFile(), $ex->getLine())
-            );
-            Flash::addFlash("database", "Oops! A database error occurred");
-        }
-        // TODO this always returns to list view,
-        // maybe we can stay in edit view
-        echo $this->indexPartial();
-        exit();
-    }
 
     /**
      * Filter out columns that should not be used in the
@@ -1044,11 +1005,7 @@ class Module
     protected function getIndexData(): array
     {
         $this->processTableRequest();
-        try {
-            $data = $this->tableData();
-        } catch (PDOException $ex) {
-            $this->handleDatabaseException($ex);
-        }
+        $data = $this->tableData();
 
         $has_delete_permission = fn (string $id) => $this->hasDeletePermission(
             $id
@@ -1141,15 +1098,11 @@ class Module
         $this->processFormRequest($id);
         $qb = $this->getEditQuery($id);
         $data = null;
-        try {
-            $data = !is_null($qb)
-                ? db()
-                ->run($qb->build(), $qb->values())
-                ->fetch()
-                : [];
-        } catch (PDOException $ex) {
-            $this->handleDatabaseException($ex);
-        }
+        $data = !is_null($qb)
+            ? db()
+            ->run($qb->build(), $qb->values())
+            ->fetch()
+            : [];
         if (!$data) {
             $this->moduleNotFound();
         }
@@ -1238,23 +1191,19 @@ class Module
         if ($this->validate($this->validation) && $this->table_create) {
             $columns = $this->getFilteredFormColumns();
             $qb = QueryBuilder::insert($this->table_name)->columns($columns);
-            try {
-                $result = (bool) db()->run($qb->build(), $qb->values());
-                $id = db()->lastInsertId();
-                if ($id && request()->files()) {
-                    $result &= $this->handleUpload($id);
-                }
-                if ($result) {
-                    $this->auditColumns($columns, $id, "INSERT");
-                    Flash::addFlash("success", "Record created successfully");
-                } else {
-                    Flash::addFlash(
-                        "danger",
-                        "Oops! An unknown issue occurred while creating new record"
-                    );
-                }
-            } catch (PDOException $ex) {
-                $this->handleDatabaseException($ex);
+            $result = (bool) db()->run($qb->build(), $qb->values());
+            $id = db()->lastInsertId();
+            if ($id && request()->files()) {
+                $result &= $this->handleUpload($id);
+            }
+            if ($result) {
+                $this->auditColumns($columns, $id, "INSERT");
+                Flash::addFlash("success", "Record created successfully");
+            } else {
+                Flash::addFlash(
+                    "danger",
+                    "Oops! An unknown issue occurred while creating new record"
+                );
             }
         }
         return $this->createPartial();
@@ -1270,22 +1219,18 @@ class Module
             $qb = QueryBuilder::update($this->table_name)
                 ->columns($columns)
                 ->where(["id", $id]);
-            try {
-                $result = (bool) db()->run($qb->build(), $qb->values());
-                if ($result && request()->files()) {
-                    $result &= $this->handleUpload($id);
-                }
-                if ($result) {
-                    $this->auditColumns($columns, $id, "UPDATE");
-                    Flash::addFlash("success", "Record updated successfully");
-                } else {
-                    Flash::addFlash(
-                        "danger",
-                        "Oops! An unknown issue occurred while updating record"
-                    );
-                }
-            } catch (PDOException $ex) {
-                $this->handleDatabaseException($ex);
+            $result = (bool) db()->run($qb->build(), $qb->values());
+            if ($result && request()->files()) {
+                $result &= $this->handleUpload($id);
+            }
+            if ($result) {
+                $this->auditColumns($columns, $id, "UPDATE");
+                Flash::addFlash("success", "Record updated successfully");
+            } else {
+                Flash::addFlash(
+                    "danger",
+                    "Oops! An unknown issue occurred while updating record"
+                );
             }
         }
         return $this->editPartial($id);
@@ -1301,23 +1246,19 @@ class Module
                 $this->key_col,
                 $id,
             ]);
-            try {
-                $result = db()->run($qb->build(), $qb->values());
-                if ($result) {
-                    $this->auditColumns(
-                        [$this->key_col => "NULL"],
-                        $id,
-                        "DELETE"
-                    );
-                    Flash::addFlash("success", "Record deleted successfully");
-                } else {
-                    Flash::addFlash(
-                        "danger",
-                        "Oops! An unknown issue occurred while deleting record"
-                    );
-                }
-            } catch (PDOException $ex) {
-                $this->handleDatabaseException($ex);
+            $result = db()->run($qb->build(), $qb->values());
+            if ($result) {
+                $this->auditColumns(
+                    [$this->key_col => "NULL"],
+                    $id,
+                    "DELETE"
+                );
+                Flash::addFlash("success", "Record deleted successfully");
+            } else {
+                Flash::addFlash(
+                    "danger",
+                    "Oops! An unknown issue occurred while deleting record"
+                );
             }
         }
         return $this->indexPartial();

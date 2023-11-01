@@ -29,6 +29,7 @@ class Audit extends Module
         $this->filter_datetime = "created_at";
         $this->filter_links = [
             "Me" => "user_id = " . user()->id,
+            "Others" => "user_id != " . user()->id,
             "All" => "1=1",
         ];
         $this->filter_select = [

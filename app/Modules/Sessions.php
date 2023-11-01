@@ -20,6 +20,7 @@ class Sessions extends Module
         $this->joins = ["INNER JOIN users ON sessions.user_id = users.id"];
         $this->filter_links = [
             "Me" => "user_id = " . user()->id,
+            "Others" => "user_id != " . user()->id,
             "All" => "1=1",
         ];
         parent::__construct("sessions", "sessions");

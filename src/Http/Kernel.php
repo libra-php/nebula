@@ -130,7 +130,7 @@ class Kernel implements NebulaKernel
         error_log("Trace: " . $exception->getTraceAsString() . PHP_EOL);
         return $config["debug"]
             ? $this->whoops($exception)
-            : $this->response(500, "Server error");
+            : $this->response(500, "Server: fatal exception");
     }
 
     /**
@@ -152,7 +152,7 @@ class Kernel implements NebulaKernel
         error_log("Trace: " . $error->getTraceAsString() . PHP_EOL);
         return $config["debug"]
             ? $this->whoops($error)
-            : $this->response(500, "Server error");
+            : $this->response(500, "Server: fatal error");
     }
 
     /**
