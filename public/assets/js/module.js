@@ -14,3 +14,8 @@ function handleSidebarActive(e) {
     }
   });
 }
+
+function disablePaginationLink(e) {
+  e.preventDefault();
+  e.currentTarget.parentElement.classList.add("disabled");
+}
