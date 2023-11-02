@@ -6,14 +6,14 @@
 [![PHP Composer](https://github.com/libra-php/nebula/actions/workflows/php.yml/badge.svg?branch=main)](https://github.com/libra-php/nebula/actions/workflows/php.yml)
 
 
-## Introduction
+## 👾 Introduction
 
-Welcome to Nebula, an advanced PHP framework designed to elevate your web development projects to new heights 🚀
+Welcome to Nebula, an advanced PHP framework designed to elevate your web development projects to new heights!
 
 Tailored for engineers who ❤️  php + htmx
 
 
-## Features
+## 👽 Features
 
 - 🔥 **Blazing Speed**: Leverage Nebula's **htmx** capabilities for lightning-fast user experiences.
 - 🥷 **Flexibility**: Craft custom web applications effortlessly with Nebula's extensible architecture.
@@ -21,7 +21,7 @@ Tailored for engineers who ❤️  php + htmx
 - ❌ **Not for Production**: Please note that Nebula is currently not recommended for production use.
 
 
-## Getting Started
+## 🚀 Getting Started
 
 Follow these steps to kickstart your Nebula journey:
 
@@ -46,9 +46,9 @@ Follow these steps to kickstart your Nebula journey:
    ```
 
 
-## Docker Integration
+## ⭐ Docker Integration
 
-Simplify your deployment process with Docker. Launch the entire stack in one command ⭐
+Simplify your deployment process with Docker. Launch the entire stack in one command
 
 1. Launch the Nebula stack:
    ```bash
@@ -61,7 +61,7 @@ Simplify your deployment process with Docker. Launch the entire stack in one com
    docker-compose down
    ```
 
-3. Access the application:
+3. Access the application container:
    ```bash
    docker-compose exec nebula-app bash
    # Try launching the cli tool
@@ -70,34 +70,40 @@ Simplify your deployment process with Docker. Launch the entire stack in one com
 
    `/shared/httpd`: project base directory
 
-4. Access the database:
+4. Access the database container:
    ```bash
    docker-compose exec nebula-mysql bash
    # Start MySQL with your .env db user + password credentials
    mysql -u root -p
    ```
 
+5. Access the logs:
+   ```bash
+   docker-compose logs -f 
+   ```
+   
 
-## Documentation
+
+## 🖥️ Documentation
 
 Note: documentation will be released in v0.0.1
 
 
-## Benchmarks
+## ⚡ Benchmarks
 
 We are committed to optimizing Nebula for top-tier performance. Stay tuned for benchmark updates.
 
 
-## Contributing
+## 🌜 Contributing
 
 Contributions to Nebula are appreciated. If you encounter issues or have enhancement suggestions, open an issue or submit a pull request.
 
 
-## License
+## 🔑 License
 
 This project is licensed under the [MIT License](https://github.com/libra-php/nebula/blob/main/LICENSE).
 
 
-## Acknowledgements
+## 🌠 Acknowledgements
 
 Nebula draws inspiration from leading open-source projects including Symfony, Slim Framework, and Laravel.
