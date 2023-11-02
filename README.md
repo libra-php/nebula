@@ -10,7 +10,7 @@
 
 Welcome to Nebula, an advanced PHP framework designed to elevate your web development projects to new heights!
 
-Tailored for engineers who ❤️  php + htmx
+Tailored for engineers who ❤️ PHP + htmx
 
 
 ## 👽 Features
