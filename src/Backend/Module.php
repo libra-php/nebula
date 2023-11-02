@@ -71,6 +71,8 @@ class Module
     protected array $table_data = [];
     // Columns that are searchable
     protected array $search = [];
+    // Search term
+    protected string $search_term = "";
     // Column to filter by datetime
     protected string $filter_datetime = "";
     // Datetime control from
@@ -454,6 +456,7 @@ class Module
         }
 
         if (session()->has($this->module_name . "_search")) {
+            $this->search_term = session()->get($this->module_name . "_term");
             $this->where[] = session()->get($this->module_name . "_search");
         }
     }
@@ -1051,6 +1054,8 @@ class Module
             "has_filter_links" => !empty($this->filter_links),
             "has_filter_datetime" => $this->filter_datetime != "",
             "has_filter_select" => !empty($this->filter_select),
+            "filter_search_term" => $this->search_term,
+            "expand_filters" => true,
             "filter_select" => $this->filter_select,
             "filter_links" => $this->filter_links,
             "filter_link" => $this->filter_link,

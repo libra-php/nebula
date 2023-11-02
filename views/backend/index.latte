@@ -23,7 +23,7 @@
 						class="form-control form-control-sm" 
 						hx-get="{$route('module.index.part')}"
 						placeholder="..."
-						value="{$session($module_name . '_term')}"
+						value="{$filter_search_term}"
 						hx-trigger="keyup changed delay:500ms, search" 
 						hx-target="#module"/>
 				</div>
