@@ -92,7 +92,7 @@ class Module
     protected int $page = 1;
     protected int $total_results = 0;
     protected int $total_pages = 1;
-    protected int $limit = 15;
+    protected int $limit = 10;
     protected ?int $offset = null;
     /** Validation */
     protected array $validation = [];
@@ -373,8 +373,6 @@ class Module
      */
     protected function handlePagination(): void
     {
-        $page = $this->page;
-        $limit = $this->limit;
         if (request()->has("page")) {
             session()->set(
                 $this->module_name . "_page",
@@ -389,8 +387,12 @@ class Module
             session()->set($this->module_name . "_page", 1);
         }
 
-        $this->page = session()->get($this->module_name . "_page") ?? $page;
-        $this->limit = session()->get($this->module_name . "_limit") ?? $limit;
+        if (session()->has($this->module_name . "_page")) {
+            $this->page = session()->get($this->module_name . "_page");
+        }
+        if (session()->has($this->module_name . "_limit")) {
+            $this->limit = session()->get($this->module_name . "_limit");
+        }
     }
 
     /**
@@ -438,7 +440,7 @@ class Module
             $term = trim(request()->search);
             foreach ($this->search as $column) {
                 // Search where column like search term
-                $where[] = "($column LIKE '$term%')";
+                $where[] = "($column LIKE '%$term%')";
             }
             session()->set($this->module_name . "_term", $term);
             session()->set($this->module_name . "_search", [
@@ -1066,7 +1068,7 @@ class Module
                 "total_results" => $this->total_results,
                 "total_pages" => $this->total_pages,
                 "per_page" => $this->limit,
-                "per_page_options" => [5, 15, 25, 50, 100, 200, 500, 1000],
+                "per_page_options" => [5, 10, 15, 25, 50, 100, 200, 500, 1000],
                 "page" => $this->page,
                 "data" => $data,
                 "columns" => $this->tableAlias($this->table_columns),

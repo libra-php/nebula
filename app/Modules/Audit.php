@@ -35,7 +35,6 @@ class Audit extends Module
         $this->filter_select = [
             "users.name" => "User",
             "table_name" => "Table",
-            "field" => "Field",
         ];
         $this->select_options = [
             "users.name" => db()->selectAll(
@@ -43,9 +42,6 @@ class Audit extends Module
             ),
             "table_name" => db()->selectAll(
                 "SELECT distinct table_name as id, table_name as name FROM audit ORDER BY table_name"
-            ),
-            "field" => db()->selectAll(
-                "SELECT distinct field as id, field as name FROM audit ORDER BY field"
             ),
         ];
         $this->addRowAction(
