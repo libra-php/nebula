@@ -42,6 +42,7 @@ Follow these steps to kickstart your Nebula journey:
 4. **Development**: Begin building your application by creating controllers, views, and models within the `app` directory. Feel free to modify the framework source code located in the  `src` directory. Start a local development server with:
    ```bash
    ./nebula -s
+   # Application will be served here: http://127.0.0.1:8888/
    ```
 
 
@@ -66,7 +67,7 @@ Simplify your deployment process with Docker:
    ./nebula -h
    ```
 
-   `/shared/httpd` = Project base directory
+   `/shared/httpd`: Project base directory
 
 4. Access the database:
    ```bash
