@@ -67,7 +67,7 @@ Simplify your deployment process with Docker:
    ./nebula -h
    ```
 
-   `/shared/httpd`: Project base directory
+   `/shared/httpd`: project base directory
 
 4. Access the database:
    ```bash
