@@ -69,6 +69,7 @@ class Module
     protected array $joins = [];
     protected array $table_columns = [];
     protected array $table_data = [];
+    protected bool $expand_filters = false;
     // Columns that are searchable
     protected array $search = [];
     // Search term
@@ -422,11 +423,14 @@ class Module
         if (session()->has($this->module_name . "_filter_select")) {
             $filters = session()->get($this->module_name . "_filter_select");
             foreach ($filters as $filter) {
-                // Remember the selection for the view
-                $this->filter_selections[$filter["column"]] = $filter["value"];
                 if ($filter["value"] !== "NULL") {
+                    $this->expand_filters = true;
                     // Add the select filter where clause
                     $this->where[] = [$filter["column"], $filter["value"]];
+                    // Remember the selection for the view
+                    $this->filter_selections[$filter["column"]] = $filter["value"];
+                } else {
+                    session()->remove($this->module_name . "_filter_select");
                 }
             }
         }
@@ -456,6 +460,7 @@ class Module
         }
 
         if (session()->has($this->module_name . "_search")) {
+            $this->expand_filters = true;
             $this->search_term = session()->get($this->module_name . "_term");
             $this->where[] = session()->get($this->module_name . "_search");
         }
@@ -485,6 +490,7 @@ class Module
                 $this->module_name . "_date_from"
             );
             if ($this->filter_date_from != "") {
+                $this->expand_filters = true;
                 $this->where[] = [
                     $this->table_name . "." . $this->filter_datetime,
                     ">=",
@@ -500,6 +506,7 @@ class Module
                 $this->module_name . "_date_to"
             );
             if ($this->filter_date_to != "") {
+                $this->expand_filters = true;
                 $this->where[] = [
                     $this->table_name . "." . $this->filter_datetime,
                     "<=",
@@ -1055,7 +1062,7 @@ class Module
             "has_filter_datetime" => $this->filter_datetime != "",
             "has_filter_select" => !empty($this->filter_select),
             "filter_search_term" => $this->search_term,
-            "expand_filters" => true,
+            "expand_filters" => $this->expand_filters,
             "filter_select" => $this->filter_select,
             "filter_links" => $this->filter_links,
             "filter_link" => $this->filter_link,

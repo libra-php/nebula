@@ -10,11 +10,11 @@
 	<div class="accordion mb-3" id="filter-accordions" n:if="$has_filter_search || $has_filter_datetime || $has_filter_select">
 		<div class="accordion-item">
 			<h2 class="accordion-header" id="accordion-filter">
-			  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#filters" aria-expanded="true" aria-controls="filters">
+			  <button class="accordion-button {if !$expand_filters}collapsed{/if}" type="button" data-bs-toggle="collapse" data-bs-target="#filters" aria-expanded="{if !$expand_filters}true{/if}" aria-controls="filters">
 				Filters
 			  </button>
 			</h2>
-			<div id="filters" class="accordion-collapse collapse show" aria-labelledby="accordion-filter" data-bs-parent="#filter-accordions">
+			<div id="filters" class="accordion-collapse collapse {if $expand_filters}show{/if}" aria-labelledby="accordion-filter" data-bs-parent="#filter-accordions">
 				<div id="filter-search" class="d-flex align-items-center" n:if="$has_filter_search">
 					<label class="p-1 pe-2 tuncate" for="search-input"><strong>Search</strong></label>
 					<input id="search-input"
