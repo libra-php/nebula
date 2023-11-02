@@ -63,8 +63,10 @@
   color: #102a3c;
   margin-bottom: 0;
 }
-#table .table tbody tr:hover {
-  background-color: #ffffe3;
+#table .table-container {
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+  overflow-x: auto;
+  background-color: #fff;
 }
 #table .table thead {
   background-image: linear-gradient(45deg, #102a3c, #050e14);
@@ -76,17 +78,26 @@
   text-decoration: none;
 }
 #table .table thead th {
+  font-size: 0.9rem;
   white-space: nowrap;
 }
-
 #table .table thead th span.active {
   color: #ffffb3 !important;
 }
-
-#table .table-container {
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
-  overflow-x: auto;
-  background-color: #fff;
+#table .table tbody tr:hover {
+  background-color: #ffffe3;
+}
+#table .table tbody td {
+  width: 1px;
+  white-space: nowrap;
+  font-size: 0.85rem;
+}
+#table .table tbody td:nth-last-child(-n + 1) {
+  width: 100%;
+}
+#table .table thead th,
+#table .table tbody td {
+  padding: 2px 6px;
 }
 #table #filters label {
   width: 90px; 
@@ -103,6 +114,10 @@
   background-repeat: no-repeat;
   background-position: 10px center;
 }
+#table .row-action {
+  padding: 2px 4px;
+  font-size: 0.6rem;
+}
 #table #filters .filter-select {
   width: 210px;
 }
@@ -112,24 +127,10 @@
 #table .filter-link.active {
   color: #ffffb3 !important;
 }
-#table .row-action {
-  padding: 2px 4px;
-}
 #table .module-edit-link {
   text-decoration: none;
   color: #444;
   font-weight: 600;
-}
-#table .table tbody td {
-  width: 1px;
-  white-space: nowrap;
-}
-#table .table tbody td:nth-last-child(-n + 1) {
-  width: 100%;
-}
-#table .table thead th,
-#table .table tbody td {
-  padding: 2px 6px;
 }
 
 /**
