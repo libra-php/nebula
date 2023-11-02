@@ -37,7 +37,7 @@ Follow these steps to kickstart your Nebula journey:
    cp .env.example .env
    ```
 
-3. **Dependencies**: Nebula integrates essential dependencies such as Redis (caching, rate limiting) and MySQL (database).
+3. **Dependencies**: Nebula requires essential dependencies such as Redis (caching, rate limiting) and MySQL (database). See documentation.
 
 4. **Development**: Begin building your application by creating controllers, views, and models within the `app` directory. Feel free to modify the framework source code located in the  `src` directory. Start a local development server with:
    ```bash
@@ -48,11 +48,12 @@ Follow these steps to kickstart your Nebula journey:
 
 ## Docker Integration
 
-Simplify your deployment process with Docker:
+Simplify your deployment process with Docker. Launch the entire stack in one command ⭐
 
 1. Launch the Nebula stack:
    ```bash
    docker-compose up --build -d
+   # Application will be served here: http://localhost/
    ```
 
 2. Shut down the stack:
@@ -72,7 +73,7 @@ Simplify your deployment process with Docker:
 4. Access the database:
    ```bash
    docker-compose exec nebula-mysql bash
-   # Next, start mysql using your .env db user + password credentials
+   # Start MySQL with your .env db user + password credentials
    mysql -u root -p
    ```
 
