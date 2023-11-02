@@ -352,7 +352,9 @@
 }
 #filters {
   border: 0;
-  padding: 20px;
+}
+#filters > div {
+  padding: 2px;
 }
 button.accordion-button {
   padding: 6px;
