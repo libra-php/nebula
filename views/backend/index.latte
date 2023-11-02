@@ -118,7 +118,7 @@
 						{foreach $table[data] as $datum}
 						<tr class="align-middle">
 							{foreach $table[columns] as $column => $title}
-								{if $column == $name_col && $table['edit']}
+								{if $column == $name_col && $table['edit'] && $has_edit_permission($datum[$key_col])}
 									<td title="{$title}"><a class="module-edit-link" hx-boost="true" href="{$route('module.edit.part', $datum[$key_col])}" title="Edit record" hx-target="#module">{$datum[$column]}</a></td>
 								{elseif $column === $key_col}
 									<td title="{$title}"><span class="text-secondary">{$datum[$column]}</span></td>
