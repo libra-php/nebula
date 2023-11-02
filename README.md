@@ -5,9 +5,13 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![PHP Composer](https://github.com/libra-php/nebula/actions/workflows/php.yml/badge.svg?branch=main)](https://github.com/libra-php/nebula/actions/workflows/php.yml)
 
+
 ## Introduction
 
 Welcome to Nebula, an advanced PHP framework designed to elevate your web development projects to new heights 🚀
+
+Tailored for engineers who ❤️  php + htmx
+
 
 ## Features
 
@@ -16,19 +20,6 @@ Welcome to Nebula, an advanced PHP framework designed to elevate your web develo
 - 👷 **Under Development**: Nebula is actively evolving to offer the best in class features.
 - ❌ **Not for Production**: Please note that Nebula is currently not recommended for production use.
 
-## Docker Integration
-
-Simplify your deployment process with Docker:
-
-1. Launch the Nebula stack:
-   ```bash
-   docker-compose up --build -d
-   ```
-
-2. Shut down the stack:
-   ```bash
-   docker-compose down
-   ```
 
 ## Getting Started
 
@@ -53,39 +44,58 @@ Follow these steps to kickstart your Nebula journey:
    ./nebula -s
    ```
 
+
+## Docker Integration
+
+Simplify your deployment process with Docker:
+
+1. Launch the Nebula stack:
+   ```bash
+   docker-compose up --build -d
+   ```
+
+2. Shut down the stack:
+   ```bash
+   docker-compose down
+   ```
+
+3. Access the application:
+   ```bash
+   docker-compose exec nebula-app bash
+   # Try launching the cli tool
+   ./nebula -h
+   ```
+
+   `/shared/httpd` = Project base directory
+
+4. Access the database:
+   ```bash
+   docker-compose exec nebula-mysql bash
+   # Next, start mysql using your .env db user + password credentials
+   mysql -u root -p
+   ```
+
+
 ## Documentation
 
-Note: documentation is currently being updated.
-
-- [Config](docs/CONFIG.md)
-- [Console](docs/CONSOLE.md)
-- [Helpers](docs/HELPERS.md)
-- [Email](docs/EMAIL.md)
-- [Database](docs/DATABASE.md)
-    - [Migrations](docs/MIGRATIONS.md)
-- [Routing](docs/ROUTING.md)
-- [Middleware](docs/MIDDLEWARE.md)
-- [Controllers](docs/CONTROLLERS.md)
-    - [Validation](docs/VALIDATION.md)
-- [Views](docs/VIEWS.md)
-- [Models](docs/MODELS.md)
-    - [Factory](docs/FACTORY.md)
+Note: documentation will be released in v0.0.1
 
 
 ## Benchmarks
 
 We are committed to optimizing Nebula for top-tier performance. Stay tuned for benchmark updates.
 
+
 ## Contributing
 
 Contributions to Nebula are appreciated. If you encounter issues or have enhancement suggestions, open an issue or submit a pull request.
+
 
 ## License
 
 This project is licensed under the [MIT License](https://github.com/libra-php/nebula/blob/main/LICENSE).
 
+
 ## Acknowledgements
 
-Nebula draws inspiration from leading open-source projects including Symfony, Slim Framework, Leaf, and Laravel.
-
-We ❤️ htmx + php
+Nebula draws inspiration from leading open-source projects including Symfony, Slim Framework, and Laravel.
