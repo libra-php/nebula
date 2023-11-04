@@ -17,6 +17,6 @@ $app = require_once __DIR__ . "/../bootstrap/app.php";
 // Basic example:
 $app->route('GET', '/', function() {
     echo "Hello, world!" && die;
-});
+}, middleware: ['cache']);
 
 $app->run(Nebula\Interfaces\Http\Kernel::class);
