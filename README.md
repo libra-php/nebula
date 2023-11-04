@@ -73,7 +73,7 @@ Simplify your deployment process with Docker. Launch the entire stack in one com
 4. Access the database container:
    ```bash
    docker-compose exec nebula-mysql bash
-   # Start MySQL with your .env db user + password credentials
+   # Start MySQL with your .env db password credentials
    mysql -u root -p
    ```
 
