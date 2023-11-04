@@ -12,11 +12,11 @@ $app = require_once __DIR__ . "/../bootstrap/app.php";
 
 // Attribute-based-routing is enabled by default
 // However, you can still use traditional routing
-// Delete the following routes if you wish to use Controller
+// Delete the following routes if you wish to use
 // Attribute-based-routing
-// Example / web endpoint
+// Basic example:
 $app->route('GET', '/', function() {
-    return latte('welcome/index.latte');
+    echo "Hello, world!" && die;
 });
 
 $app->run(Nebula\Interfaces\Http\Kernel::class);
