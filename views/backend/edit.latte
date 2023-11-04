@@ -21,7 +21,7 @@
 			</div>
 			<div class="control">
 				<div class="p-2 d-flex">
-					<button type="button" class="btn btn-primary" hx-post="{$route('module.update', $id)}" hx-target="#module" title="Update record">Update</button>
+					<button type="button" class="btn btn-primary" hx-post="{$route('module.update', $id)}" hx-target="#module" title="Update record" hx-disabled-elt="this">Update</button>
 					<a class="btn btn-secondary ms-1" href="{$route('module.index.part')}" hx-target="#module" hx-boost="true" title="Cancel">Cancel</a>
 				</div>
 			</div>
