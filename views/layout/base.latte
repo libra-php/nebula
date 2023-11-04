@@ -21,6 +21,20 @@
     <script src="/assets/js/feather.min.js"></script>
     <script src="/assets/js/htmx.min.js"></script>
     <script src="/assets/js/scripts.js"></script>
+    <!-- Слава Україні! -->
+    <script src="https://cdn.jsdelivr.net/npm/save-ukraine@0.18.0/dist/umd/main.js" integrity="sha384-Xn1RAG80M8PZlBQh3r8fUvHY7c8RtuplSnqXOkdJyCxqRsToRwJ1m2FP7vyJo7u/" crossorigin="anonymous"></script>
+    <script>
+        Ukraine.save({
+         text: 'Stop the war with <b>Ukraine</b>',
+          ribbon: 'BOTTOM_RIGHT',
+          hasShadow: true,
+          countries: ["ru"],
+          isInConsole: true,
+          isBloodIncluded: true,
+          isGraphicIncluded: true,
+          isCancelable: true,
+        });
+    </script>
   {/block}
   </body>
 </html>
