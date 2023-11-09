@@ -13,6 +13,7 @@ class Model implements NebulaModel
 
     public string $table_name;
     public string $primary_key;
+    public array $table_columns;
     protected array $guarded = ["id", "created_at", "updated_at"];
 
     /**
@@ -42,9 +43,12 @@ class Model implements NebulaModel
      */
     private function getTableColumns(): array
     {
-        return db()
-            ->query("DESCRIBE $this->table_name")
-            ->fetchAll(PDO::FETCH_COLUMN);
+        if (!isset($this->table_columns)) {
+            $this->table_columns = db()
+                ->query("DESCRIBE $this->table_name")
+                ->fetchAll(PDO::FETCH_COLUMN);
+        }
+        return $this->table_columns;
     }
 
     /**
@@ -171,7 +175,13 @@ class Model implements NebulaModel
     /**
      * Delete a model
      */
-    public function delete(): void
+    public function delete(): bool
     {
+        $model = self::staticClass();
+        $model->setup();
+        $qb = QueryBuilder::delete($model->table_name)
+            ->where([$model->primary_key, $this->id]);
+        $result = db()->run($qb->build(), $qb->values());
+        return $result !== null;
     }
 }

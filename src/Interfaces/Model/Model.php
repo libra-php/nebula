@@ -9,6 +9,6 @@ interface Model
     public function save(): mixed;
     public function insert(array $data, bool $ignore): mixed;
     public function update(array $data): bool;
+    public function delete(): bool;
     public function refresh(): void;
-    public function delete(): void;
 }

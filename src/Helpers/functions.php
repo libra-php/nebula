@@ -253,13 +253,20 @@ function config(string $name)
 /**
  * Return the app user
  */
+$app_user = null;
 function user(): ?User
 {
+    global $app_user;
     $uuid = session()->get("user");
     if ($uuid) {
-        $user = User::search(["uuid", $uuid]);
-        if ($user) {
-            return $user;
+        if (!$app_user) {
+            $user = User::search(["uuid", $uuid]);
+            if ($user) {
+                $app_user = $user;
+                return $user;
+            }
+        } else {
+            return $app_user;
         }
     }
     return null;

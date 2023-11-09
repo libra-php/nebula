@@ -99,7 +99,7 @@ final class QueryBuilderTest extends TestCase
 
     public function test_delete_query(): void
     {
-        $qb = QueryBuilder::delete("users")->where(["id", "=", 1]);
+        $qb = QueryBuilder::delete("users")->where(["id", 1]);
         $this->assertSame($qb->values(), [1]);
         $this->assertSame("DELETE FROM users WHERE (id = ?)", $qb->build());
     }
