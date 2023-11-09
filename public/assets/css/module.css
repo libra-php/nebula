@@ -45,6 +45,7 @@
   height: 300px;
 }
 .form-row .control-image {
+  width: 100%;
   max-width: 100%;
 }
 .form-row .file-button {
@@ -367,7 +368,10 @@ button.accordion-button {
 /* X-Small devices (portrait phones, less than 576px) */
 @media (max-width: 575.98px) {
   .form-row .control {
-    max-width: 235px !important;
+    max-width: 263px !important;
+  }
+  .form-row .label {
+    max-width: 100px !important;
   }
   #main {
     height: calc(100% - 56px);
