@@ -10,9 +10,6 @@
 
 Welcome to Nebula, an advanced PHP framework designed to elevate your web development projects to new heights!
 
-Tailored for engineers who ❤️ PHP + htmx
-
-
 ## 👽 Features
 
 - 🔥 **Blazing Speed**: Leverage Nebula's **htmx** capabilities for lightning-fast user experiences.
@@ -85,6 +82,9 @@ Simplify your deployment process with Docker. Launch the entire stack in one com
 
 
 ## 🖥️ Documentation
+
+![image](https://github.com/libra-php/nebula/assets/71740767/1fc0ce20-538c-4e8d-a10b-c49ea5fb1301)
+(Screenshot of admin backend)
 
 Note: documentation will be released in v0.0.1
 
