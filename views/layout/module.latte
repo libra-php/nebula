@@ -9,7 +9,7 @@
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb" hx-boost="true">
         {foreach $breadcrumbs as $title => $link}
-        <li class="breadcrumb-item"><a hx-target="#module" href="{$link}">{$title}</a></li>
+        <li class="breadcrumb-item" {if $title === 'Home'}data-module='home' onClick="handleSidebarActive(event)"{/if}><a hx-target="#module" href="{$link}">{$title}</a></li>
         {/foreach}
       </ol>
     </nav>
@@ -24,7 +24,7 @@
 </section>
 {/block}
 
-{block body_scripts} 
+{block body_scripts}
 {include parent}
 <script src="/assets/js/module.js"></script>
 {/block}
