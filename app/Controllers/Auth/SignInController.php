@@ -16,6 +16,7 @@ final class SignInController extends Controller
     {
         return latte("auth/sign-in.latte", [
             "two_fa_enabled" => config("auth.two_fa_enabled"),
+            "register_enabled" => config("auth.register_enabled"),
         ]);
     }
 
