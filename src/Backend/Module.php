@@ -577,7 +577,7 @@ class Module
       "Permission denied"
     );
     $response = $this->response(
-      200,
+      403,
       latte($this->getCustomIndex(), $this->getIndexData())
     );
     echo $response->send();
