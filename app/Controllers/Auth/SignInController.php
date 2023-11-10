@@ -27,6 +27,7 @@ final class SignInController extends Controller
             "auth/sign-in.latte",
             [
                 "two_fa_enabled" => config("auth.two_fa_enabled"),
+                "register_enabled" => config("auth.register_enabled"),
                 "email" => request()->get("email"),
             ],
             "body"

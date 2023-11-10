@@ -2,9 +2,13 @@
 
 namespace Nebula\Console;
 
+use App\Auth;
+use App\Models\Factories\UserFactory;
 use Nebula\Interfaces\Framework\Kernel as ConsoleKernel;
 use Nebula\Interfaces\Http\Response;
 use Throwable;
+use App\Models\User;
+
 
 /**
  * Class Kernel
@@ -23,20 +27,15 @@ class Kernel implements ConsoleKernel
         ],
         "long" => [
             "help" => "Print help and exit.",
-            "fix-permissions" =>
-                "Automatically fix permissions on directories.",
-            "migration-table:" =>
-                "Create new table migration. Usage: --migration-table=<table_name>",
-            "migration-create:" =>
-                "Create new empty migration. Usage: --migration-create=<migration_name>",
+            "fix-permissions" => "Automatically fix permissions on directories.",
+            "migration-table:" => "Create new table migration. Usage: --migration-table=<table_name>",
+            "migration-create:" => "Create new empty migration. Usage: --migration-create=<migration_name>",
             "migration-list" => "List all migrations and their status.",
             "migration-run" => "Run all migrations that have not been run yet.",
-            "migration-up:" =>
-                "Run migration up on file. Usage: --migration-up=<filename>.php",
-            "migration-down:" =>
-                "Run migration down on file. Usage: --migration-down=<filename>.php",
-            "migration-fresh" =>
-                "Create new database and run all migrations. Be careful!",
+            "migration-up:" => "Run migration up on file. Usage: --migration-up=<filename>.php",
+            "migration-down:" => "Run migration down on file. Usage: --migration-down=<filename>.php",
+            "migration-fresh" => "Create new database and run all migrations. Be careful!",
+            "seed-user" => "Seed application user. A secure password will be generated. It is advised to change this password immediately.",
         ],
     ];
     protected array $commands = [];
@@ -85,6 +84,7 @@ class Kernel implements ConsoleKernel
                 "migration-up" => $this->migration($value, true),
                 "migration-down" => $this->migration($value, false),
                 "migration-fresh" => $this->migrationFresh(),
+                "seed-user" => $this->seedUser(),
                 default => $this->tryCommand($opt, $value),
             };
         }
@@ -102,8 +102,8 @@ class Kernel implements ConsoleKernel
     protected function banner(): string
     {
         $banner = <<<EOT
-  _   _      _           _       
- | \ | | ___| |__  _   _| | __ _ 
+  _   _      _           _
+ | \ | | ___| |__  _   _| | __ _
  |  \| |/ _ \ '_ \| | | | |/ _` |
  | |\  |  __/ |_) | |_| | | (_| |
  |_| \_|\___|_.__/ \__,_|_|\__,_|
@@ -252,9 +252,24 @@ EOT;
         exit();
     }
 
+    protected function echo(string $content): void
+    {
+        echo $content . PHP_EOL;
+    }
+
     protected function write(string $content): void
     {
         $this->output .= $content . PHP_EOL;
+    }
+
+    protected function input(string $prompt)
+    {
+        $input = readline($prompt);
+        $input = trim($input);
+        if ($input !== '') {
+            return $input;
+        }
+        $this->input($prompt);
     }
 
     protected function displayUnknownOption(string $option): void
@@ -335,7 +350,7 @@ EOT;
         $query = "CREATE TABLE IF NOT EXISTS migrations (
         id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
         migration_hash VARCHAR(32) NOT NULL,
-        ts TIMESTAMP(0) NOT NULL DEFAULT NOW(), 
+        ts TIMESTAMP(0) NOT NULL DEFAULT NOW(),
         PRIMARY KEY (id),
         UNIQUE (migration_hash))";
         $result = db()->query($query);
@@ -418,5 +433,82 @@ EOT;
             "DELETE FROM migrations WHERE migration_hash = ?",
             $this->getFileHash($file)
         );
+    }
+
+    function generateSecurePassword()
+    {
+        // Define the character sets to use in the password
+        $uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $lowercase = 'abcdefghijklmnopqrstuvwxyz';
+        $numbers = '0123456789';
+        $specialChars = '()!_@/\\';
+
+        // Concatenate all character sets
+        $allChars = $uppercase . $lowercase . $numbers . $specialChars;
+
+        // Get the total length of the character set
+        $charSetLength = strlen($allChars);
+
+        // Initialize the password variable
+        $password = '';
+
+        // Generate a 12-character password
+        for ($i = 0; $i < 12; $i++) {
+            // Get a random index within the character set
+            $randomIndex = mt_rand(0, $charSetLength - 1);
+
+            // Append the randomly selected character to the password
+            $password .= $allChars[$randomIndex];
+        }
+
+        return $password;
+    }
+
+    protected function seedUser()
+    {
+        ask_name:
+        $name = $this->input("Enter name: ");
+        if ($name == '') {
+            goto ask_name;
+        }
+
+        ask_email:
+        $email = $this->input("Enter email address: ");
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $this->echo("Invalid email...");
+            goto ask_email;
+        }
+
+        $user = User::search(["email", $email]);
+        if ($user) {
+            $this->echo("User already registered.");
+            exit;
+        }
+
+        ask_type:
+        $choices = [1,2,3];
+        $type = $this->input("Enter user type [1 = super admin, 2 = admin, 3 = standard user]: ");
+        if (!in_array($type, $choices)) {
+            $this->echo("Invalid type...");
+            goto ask_type;
+        }
+
+        $factory = app()->get(UserFactory::class);
+        $password = $this->generateSecurePassword();
+        $user = $factory->create($name, $email, $password, $type);
+        if ($user) {
+            $qr = Auth::urlQR($user);
+            $this->echo("Success! Please use this password to sign in: " . $password);
+            $this->echo("GoogleAuthenticator QR: " . $qr);
+            exit;
+        }
+
+        $this->echo("Error! Something went wrong.");
+        exit;
+    }
+
+    protected function adminPassword()
+    {
+        $this->write("wip");
     }
 }
