@@ -8,7 +8,6 @@ class Users extends Module
 {
     public function __construct()
     {
-        $this->module_icon = "users";
         $this->table_columns = [
             "id" => "ID",
             "uuid" => "UUID",
@@ -37,7 +36,7 @@ class Users extends Module
             "Others" => "id != " . user()->id,
         ];
 
-        parent::__construct("users", "users");
+        parent::__construct("users");
     }
 
     protected function hasEditPermission(string $id): bool

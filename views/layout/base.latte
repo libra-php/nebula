@@ -4,7 +4,7 @@
     <title>{block title}{$app['name']}{/block}</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    {block head} 
+    {block head}
       <link rel="apple-touch-icon" sizes="180x180" href="/assets/ico/apple-touch-icon.png">
       <link rel="icon" type="image/png" sizes="32x32" href="/assets/ico/favicon-32x32.png">
       <link rel="icon" type="image/png" sizes="16x16" href="/assets/ico/favicon-16x16.png">
@@ -16,26 +16,12 @@
     {/block}
   </head>
   <body id="body" hx-history-elt>
-  {block body} 
+  {block body}
   {/block}
-  {block body_scripts} 
+  {block body_scripts}
     <script src="/assets/js/feather.min.js"></script>
     <script src="/assets/js/htmx.min.js"></script>
     <script src="/assets/js/scripts.js"></script>
-    <!-- Слава Україні! -->
-    <script src="https://cdn.jsdelivr.net/npm/save-ukraine@0.18.0/dist/umd/main.js" integrity="sha384-Xn1RAG80M8PZlBQh3r8fUvHY7c8RtuplSnqXOkdJyCxqRsToRwJ1m2FP7vyJo7u/" crossorigin="anonymous"></script>
-    <script>
-        Ukraine.save({
-         text: 'Stop the war with <b>Ukraine</b>',
-          ribbon: 'BOTTOM_RIGHT',
-          hasShadow: true,
-          countries: ["ru"],
-          isInConsole: true,
-          isBloodIncluded: true,
-          isGraphicIncluded: true,
-          isCancelable: true,
-        });
-    </script>
   {/block}
   </body>
 </html>

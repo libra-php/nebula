@@ -105,16 +105,16 @@ class Test extends Module
          * array: array of options (key = option value & name = option label)
          */
         $this->select_options = [
-            "dropdown" => db()->selectAll("SELECT id, name FROM animals"),
-            // "dropdown" => [
-            //     0 => "Fish",
-            //     1 => "Cat",
-            //     2 => "Dog",
-            //     3 => "Wolf",
-            //     4 => "Bear"
-            // ]
+            "dropdown" => [
+                0 => "Fish",
+                1 => "Cat",
+                2 => "Dog",
+                3 => "Wolf",
+                4 => "Bear",
+                5 => "Dolphin"
+            ]
         ];
 
-        parent::__construct("test", "test");
+        parent::__construct("test");
     }
 }

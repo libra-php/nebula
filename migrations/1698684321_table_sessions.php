@@ -19,7 +19,6 @@ return new class implements Migration
             $table->foreignKey("user_id")
               ->references("users", "id")
               ->onDelete("SET NULL");
- 
         });
     }
 

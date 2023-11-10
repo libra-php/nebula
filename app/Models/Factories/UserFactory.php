@@ -17,7 +17,7 @@ class UserFactory extends Factory
      * @param string $password
      * @return User|null
      */
-    public function create(string $name, string $email, string $password): ?User
+    public function create(string $name, string $email, string $password, int $type = 2): ?User
     {
         $user = app()->get($this->model);
         $user->name = $name;
@@ -25,6 +25,7 @@ class UserFactory extends Factory
         $user->password = Auth::hashPassword($password);
         $user->two_fa_secret = Auth::generateTwoFASecret();
         $user->failed_login_attempts = 0;
+        $user->user_type = $type;
         $id = $user->save();
         return User::find($id);
     }
