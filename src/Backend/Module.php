@@ -322,6 +322,7 @@ class Module
           $this->module_name . "_filter_link",
           $this->filter_links[$idx]
         );
+        session()->set($this->module_name . "_page", 1);
       }
     }
 
