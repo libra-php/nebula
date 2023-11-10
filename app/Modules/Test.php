@@ -106,12 +106,14 @@ class Test extends Module
          */
         $this->select_options = [
             "dropdown" => [
-                0 => "Fish",
-                1 => "Cat",
-                2 => "Dog",
-                3 => "Wolf",
-                4 => "Bear",
-                5 => "Dolphin"
+                (object) ["id" => 1, "name" => "Fish"],
+                (object) ["id" => 2, "name" => "Cat"],
+                (object) ["id" => 3, "name" => "Dog"],
+                (object) ["id" => 4, "name" => "Wolf"],
+                (object) ["id" => 5, "name" => "Bear"],
+                (object) ["id" => 6, "name" => "Dolphin"],
+                (object) ["id" => 7, "name" => "Tiger"],
+                (object) ["id" => 8, "name" => "Tiger"],
             ]
         ];
 
