@@ -115,6 +115,6 @@ class Test extends Module
             ]
         ];
 
-        parent::__construct("test", "test");
+        parent::__construct("test");
     }
 }

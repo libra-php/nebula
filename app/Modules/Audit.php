@@ -9,7 +9,6 @@ class Audit extends Module
 {
     public function __construct()
     {
-        $this->module_icon = "flag";
         $this->table_create = $this->table_edit = $this->table_destroy = false;
         $this->name_col = "id";
         $this->table_columns = [
@@ -49,7 +48,7 @@ class Audit extends Module
             "Undo",
             "Are you sure you want to restore this value?"
         );
-        parent::__construct("audit", "audit");
+        parent::__construct("audit");
     }
 
     protected function hasRowActionPermission(string $name, string $id): bool

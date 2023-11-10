@@ -2,21 +2,22 @@
 
 namespace Nebula\Backend;
 
+use App\Models\Module as NebulaModule;
 use Nebula\Alerts\Flash;
 use Nebula\Database\QueryBuilder;
 use Nebula\Traits\Http\Response;
 use Nebula\Validation\Validate;
 use Nebula\Backend\FormControls;
+use PDO;
 
 class Module
 {
   use Response;
 
   /** Module */
-  protected string $module_name;
-  protected string $module_title;
+  protected string $module_title = "";
   protected string $module_icon = "package";
-  protected ?string $table_name;
+  protected ?string $table_name = null;
   protected string $name_col = "name";
   protected string $key_col = "id";
   protected bool $table_create = true;
@@ -101,11 +102,12 @@ class Module
   protected array $validation = [];
   protected array $errors = [];
 
-  public function __construct(string $module_name, ?string $table_name = null)
+  public function __construct(protected string $module_name)
   {
-    $this->module_name = $module_name;
-    $this->module_title = ucfirst($module_name);
-    $this->table_name = $table_name;
+        $module = NebulaModule::search(["module_name", $module_name]);
+        $this->table_name = $module->module_table ?? '';
+        $this->module_title = $module->module_title ?? 'Unknown';
+        $this->module_icon = $module->module_icon ?? 'package';
   }
 
   /**
@@ -118,28 +120,15 @@ class Module
 
   /**
    * Get the module links for navbar and sidebar
+   * Home should appear first
    */
   protected function getModuleLinks()
   {
-    $links = [];
-    $module_map = classMap(config("paths.modules"));
-    foreach ($module_map as $class => $_) {
-      $module = new $class();
-      [$name, $title, $icon] = $module->getLinkInfo();
-      $links[] = [
-        "name" => $name,
-        "title" => $title,
-        "icon" => $icon,
-      ];
-    }
-    // Sort by name
-    usort($links, function ($a, $b) {
-      if ($a["name"] === "home") {
-        return -1;
-      }
-      return $a["name"] <=> $b["name"];
-    });
-    return $links;
+    return db()->run("SELECT module_name as name, module_title as title, module_icon as icon
+      FROM modules
+      WHERE user_type >= ?
+      ORDER BY name = 'home' DESC", [user()->user_type])
+      ->fetchAll(PDO::FETCH_ASSOC);
   }
 
   /**
@@ -583,12 +572,14 @@ class Module
    */
   public function permissionDenied(): never
   {
-    Flash::addFlash("error", "Permission denied");
+    Flash::addFlash(
+      "error",
+      "Permission denied"
+    );
     $response = $this->response(
       200,
-      latte($this->getCustomIndex(), $this->getIndexData(), "content")
+      latte($this->getCustomIndex(), $this->getIndexData())
     );
-    $response->setHeader("HX-Push-Url", $this->module_name);
     echo $response->send();
     exit();
   }
@@ -1158,7 +1149,7 @@ class Module
     if (!$this->hasIndexPermission()) {
       $this->permissionDenied();
     }
-    $template = !is_null($this->table_name)
+    $template = !is_null($this->table_name) && trim($this->table_name) != ''
       ? $this->getIndexTemplate()
       : $this->getCustomIndex();
     return latte($template, $this->getIndexData());
@@ -1169,7 +1160,7 @@ class Module
     if (!$this->hasIndexPermission()) {
       $this->permissionDenied();
     }
-    $template = !is_null($this->table_name)
+    $template = !is_null($this->table_name) && trim($this->table_name) != ''
       ? $this->getIndexTemplate()
       : $this->getCustomIndex();
     return latte($template, $this->getIndexData(), "content");

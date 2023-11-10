@@ -8,7 +8,6 @@ class Sessions extends Module
 {
     public function __construct()
     {
-        $this->module_icon = "activity";
         $this->table_create = $this->table_edit = $this->table_destroy = false;
         $this->table_columns = [
             "sessions.id" => "ID",
@@ -23,6 +22,6 @@ class Sessions extends Module
             "Others" => "user_id != " . user()->id,
             "All" => "1=1",
         ];
-        parent::__construct("sessions", "sessions");
+        parent::__construct("sessions");
     }
 }

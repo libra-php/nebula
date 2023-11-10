@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Models\Module as NebulaModule;
 use Nebula\Backend\Module;
 use Nebula\Controller\Controller;
 use Nebula\Traits\Http\Response;
@@ -30,14 +31,17 @@ class ModuleController extends Controller
     private function getModule(string $module_name): Module
     {
         $module_name = strtok($module_name, "?");
-        $module_map = classMap(config("paths.modules"));
-        foreach ($module_map as $class => $_) {
-            $module = new $class();
-            if ($module->getModuleName() === $module_name) {
-                return $module;
-            }
+        $module = NebulaModule::search(["module_name", $module_name]);
+        // Check if module exists
+        if (is_null($module) || $module_name === 'module_unknown') {
+            $this->moduleNotFound();
         }
-        $this->moduleNotFound();
+        // Check if user has permission
+        if (user()->user_type > $module->user_type) {
+            $this->permissionDenied();
+        }
+        $class = $module->class_name;
+        return new $class;
     }
 
     /**
@@ -47,6 +51,15 @@ class ModuleController extends Controller
     {
         $module = new Module("error");
         $module->moduleNotFound();
+    }
+
+    /**
+     * Permission denied
+     */
+    private function permissionDenied(): never
+    {
+        $module = new Module("error");
+        $module->permissionDenied();
     }
 
     /**

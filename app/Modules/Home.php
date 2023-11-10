@@ -8,7 +8,9 @@ class Home extends Module
 {
     public function __construct()
     {
-        $this->module_icon = "home";
+        $this->table_create = false;
+        $this->export_csv = false;
+
         parent::__construct("home");
     }
 
