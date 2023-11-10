@@ -29,9 +29,9 @@ class Modules extends Module
         ];
 
         $this->validation = [
-            "name" => ["required"],
+            "module_name" => ["required"],
             "class_name" => ["required"],
-            "title" => ["required"],
+            "module_title" => ["required"],
             "user_type" => ["required"],
         ];
 

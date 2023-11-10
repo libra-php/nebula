@@ -2,6 +2,7 @@
 
 namespace Nebula\Validation;
 
+use Nebula\Alerts\Flash;
 use Nebula\Database\QueryBuilder;
 
 class Validate
@@ -59,6 +60,10 @@ class Validate
     public static function request(array $request_rules): bool
     {
         foreach ($request_rules as $request_item => $ruleset) {
+            if (!request()->has($request_item)) {
+                Flash::addFlash("warning", "Validation error: '{$request_item}' missing from request.");
+                return false;
+            }
             $value = request()->get($request_item) ?? null;
             if (!array_is_list($ruleset)) {
                 $label = array_keys($ruleset)[0];
