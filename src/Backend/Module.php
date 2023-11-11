@@ -715,12 +715,12 @@ class Module
         // Deal with "null" string
         array_walk(
             $data,
-            fn(&$value, $key) => ($value =
+            fn (&$value, $key) => ($value =
                 is_string($value) && strtolower($value) === "null" ? null : $value)
         );
         return array_filter(
             $data,
-            fn($value, $key) => $key != "csrf_token" &&
+            fn ($value, $key) => $key != "csrf_token" &&
                 !in_array($this->form_controls[$key], $filtered_controls),
             ARRAY_FILTER_USE_BOTH
         );
@@ -788,6 +788,17 @@ class Module
     }
 
     /**
+     * Convert value (size) to unit
+     */
+    function convert($size)
+    {
+        $units = array('b', 'kb', 'mb', 'gb', 'tb', 'pb');
+        $value = round($size / pow(1024, ($i = floor(log($size, 1024)))), 2);
+        $unit = $units[$i];
+        return sprintf("%s%s", $value, $unit);
+    }
+
+    /**
      * Return the profiler array used in all views
      */
     protected function profiler(): array
@@ -797,7 +808,7 @@ class Module
         foreach (["Slow DB:" => db()->trace_counts] as $title => $traces) {
             //$slow_traces[] = $title;
             if ($traces) {
-                uasort($traces, fn($a, $b) => $b["time"] <=> $a["time"]);
+                uasort($traces, fn ($a, $b) => $b["time"] <=> $a["time"]);
                 $i = 0;
                 foreach ($traces as $key => $value) {
                     $i++;
@@ -813,11 +824,16 @@ class Module
                 }
             }
         }
+        $total = microtime(true) - $global_start;
+        $db_total = db()->total_time ?? 0;
+        $php_total = $total - $db_total;
         return [
             "show_profiler" => config("database.show_profiler"),
             "global_start" => $global_start,
-            "total_php" => microtime(true) - $global_start,
-            "db_total_time" => db()->total_time ?? 0,
+            "total_memory" => $this->convert(memory_get_usage(true)),
+            "total_time" => number_format($total,6),
+            "db_total_time" => number_format($db_total,6),
+            "php_total_time" => number_format($php_total,6),
             "db_num_queries" => db()->num_queries ?? 0,
             "slow_traces" => $slow_traces ?? [],
         ];
@@ -838,14 +854,14 @@ class Module
         ) {
             return moduleRoute($route_name, $module_name, $id);
         };
-        $gravatar = fn(string $str) => md5(strtolower(trim($str)));
+        $gravatar = fn (string $str) => md5(strtolower(trim($str)));
         $singular = function (string $str) {
             return substr($str, -1) === "s" ? rtrim($str, "s") : $str;
         };
-        $request = fn(string $column) => request()->has($column)
+        $request = fn (string $column) => request()->has($column)
             ? request()->$column
             : "";
-        $session = fn(string $column) => session()->has($column)
+        $session = fn (string $column) => session()->has($column)
             ? session()->get($column)
             : "";
         return [
@@ -1013,12 +1029,12 @@ class Module
         $this->processTableRequest();
         $data = $this->tableData();
 
-        $has_delete_permission = fn(string $id) => $this->hasDeletePermission(
+        $has_delete_permission = fn (string $id) => $this->hasDeletePermission(
             $id
         );
-        $has_edit_permission = fn(string $id) => $this->hasEditPermission($id);
-        $has_create_permission = fn() => $this->hasCreatePermission();
-        $has_row_action_permission = fn(
+        $has_edit_permission = fn (string $id) => $this->hasEditPermission($id);
+        $has_create_permission = fn () => $this->hasCreatePermission();
+        $has_row_action_permission = fn (
             string $name,
             string $id
         ) => $this->hasRowActionPermission($name, $id);
@@ -1128,8 +1144,8 @@ class Module
         $data = null;
         $data = !is_null($qb)
             ? db()
-                ->run($qb->build(), $qb->values())
-                ->fetch()
+            ->run($qb->build(), $qb->values())
+            ->fetch()
             : [];
         if (!$data) {
             $this->moduleNotFound();
@@ -1165,8 +1181,8 @@ class Module
         }
         $template =
             !is_null($this->table_name) && trim($this->table_name) != ""
-                ? $this->getIndexTemplate()
-                : $this->getCustomIndex();
+            ? $this->getIndexTemplate()
+            : $this->getCustomIndex();
         return latte($template, $this->getIndexData());
     }
 
@@ -1177,8 +1193,8 @@ class Module
         }
         $template =
             !is_null($this->table_name) && trim($this->table_name) != ""
-                ? $this->getIndexTemplate()
-                : $this->getCustomIndex();
+            ? $this->getIndexTemplate()
+            : $this->getCustomIndex();
         return latte($template, $this->getIndexData(), "content");
     }
 

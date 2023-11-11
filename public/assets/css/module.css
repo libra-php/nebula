@@ -187,6 +187,12 @@
   font-size: 0.7rem;
   cursor: pointer;
 }
+#profiler h5 {
+  font-size: 1.1rem;
+}
+#profiler #info table {
+  line-height: 10px;
+}
 #profiler #extra-info {
   font-size: 0.6rem;
 }
@@ -336,6 +342,9 @@
 /**
  * Utility
  */
+.mono {
+  font-family: monospace;
+}
 .hidden {
   display: none !important;
 }
