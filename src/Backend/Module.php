@@ -803,9 +803,9 @@ class Module
      */
     protected function profiler(): array
     {
-        global $global_start, $global_memory;
+        global $global_memory;
         $slow_traces = [];
-        $total = microtime(true) - $global_start;
+        $total = microtime(true) - $_SERVER["REQUEST_TIME_FLOAT"];
         $db_total = db()->total_time ?? 0;
         $php_total = $total - $db_total;
         $memory = memory_get_usage() - $global_memory;
@@ -836,7 +836,7 @@ class Module
         }
         return [
             "show_profiler" => config("database.show_profiler"),
-            "global_start" => $global_start,
+            "global_start" => $_SERVER["REQUEST_TIME_FLOAT"],
             "total_memory" => $memory_total,
             "total_time" => number_format($total,6),
             "db_total_time" => number_format($db_total,6),

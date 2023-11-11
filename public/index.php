@@ -6,7 +6,6 @@
  * License: MIT
  */
 
-$global_start = microtime(true);
 $global_memory = memory_get_usage();
 require __DIR__.'/../vendor/autoload.php';
 $app = require_once __DIR__ . "/../bootstrap/app.php";
