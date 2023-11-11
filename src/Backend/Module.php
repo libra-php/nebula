@@ -400,8 +400,6 @@ class Module
         if (request()->has("filter_select")) {
             // filter_select is an array of select controls
             foreach (request()->filter_select as $column => $value) {
-                // Note the [[ ... ]]
-                // This will store the array on the session
                 $filter_options = [
                     "column" => $column,
                     "value" => $value,
@@ -1159,7 +1157,7 @@ class Module
     }
 
     /**-------- ENDPOINTS -----------------------------------------------*/
-
+    /* Endpoints are called from ModuleController */
     public function index(): string
     {
         if (!$this->hasIndexPermission()) {

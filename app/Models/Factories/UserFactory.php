@@ -21,7 +21,7 @@ class UserFactory extends Factory
         string $name,
         string $email,
         string $password,
-        int $type = 2
+        int $user_type = 2
     ): ?User {
         $user = app()->get($this->model);
         $user->name = $name;
@@ -29,7 +29,7 @@ class UserFactory extends Factory
         $user->password = Auth::hashPassword($password);
         $user->two_fa_secret = Auth::generateTwoFASecret();
         $user->failed_login_attempts = 0;
-        $user->user_type = $type;
+        $user->user_type = $user_type;
         $id = $user->save();
         return User::find($id);
     }
