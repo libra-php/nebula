@@ -179,8 +179,10 @@ class Model implements NebulaModel
     {
         $model = self::staticClass();
         $model->setup();
-        $qb = QueryBuilder::delete($model->table_name)
-            ->where([$model->primary_key, $this->id]);
+        $qb = QueryBuilder::delete($model->table_name)->where([
+            $model->primary_key,
+            $this->id,
+        ]);
         $result = db()->run($qb->build(), $qb->values());
         return $result !== null;
     }

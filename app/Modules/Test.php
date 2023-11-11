@@ -113,7 +113,7 @@ class Test extends Module
                 option(6, "Whale"),
                 option(7, "Wolf"),
                 option(8, "Tiger"),
-            ]
+            ],
         ];
 
         parent::__construct("test");

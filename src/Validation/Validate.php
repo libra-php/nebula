@@ -61,7 +61,10 @@ class Validate
     {
         foreach ($request_rules as $request_item => $ruleset) {
             if (!request()->has($request_item)) {
-                Flash::addFlash("warning", "Validation error: '{$request_item}' missing from request.");
+                Flash::addFlash(
+                    "warning",
+                    "Validation error: '{$request_item}' missing from request."
+                );
                 return false;
             }
             $value = request()->get($request_item) ?? null;
@@ -147,7 +150,9 @@ class Validate
     public static function isRequired($value): bool
     {
         $value = trim($value);
-        return !is_null($value) && $value !== "" && strtolower($value) !== "null";
+        return !is_null($value) &&
+            $value !== "" &&
+            strtolower($value) !== "null";
     }
 
     /**

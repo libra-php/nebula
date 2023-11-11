@@ -17,8 +17,12 @@ class UserFactory extends Factory
      * @param string $password
      * @return User|null
      */
-    public function create(string $name, string $email, string $password, int $type = 2): ?User
-    {
+    public function create(
+        string $name,
+        string $email,
+        string $password,
+        int $type = 2
+    ): ?User {
         $user = app()->get($this->model);
         $user->name = $name;
         $user->email = $email;

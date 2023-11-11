@@ -9,7 +9,6 @@ use Nebula\Interfaces\Http\Response;
 use Throwable;
 use App\Models\User;
 
-
 /**
  * Class Kernel
  * @package Nebula\Console
@@ -27,15 +26,22 @@ class Kernel implements ConsoleKernel
         ],
         "long" => [
             "help" => "Print help and exit.",
-            "fix-permissions" => "Automatically fix permissions on directories.",
-            "migration-table:" => "Create new table migration. Usage: --migration-table=<table_name>",
-            "migration-create:" => "Create new empty migration. Usage: --migration-create=<migration_name>",
+            "fix-permissions" =>
+                "Automatically fix permissions on directories.",
+            "migration-table:" =>
+                "Create new table migration. Usage: --migration-table=<table_name>",
+            "migration-create:" =>
+                "Create new empty migration. Usage: --migration-create=<migration_name>",
             "migration-list" => "List all migrations and their status.",
             "migration-run" => "Run all migrations that have not been run yet.",
-            "migration-up:" => "Run migration up on file. Usage: --migration-up=<filename>.php",
-            "migration-down:" => "Run migration down on file. Usage: --migration-down=<filename>.php",
-            "migration-fresh" => "Create new database and run all migrations. Be careful!",
-            "seed-user" => "Seed application user. A secure password will be generated. It is advised to change this password immediately.",
+            "migration-up:" =>
+                "Run migration up on file. Usage: --migration-up=<filename>.php",
+            "migration-down:" =>
+                "Run migration down on file. Usage: --migration-down=<filename>.php",
+            "migration-fresh" =>
+                "Create new database and run all migrations. Be careful!",
+            "seed-user" =>
+                "Seed application user. A secure password will be generated. It is advised to change this password immediately.",
         ],
     ];
     protected array $commands = [];
@@ -266,7 +272,7 @@ EOT;
     {
         $input = readline($prompt);
         $input = trim($input);
-        if ($input !== '') {
+        if ($input !== "") {
             return $input;
         }
         $this->input($prompt);
@@ -438,10 +444,10 @@ EOT;
     function generateSecurePassword()
     {
         // Define the character sets to use in the password
-        $uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $lowercase = 'abcdefghijklmnopqrstuvwxyz';
-        $numbers = '0123456789';
-        $specialChars = '()!_@/\\';
+        $uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        $lowercase = "abcdefghijklmnopqrstuvwxyz";
+        $numbers = "0123456789";
+        $specialChars = "()!_@/\\";
 
         // Concatenate all character sets
         $allChars = $uppercase . $lowercase . $numbers . $specialChars;
@@ -450,7 +456,7 @@ EOT;
         $charSetLength = strlen($allChars);
 
         // Initialize the password variable
-        $password = '';
+        $password = "";
 
         // Generate a 12-character password
         for ($i = 0; $i < 12; $i++) {
@@ -468,7 +474,7 @@ EOT;
     {
         ask_name:
         $name = $this->input("Enter name: ");
-        if ($name == '') {
+        if ($name == "") {
             goto ask_name;
         }
 
@@ -482,12 +488,14 @@ EOT;
         $user = User::search(["email", $email]);
         if ($user) {
             $this->echo("User already registered.");
-            exit;
+            exit();
         }
 
         ask_type:
-        $choices = [1,2,3];
-        $type = $this->input("Enter user type [1 = super admin, 2 = admin, 3 = standard user]: ");
+        $choices = [1, 2, 3];
+        $type = $this->input(
+            "Enter user type [1 = super admin, 2 = admin, 3 = standard user]: "
+        );
         if (!in_array($type, $choices)) {
             $this->echo("Invalid type...");
             goto ask_type;
@@ -498,13 +506,15 @@ EOT;
         $user = $factory->create($name, $email, $password, $type);
         if ($user) {
             $qr = Auth::urlQR($user);
-            $this->echo("Success! Please use this password to sign in: " . $password);
+            $this->echo(
+                "Success! Please use this password to sign in: " . $password
+            );
             $this->echo("GoogleAuthenticator QR: " . $qr);
-            exit;
+            exit();
         }
 
         $this->echo("Error! Something went wrong.");
-        exit;
+        exit();
     }
 
     protected function adminPassword()

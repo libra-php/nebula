@@ -18,6 +18,9 @@ final class User extends Model
 
     public function type()
     {
-        return db()->select("SELECT * FROM user_types WHERE id = ?", $this->user_type);
+        return db()->select(
+            "SELECT * FROM user_types WHERE id = ?",
+            $this->user_type
+        );
     }
 }

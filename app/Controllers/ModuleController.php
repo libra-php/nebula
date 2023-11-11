@@ -33,7 +33,7 @@ class ModuleController extends Controller
         $module_name = strtok($module_name, "?");
         $module = NebulaModule::search(["module_name", $module_name]);
         // Check if module exists
-        if (is_null($module) || $module_name === 'module_unknown') {
+        if (is_null($module) || $module_name === "module_unknown") {
             $this->moduleNotFound();
         }
         // Check if user has permission
@@ -41,7 +41,7 @@ class ModuleController extends Controller
             $this->permissionDenied();
         }
         $class = $module->class_name;
-        return new $class;
+        return new $class();
     }
 
     /**
