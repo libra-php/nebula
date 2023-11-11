@@ -13,12 +13,10 @@ class Modules extends Module
         $this->table_columns = [
             "modules.id" => "ID",
             "modules.module_title" => "Title",
-            "user_types.name" => "Permission Level",
+            "(SELECT user_types.name
+                FROM user_types
+                WHERE user_types.id = modules.user_type) as permission_level" => "Permission Level",
             "modules.created_at" => "Created At",
-        ];
-
-        $this->joins = [
-            "INNER JOIN user_types ON modules.user_type = user_types.id",
         ];
 
         $this->form_columns = [
@@ -44,6 +42,10 @@ class Modules extends Module
             "module_title" => "input",
             "module_icon" => "input",
             "user_type" => "select",
+        ];
+
+        $this->filter_select = [
+            "user_type" => "Permission Level",
         ];
 
         $this->select_options = [

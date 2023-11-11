@@ -101,9 +101,9 @@
   padding: 2px 6px;
 }
 #table #filters label {
-  width: 90px; 
+  width: 120px;
   text-align: right;
-} 
+}
 #table #filters #filter-datetime .input-group {
   width: 210px;
 }
@@ -145,7 +145,7 @@
 }
 
 /**
- * Search 
+ * Search
  */
 #table #pagination {
   font-size: 0.9rem;
@@ -371,7 +371,7 @@ button.accordion-button {
     max-width: 263px !important;
   }
   .form-row .label {
-    max-width: 100px !important;
+    max-width: 120px !important;
   }
   #main {
     height: calc(100% - 56px);

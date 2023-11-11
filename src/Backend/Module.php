@@ -716,7 +716,7 @@ class Module
         array_walk(
             $data,
             fn(&$value, $key) => ($value =
-                strtolower($value) === "null" ? null : $value)
+                is_string($value) && strtolower($value) === "null" ? null : $value)
         );
         return array_filter(
             $data,

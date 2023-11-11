@@ -37,7 +37,7 @@ class Audit extends Module
         ];
         $this->select_options = [
             "users.name" => db()->selectAll(
-                "SELECT name as id, name FROM users ORDER BY name"
+                "SELECT name as id, concat(name, ' (', email, ')') as name FROM users ORDER BY name"
             ),
             "table_name" => db()->selectAll(
                 "SELECT distinct table_name as id, table_name as name FROM audit ORDER BY table_name"

@@ -19,13 +19,13 @@
 					<div id="filter-search" class="d-flex align-items-center" n:if="$has_filter_search">
 						<label class="p-1 pe-2 tuncate" for="search-input"><strong>Search</strong></label>
 						<input id="search-input"
-							type="search" 
-							name="search" 
-							class="form-control form-control-sm" 
+							type="search"
+							name="search"
+							class="form-control form-control-sm"
 							hx-get="{$route('module.index.part')}"
 							placeholder="..."
 							value="{$filter_search_term}"
-							hx-trigger="keyup changed delay:500ms, search" 
+							hx-trigger="keyup changed delay:500ms, search"
 							hx-target="#module"/>
 					</div>
 					<div id="filter-datetime" n:if="$has_filter_datetime">
@@ -35,7 +35,7 @@
 								<input type="datetime-local"
 									hx-get="{$route('module.index.part')}"
 									hx-target="#module"
-									hx-trigger="change" 
+									hx-trigger="change"
 									class="form-control form-control-sm"
 									id="date-from"
 									name="date_from"
@@ -53,7 +53,7 @@
 								<input type="datetime-local"
 									hx-get="{$route('module.index.part')}"
 									hx-target="#module"
-									hx-trigger="change" 
+									hx-trigger="change"
 									class="form-control form-control-sm"
 									id="date-to"
 									name="date_to"
@@ -69,7 +69,7 @@
 					<div id="filter-select" class="d-flex flex-column" n:if="$has_filter_select">
 						{foreach $filter_select as $column => $title}
 							<div class="d-flex align-items-center justify-content-start">
-							<label for="filter_select[{$column}]" class="p-1 pe-2 truncate flex-break" for=""><strong>{$title}</strong></label>
+								<label for="filter_select[{$column}]" class="p-1 pe-2 truncate flex-break" for="" title="{$title}"><strong>{$title}</strong></label>
 							{$filter_select_control($column, $filter_selections[$column] ?? '')|noescape}
 							</div>
 						{/foreach}
@@ -82,12 +82,12 @@
 		<div n:if="$has_filter_links" class="d-flex my-1">
 			{foreach $filter_links as $title => $clause}
 				<a hx-boost="true" href="{$route('module.index.part')}?filter_link={$title|escapeUrl}" hx-target="#module-table-links" hx-select="#module-table-links" title="Filter on {$title}">
-					<span class="badge filter-link pill me-1 {if $filter_link == $title}active{/if}">{$title} 
+					<span class="badge filter-link pill me-1 {if $filter_link == $title}active{/if}">{$title}
 						[<span class="count">?</span>]
 					</span>
 				</a>
 				<span hx-trigger="load delay:50ms" hx-get="{$route('module.index.part')}?filter_count={$title|escapeUrl}" class="count" hx-target="previous .count"></span>
-			{/foreach}		
+			{/foreach}
 		</div>
 		<section id="module-table">
 			<div class="table-container rounded-3">
@@ -106,7 +106,7 @@
 													&#9650;
 												{/if}
 											</span>
-										{else}	
+										{else}
 											<span>{$title}</span>
 										{/if}
 									</a>
@@ -124,16 +124,16 @@
 									<td title="{$title}"><a class="module-edit-link" hx-boost="true" href="{$route('module.edit.part', $datum[$key_col])}" title="Edit record" hx-target="#module">{$datum[$column]}</a></td>
 								{elseif $column === $key_col}
 									<td title="{$title}"><span class="text-secondary">{$datum[$column]}</span></td>
-								{else}		
+								{else}
 									<td title="{$title}">{$datum[$column]}</td>
 								{/if}
 							{/foreach}
 							<td>
 								<div class="d-flex justify-content-end" hx-boost="true">
 									{foreach $table['row_actions'] as $action}
-										<a n:if="$table['has_row_action_permission']($action['name'], $datum[$key_col])" 
-											class="row-action btn btn-sm btn-outline-{$action['class']} ms-1" 
-											href="{$route('module.index')}?{$action['name']}=true&id={$datum[$key_col]}" 
+										<a n:if="$table['has_row_action_permission']($action['name'], $datum[$key_col])"
+											class="row-action btn btn-sm btn-outline-{$action['class']} ms-1"
+											href="{$route('module.index')}?{$action['name']}=true&id={$datum[$key_col]}"
 											{if $action['confirm']}hx-confirm="{$action['confirm']}"{/if}
 											title="{$action['title']}"
 											hx-replace-url="{$module_name}"
