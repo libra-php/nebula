@@ -17,9 +17,9 @@ class Audit extends Module
             "audit.table_name" => "Table",
             "audit.table_id" => "ID",
             "audit.field" => "Field",
-            "audit.old_value" => "Old",
+            "ifnull(audit.old_value, 'NULL') as old_value" => "Old",
             "'🠮' as sep" => "",
-            "audit.new_value" => "New",
+            "ifnull(audit.new_value, 'NULL') as new_value" => "New",
             "audit.message" => "Message",
             "audit.created_at" => "Created At",
         ];

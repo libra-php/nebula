@@ -13,7 +13,7 @@ class Modules extends Module
         $this->table_columns = [
             "modules.id" => "ID",
             "modules.module_title" => "Title",
-			"user_types.name" => "Permission",
+			"user_types.name" => "Permission Level",
             "modules.created_at" => "Created At",
         ];
 
@@ -25,7 +25,7 @@ class Modules extends Module
 			"module_table" => "Table",
 			"module_title" => "Title",
 			"module_icon" => "Icon",
-            "user_type" => "Level",
+            "user_type" => "Permission Level",
         ];
 
         $this->validation = [

@@ -146,7 +146,8 @@ class Validate
      */
     public static function isRequired($value): bool
     {
-        return !is_null($value) && $value != "";
+        $value = trim($value);
+        return !is_null($value) && $value !== "" && strtolower($value) !== "null";
     }
 
     /**

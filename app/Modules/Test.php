@@ -66,7 +66,6 @@ class Test extends Module
         $this->validation = [
             "name" => ["required"],
             "number" => ["required", "numeric"],
-            "dropdown" => ["required"],
         ];
 
         /**
@@ -80,7 +79,7 @@ class Test extends Module
             "comment" => "textarea",
             // select if you require a value
             // nselect if you allow null
-            "dropdown" => "select",
+            "dropdown" => "nselect",
             "color" => "color",
             "file" => "upload",
             "image" => "image",
@@ -106,14 +105,14 @@ class Test extends Module
          */
         $this->select_options = [
             "dropdown" => [
-                (object) ["id" => 1, "name" => "Fish"],
-                (object) ["id" => 2, "name" => "Cat"],
-                (object) ["id" => 3, "name" => "Dog"],
-                (object) ["id" => 4, "name" => "Wolf"],
-                (object) ["id" => 5, "name" => "Bear"],
-                (object) ["id" => 6, "name" => "Dolphin"],
-                (object) ["id" => 7, "name" => "Tiger"],
-                (object) ["id" => 8, "name" => "Tiger"],
+                option(1, "Fish"),
+                option(2, "Bear"),
+                option(3, "Dog"),
+                option(4, "Dolphin"),
+                option(5, "Bear"),
+                option(6, "Whale"),
+                option(7, "Wolf"),
+                option(8, "Tiger"),
             ]
         ];
 

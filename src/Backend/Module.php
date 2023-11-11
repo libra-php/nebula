@@ -456,6 +456,9 @@ class Module
     }
   }
 
+  /**
+   * Handle datetime filter
+   */
   protected function handleDateTime(): void
   {
     if (request()->has("date_from")) {
@@ -641,7 +644,7 @@ class Module
     string $table_name,
     string $table_id,
     string $field,
-    string $value,
+    ?string $value = null,
     string $message = ""
   ): void {
     $old = db()->select(
@@ -709,10 +712,10 @@ class Module
   {
     $filtered_controls = ["upload", "image"];
     $data = request()->data();
-    // Deal with "NULL" string
+    // Deal with "null" string
     array_walk(
       $data,
-      fn (&$value, $key) => ($value = $value === "NULL" ? null : $value)
+      fn (&$value, $key) => ($value = strtolower($value) === "null" ? null : $value)
     );
     return array_filter(
       $data,
