@@ -184,6 +184,12 @@
  * Profiler
  */
 #profiler #info {
+  opacity: 0.4;
+}
+#profiler #info:hover {
+  opacity: 1.0;
+}
+#profiler #info {
   font-size: 0.7rem;
   cursor: pointer;
 }
