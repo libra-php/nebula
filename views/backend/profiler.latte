@@ -19,11 +19,18 @@
 		</table>
 	</div>
   </div>
-  <div id="extra-info" class="hidden mt-2">
+  <div id="extra-info" class="hidden mt-2 table-responsive">
 	{if ($profiler['slow_traces']|length) > 0}
-		{foreach $profiler['slow_traces'] as $trace}
-			<div>{$trace|noescape}</div>
-		{/foreach}
+		<table>
+			{foreach $profiler['slow_traces'] as $trace}
+			<tr>
+				<td class="text-end" nowrap>{$trace["file"]}</td>
+				<td class="mono">x<strong>{$trace["count"]}</strong></td>
+				<td class="ps-2 mono text-right">{$trace["time"]}</td>
+				<td class="ps-2 mono text-right">{$trace["pct"]}</td>
+			</tr>
+			{/foreach}
+		</table>
 	{/if}
   </div>
 </section>

@@ -191,10 +191,16 @@
   font-size: 1.1rem;
 }
 #profiler #info table {
-  line-height: 10px;
+  line-height: 11px;
 }
 #profiler #extra-info {
-  font-size: 0.6rem;
+  font-size: 0.7rem;
+}
+#profiler #extra-info table {
+  line-height: 12px;
+}
+#profiler #extra-info table tr:hover {
+  text-decoration: underline;
 }
 
 /**

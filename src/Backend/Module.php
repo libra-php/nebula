@@ -803,13 +803,18 @@ class Module
      */
     protected function profiler(): array
     {
-        global $global_start;
+        global $global_start, $global_memory;
         $slow_traces = [];
+        $total = microtime(true) - $global_start;
+        $db_total = db()->total_time ?? 0;
+        $php_total = $total - $db_total;
+        $memory = memory_get_usage() - $global_memory;
+        $memory_total = $this->convert($memory);
         foreach (["Slow DB:" => db()->trace_counts] as $title => $traces) {
-            //$slow_traces[] = $title;
             if ($traces) {
                 uasort($traces, fn ($a, $b) => $b["time"] <=> $a["time"]);
                 $i = 0;
+
                 foreach ($traces as $key => $value) {
                     $i++;
                     if ($i > 10) {
@@ -817,20 +822,22 @@ class Module
                     }
                     $pct =
                         number_format(
-                            ($value["time"] / db()->total_time) * 100,
+                            ($value["time"] / $db_total) * 100,
                             2
                         ) . "%";
-                    $slow_traces[] = "{$key} &times; {$value["count"]}, {$value["time"]} <strong>{$pct}</strong>";
+                    $slow_traces[] = [
+                        "file" => $key,
+                        "count" => $value["count"],
+                        "time" => $value["time"],
+                        "pct" => $pct,
+                    ];
                 }
             }
         }
-        $total = microtime(true) - $global_start;
-        $db_total = db()->total_time ?? 0;
-        $php_total = $total - $db_total;
         return [
             "show_profiler" => config("database.show_profiler"),
             "global_start" => $global_start,
-            "total_memory" => $this->convert(memory_get_usage(true)),
+            "total_memory" => $memory_total,
             "total_time" => number_format($total,6),
             "db_total_time" => number_format($db_total,6),
             "php_total_time" => number_format($php_total,6),
