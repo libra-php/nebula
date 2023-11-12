@@ -561,15 +561,16 @@ class Module
     /**
      * Return module not found response
      */
-    public function moduleNotFound(): never
+    public function moduleNotFound($partial = false): never
     {
         Flash::addFlash(
             "warning",
             "Oops! The requested module could not be found"
         );
+        $is_part = $partial ? 'content' : null;
         $response = $this->response(
             404,
-            latte($this->getCustomIndex(), $this->getIndexData())
+            latte($this->getCustomIndex(), $this->getIndexData(),  $is_part)
         );
         echo $response->send();
         exit();
@@ -578,12 +579,28 @@ class Module
     /**
      * Return permission denied response
      */
-    public function permissionDenied(): never
+    public function permissionDenied($partial = false): never
     {
         Flash::addFlash("error", "Permission denied");
+        $is_part = $partial ? 'content' : null;
         $response = $this->response(
             403,
-            latte($this->getCustomIndex(), $this->getIndexData())
+            latte($this->getCustomIndex(), $this->getIndexData(),  $is_part)
+        );
+        echo $response->send();
+        exit();
+    }
+
+    /**
+     * Return fatal error response
+     */
+    public function fatalError($partial = false): never
+    {
+        Flash::addFlash("error", "Fatal error");
+        $is_part = $partial ? 'content' : null;
+        $response = $this->response(
+            200,
+            latte($this->getCustomIndex(), $this->getIndexData(),  $is_part)
         );
         echo $response->send();
         exit();
@@ -791,7 +808,7 @@ class Module
     /**
      * Convert value (size) to unit
      */
-    function convert($size)
+    function convert($size): string
     {
         $units = array('b', 'kb', 'mb', 'gb', 'tb', 'pb');
         $value = round($size / pow(1024, ($i = floor(log($size, 1024)))), 2);

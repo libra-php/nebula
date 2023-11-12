@@ -8,8 +8,6 @@ use Nebula\Backend\Module;
 use Nebula\Controller\Controller;
 use Nebula\Traits\Http\Response;
 use StellarRouter\{Get, Post, Delete, Patch, Group};
-use Exception;
-use PDOException;
 
 #[Group(prefix: "/admin/v1", middleware: ["auth", "module"])]
 class ModuleController extends Controller
@@ -26,9 +24,16 @@ class ModuleController extends Controller
             redirectRoute("sign-in.index");
         }
         // Using the route params to determine the module, or 404
-        $module_name =
-            request()->route->getParameters()["module"] ?? "module_unknown";
-        $this->module = $this->getModule($module_name);
+        $params = request()->route->getParameters();
+        if (!empty($params)) {
+            $module_name = $params["module"];
+            $module = $this->getModule($module_name);
+            if (!is_null($module)) {
+                $this->module = $module;
+            } else {
+                $this->fatalError();
+            }
+        }
 
         parent::__construct();
     }
@@ -36,12 +41,12 @@ class ModuleController extends Controller
     /**
      * Get module from modules path class map
      */
-    private function getModule(string $module_name): Module
+    private function getModule(string $module_name): ?Module
     {
         $module_name = strtok($module_name, "?");
         $module = NebulaModule::search(["module_name", $module_name]);
         // Check if module exists
-        if (is_null($module) || $module_name === "module_unknown") {
+        if (is_null($module)) {
             $this->moduleNotFound();
         }
         // Check if user has permission
@@ -51,40 +56,34 @@ class ModuleController extends Controller
         $class = $module->class_name;
         try {
             $module_class = new $class();
-        } catch (PDOException $ex) {
-            $this->error('PDOException', $ex);
-        } catch (Exception $ex) {
-            $this->error('Exception', $ex);
+        } catch (\Throwable $th) {
+            if (config('app.debug')) {
+                Flash::addFlash("info", $th->getMessage());
+            }
+            return null;
         }
         return $module_class;
     }
 
-    private function error(string $type, Exception $ex): never
+    #[Get("/module/permission-denied", "module.permission-denied")]
+    public function permissionDenied()
     {
-        if (config("app.debug")) {
-            dump($ex->getMessage());
-            dump("File: " . $ex->getFile() . ':' . $ex->getLine());
-            dump($ex->getTraceAsString());
-        }
-        die($type);
+        $module = new Module("error");
+        $module->fatalError();
     }
 
-    /**
-     * No module found, 404
-     */
-    private function moduleNotFound(): never
+    #[Get("/module/not-found", "module.not-found")]
+    public function moduleNotFound()
     {
         $module = new Module("error");
         $module->moduleNotFound();
     }
 
-    /**
-     * Permission denied
-     */
-    private function permissionDenied(): never
+    #[Get("/module/fatal-error", "module.fatal-error")]
+    public function fatalError()
     {
         $module = new Module("error");
-        $module->permissionDenied();
+        $module->fatalError(true);
     }
 
     /**
