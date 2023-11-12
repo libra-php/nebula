@@ -101,9 +101,7 @@ class Auth
             ]);
             $template = latte("auth/mail/forgot-password.latte", [
                 "name" => $user->name,
-                "link" =>
-                config("app.url") .
-                    "/password-reset/{$user->uuid}/{$token}/",
+                "link" => config("app.url") . buildRoute('password-reset.index', $user->uuid, $token),
                 "project" => config("app.name"),
             ]);
             smtp()->send(
