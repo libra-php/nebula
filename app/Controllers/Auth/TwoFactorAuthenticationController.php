@@ -59,7 +59,7 @@ final class TwoFactorAuthenticationController extends Controller
             ])
         ) {
             if (
-                Auth::validateCode($this->user->two_fa_secret, request()->code)
+                Auth::validateCode($this->user, request()->code)
             ) {
                 return Auth::signIn($this->user);
             } else {

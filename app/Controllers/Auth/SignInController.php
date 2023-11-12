@@ -4,6 +4,7 @@ namespace App\Controllers\Auth;
 
 use App\Auth;
 use App\Models\User;
+use Nebula\Alerts\Flash;
 use Nebula\Controller\Controller;
 use Nebula\Validation\Validate;
 use StellarRouter\{Get, Post, Put, Group};
@@ -15,6 +16,7 @@ final class SignInController extends Controller
     public function index(): string
     {
         return latte("auth/sign-in.latte", [
+            "has_flash" => Flash::hasFlash(),
             "two_fa_enabled" => config("auth.two_fa_enabled"),
             "register_enabled" => config("auth.register_enabled"),
         ]);
@@ -26,6 +28,7 @@ final class SignInController extends Controller
         return latte(
             "auth/sign-in.latte",
             [
+                "has_flash" => Flash::hasFlash(),
                 "two_fa_enabled" => config("auth.two_fa_enabled"),
                 "register_enabled" => config("auth.register_enabled"),
                 "email" => request()->get("email"),

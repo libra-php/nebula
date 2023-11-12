@@ -7,6 +7,9 @@
   <form hx-post="{route('sign-in.post')}" hx-boost="true" hx-target="#body">
     {csrf()|noescape}
     <h1 class="h3 mb-3 fw-normal text-center">Please sign in</h1>
+    <div n:if="$has_flash" class="my-2">
+        {getFlashMessages()|noescape}
+    </div>
 
     <div class="form-floating">
       <input name="email" type="email" class="form-control" id="email" placeholder="name@example.com" autocomplete="on">

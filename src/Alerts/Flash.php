@@ -76,31 +76,31 @@ class Flash
     public static function error($message)
     {
         return "<div class='flash error fade show' role='alert'>
-            <div><strong>&#128293;</strong></div><div>{$message}</div>
+            <div class='px-2'><strong>&#128293;</strong></div><div>{$message}</div>
         </div>";
     }
     public static function success($message)
     {
         return "<div class='flash success fade show' role='alert'>
-            <div><strong>&#9989;</strong></div><div>{$message}</div>
+            <div class='px-2'><strong>&#9989;</strong></div><div>{$message}</div>
         </div>";
     }
     public static function warning($message)
     {
         return "<div class='flash warning fade show' role='alert'>
-            <div><strong>&#9888;</strong></div><div>{$message}</div>
+            <div class='px-2'><strong>&#9888;</strong></div><div>{$message}</div>
         </div>";
     }
     public static function database($message)
     {
         return "<div class='flash database fade show' role='alert'>
-            <div><strong>&#128163;</strong></div><div>{$message}</div>
+            <div class='px-2'><strong>&#128163;</strong></div><div>{$message}</div>
         </div>";
     }
     public static function info($message)
     {
         return "<div class='flash info fade show' role='alert'>
-            <div><strong>&#128681;</strong></div><div>{$message}</div>
+            <div class='px-2'><strong>&#128681;</strong></div><div>{$message}</div>
         </div>";
     }
 }
