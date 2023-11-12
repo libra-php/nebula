@@ -21,7 +21,8 @@ class UserFactory extends Factory
         string $name,
         string $email,
         string $password,
-        int $user_type = 2
+        // Standard user defaults
+        int $user_type = 3
     ): ?User {
         $user = app()->get($this->model);
         $user->name = $name;
