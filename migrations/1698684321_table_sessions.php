@@ -13,6 +13,7 @@ return new class implements Migration
         return Schema::create("sessions", function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger("user_id")->nullable();
+            $table->varchar("method");
             $table->mediumText("uri");
             $table->dateTime("created_at")->default("CURRENT_TIMESTAMP");
             $table->primaryKey("id");

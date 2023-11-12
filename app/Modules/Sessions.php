@@ -11,6 +11,7 @@ class Sessions extends Module
         $this->table_create = $this->table_edit = $this->table_destroy = false;
         $this->table_columns = [
             "sessions.id" => "ID",
+            "sessions.method" => "Method",
             "sessions.uri" => "URI",
             "users.name" => "User",
             "sessions.created_at" => "Created At",
@@ -21,6 +22,18 @@ class Sessions extends Module
             "Me" => "user_id = " . user()->id,
             "Others" => "user_id != " . user()->id,
             "All" => "1=1",
+        ];
+        $this->filter_select = [
+            "method" => "Method",
+        ];
+        $this->select_options = [
+            "method" => [
+                option("GET", "GET"),
+                option("POST", "POST"),
+                option("PUT", "PUT"),
+                option("PATCH", "PATCH"),
+                option("DELETE", "DELTE"),
+            ],
         ];
         parent::__construct("sessions");
     }

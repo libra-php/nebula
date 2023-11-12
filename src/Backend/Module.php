@@ -180,8 +180,9 @@ class Module
     protected function handleSession()
     {
         db()->query(
-            "INSERT INTO sessions SET user_id = ?, uri = ?",
+            "INSERT INTO sessions SET user_id = ?, method = ?, uri = ?",
             user()->id,
+            request()->getMethod(),
             request()->getUri()
         );
     }
@@ -1059,7 +1060,7 @@ class Module
                     moduleRoute("module.index.part", $this->module_name) .
                     "'",
                 "hx-target='#module'",
-                "hx-trigger='change'"
+                "hx-trigger='change'",
             );
             return $control;
         };
