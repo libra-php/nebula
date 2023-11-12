@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\Module as NebulaModule;
+use Nebula\Alerts\Flash;
 use Nebula\Backend\Module;
 use Nebula\Controller\Controller;
 use Nebula\Traits\Http\Response;
@@ -17,6 +18,11 @@ class ModuleController extends Controller
 
     public function __construct()
     {
+        // Check if backend is in maintenance mode
+        if (config("backend.maintenance_mode")) {
+            Flash::addFlash("warning", "Maintenance mode. Please check back soon.");
+            redirectRoute("sign-in.index");
+        }
         // Using the route params to determine the module, or 404
         $module_name =
             request()->route->getParameters()["module"] ?? "module_unknown";

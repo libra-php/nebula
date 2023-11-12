@@ -112,7 +112,7 @@ function buildRoute(string $name, ...$replacements): ?string
     return null;
 }
 
-function redirectRoute(string $name, int $code = 301, int $delay = 0): never
+function redirectRoute(string $name, int $code = 302, int $delay = 0): never
 {
     $route = app()
         ->use()

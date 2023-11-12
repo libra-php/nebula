@@ -2,4 +2,6 @@
 
 namespace App\Config;
 
-return [];
+return [
+    "maintenance_mode" => env("APP_MAINTENANCE_MODE", "true") == "true",
+];
