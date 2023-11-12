@@ -67,23 +67,20 @@ class Audit extends Module
     {
         parent::processTableRequest();
         if (request()->has("undo_change")) {
-            $row = db()->select(
-                "SELECT * FROM $this->table_name WHERE $this->key_col = ?",
-                request()->id
-            );
+            $audit_row = db()->select("SELECT * FROM audit WHERE id = ?", request()->id);
             $result = db()->query(
-                "UPDATE $row->table_name SET $row->field = ? WHERE id = ?",
-                $row->old_value,
-                $row->id
+                "UPDATE $audit_row->table_name SET $audit_row->field = ? WHERE id = ?",
+                $audit_row->old_value,
+                $audit_row->table_id
             );
             if ($result) {
                 Flash::addFlash("success", "Old value restored successfully");
                 $this->audit(
                     user()->id,
-                    $row->table_name,
-                    $row->table_id,
-                    $row->field,
-                    $row->old_value,
+                    $audit_row->table_name,
+                    $audit_row->table_id,
+                    $audit_row->field,
+                    $audit_row->old_value,
                     "UNDO"
                 );
             } else {
