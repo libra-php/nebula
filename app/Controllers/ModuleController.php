@@ -8,6 +8,8 @@ use Nebula\Backend\Module;
 use Nebula\Controller\Controller;
 use Nebula\Traits\Http\Response;
 use StellarRouter\{Get, Post, Delete, Patch, Group};
+use Exception;
+use PDOException;
 
 #[Group(prefix: "/admin/v1", middleware: ["auth", "module"])]
 class ModuleController extends Controller
@@ -47,7 +49,24 @@ class ModuleController extends Controller
             $this->permissionDenied();
         }
         $class = $module->class_name;
-        return new $class();
+        try {
+            $module_class = new $class();
+        } catch (PDOException $ex) {
+            $this->error('PDOException', $ex);
+        } catch (Exception $ex) {
+            $this->error('Exception', $ex);
+        }
+        return $module_class;
+    }
+
+    private function error(string $type, Exception $ex): never
+    {
+        if (config("app.debug")) {
+            dump($ex->getMessage());
+            dump("File: " . $ex->getFile() . ':' . $ex->getLine());
+            dump($ex->getTraceAsString());
+        }
+        die($type);
     }
 
     /**
