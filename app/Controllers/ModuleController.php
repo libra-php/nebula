@@ -7,7 +7,7 @@ use Nebula\Alerts\Flash;
 use Nebula\Backend\Module;
 use Nebula\Controller\Controller;
 use Nebula\Traits\Http\Response;
-use StellarRouter\{Get, Post, Delete, Patch, Group};
+use StellarRouter\{Get, Post, Delete, Group};
 
 #[Group(prefix: "/admin/v1", middleware: ["auth", "module"])]
 class ModuleController extends Controller
@@ -66,21 +66,21 @@ class ModuleController extends Controller
     }
 
     #[Get("/module/permission-denied", "module.permission-denied")]
-    public function permissionDenied()
+    public function permissionDenied(): void
     {
         $module = new Module("error");
         $module->fatalError();
     }
 
     #[Get("/module/not-found", "module.not-found")]
-    public function moduleNotFound()
+    public function moduleNotFound(): void
     {
         $module = new Module("error");
         $module->moduleNotFound();
     }
 
     #[Get("/module/fatal-error", "module.fatal-error")]
-    public function fatalError()
+    public function fatalError(): void
     {
         $module = new Module("error");
         $module->fatalError(true);
@@ -107,13 +107,13 @@ class ModuleController extends Controller
      */
     #[Post("/{module}/create", "module.create.post")]
     #[Get("/{module}/create", "module.create", ["push-url"])]
-    public function create(string $module)
+    public function create(string $module): string
     {
         return $this->module->create();
     }
 
     #[Get("/{module}/create/part", "module.create.part", ["push-url"])]
-    public function create_part(string $module)
+    public function create_part(string $module): string
     {
         return $this->module->createPartial();
     }
@@ -123,13 +123,13 @@ class ModuleController extends Controller
      */
     #[Post("/{module}/{id}/edit", "module.edit.post")]
     #[Get("/{module}/{id}/edit", "module.edit", ["push-url"])]
-    public function edit(string $module, string $id)
+    public function edit(string $module, string $id): string
     {
         return $this->module->edit($id);
     }
 
     #[Get("/{module}/{id}/edit/part", "module.edit.part", ["push-url"])]
-    public function edit_part(string $module, string $id)
+    public function edit_part(string $module, string $id): string
     {
         return $this->module->editPartial($id);
     }
@@ -138,7 +138,7 @@ class ModuleController extends Controller
      * Store module in db
      */
     #[Post("/{module}/store", "module.store", ["api"])]
-    public function store(string $module)
+    public function store(string $module): string
     {
         return $this->module->store();
     }
@@ -147,7 +147,7 @@ class ModuleController extends Controller
      * Update a module (using post for files)
      */
     #[Post("/{module}/{id}/update", "module.update", ["api"])]
-    public function update(string $module, string $id)
+    public function update(string $module, string $id): string
     {
         return $this->module->update($id);
     }
@@ -156,7 +156,7 @@ class ModuleController extends Controller
      * Destroy a module
      */
     #[Delete("/{module}/{id}/destroy", "module.destroy", ["api"])]
-    public function destroy(string $module, string $id)
+    public function destroy(string $module, string $id): string
     {
         return $this->module->destroy($id);
     }
