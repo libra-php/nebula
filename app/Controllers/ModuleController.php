@@ -91,13 +91,13 @@ class ModuleController extends Controller
      */
     #[Post("/{module}", "module.index.post")]
     #[Get("/{module}", "module.index", ["push-url"])]
-    public function index(string $module)
+    public function index(string $module): string
     {
         return $this->module->index();
     }
 
     #[Get("/{module}/part", "module.index.part", ["push-url"])]
-    public function index_part(string $module)
+    public function index_part(string $module): string
     {
         return $this->module->indexPartial();
     }
