@@ -5,32 +5,35 @@
 	{include parent}
 	<form method="POST" hx-encoding="multipart/form-data">
 	{csrf()|noescape}
-	{foreach $form['columns'] as $column => $title}
-		<div class="container-fluid d-flex form-row w-100">
-			<div class="label d-flex align-items-start justify-content-end text-end">
-				<strong class="form-label truncate" title="{$title}">{$title}</strong>
-			</div>
-			<div class="control ms-2 flex-grow-1">
-				{$controls($column, '')|noescape}
-				{include '../layout/components/validation.latte', name: $column}
-			</div>
-		</div>
-	{/foreach}
-		<div class="container-fluid d-flex form-row p-2 w-100">
-			<div class="label d-flex align-items-start justify-content-end pt-1 text-end">
-			</div>
-			<div class="control">
-				<div class="p-2 d-flex">
-					<button type="button" class="btn btn-success" hx-post="{$route('module.store')}" hx-target="#module" title="Save record" hx-disabled-elt="this">Save</button>
-					<a class="btn btn-secondary ms-1" href="{$route('module.index.part')}" hx-target="#module" hx-boost="true" title="Cancel">Cancel</a>
-				</div>
-			</div>
-		</div>
+		<table>
+			<tbody>
+			{foreach $form['columns'] as $column => $title}
+				<tr class="form-row">
+					<td class="label text-end align-top">
+						<strong class="form-label truncate" title="{$title}">{$title}</strong>
+					</td>
+					<td class="control ps-2">
+						{$controls($column, '')|noescape}
+						{include '../layout/components/validation.latte', name: $column}
+					</td>
+				</tr>
+			{/foreach}
+				<tr>
+					<td></td>
+					<td>
+						<div class="p-2 d-flex">
+							<button type="button" class="btn btn-success" hx-post="{$route('module.store')}" hx-target="#module" title="Save record" hx-disabled-elt="this">Save</button>
+							<a class="btn btn-secondary ms-1" href="{$route('module.index.part')}" hx-target="#module" hx-boost="true" title="Cancel">Cancel</a>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
 	</form>
 </section>
 {include 'profiler.latte'}
 <script>
-document.title = {$app["name"]} + " " + {$module_title} + " — Create";
+document.title = {$app["name"]} + " [Admin] " + {$module_title} + " — Create";
 </script>
 <script src="/assets/js/tinymce/tinymce.min.js"></script>
 <script src='/assets/js/form.js'></script>

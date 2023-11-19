@@ -1,7 +1,10 @@
 /** Blog */
+#post #blog-jumbo {
+  height: 600px;
+}
 #post h1.header {
   font-family: 'Anton', sans-serif;
-  font-size: 3rem;
+  font-size: 5rem;
 }
 #post p {
   font-family: 'Merriweather', serif;

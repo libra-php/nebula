@@ -29,11 +29,6 @@
 }
 .form-row .label {
   color: #555;
-  padding-top: 2px;
-  max-width: 150px;
-  width: 150px !important;
-}
-.form-row .control {
 }
 .form-row .control-color {
   width: 42px !important;

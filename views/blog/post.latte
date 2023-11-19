@@ -1,9 +1,17 @@
-<h1 class="header">{$post->title}</h1>
-<h4>{$post->subtitle}</h4>
-<div id="info" class="my-3">
+<div n:if="$banner_image" id="blog-jumbo" class="p-5 rounded-3 d-flex align-items-center justify-content-center" style="background-position: center; background-size: cover; background-image: url('{$banner_image}')">
+	<div id="overlay" class="d-flex flex-column text-white p-2" style="background-color: rgba(0,0,0,0.5)">
+		<h1 class="header">{$post->title}</h1>
+		<h4 n:if="$post->subtitle">{$post->subtitle}</h4>
+	</div>
+</div>
+<div n:if="!$banner_image" class="container">
+	<h1 class="header">{$post->title}</h1>
+	<h4 n:if="$post->subtitle">{$post->subtitle}</h4>
+</div>
+<div id="info" class="my-3 container">
 	<span id="publish-date">Published: {$published_at}</span><br />
 	<span id="author">Author: {$post->author()->name}</span>
 </div>
-<div id="content">
+<div id="content" class="container">
 	{$post->content|noescape}
 </div>

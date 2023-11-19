@@ -10,10 +10,26 @@ use StellarRouter\{Get, Group};
 #[Group(prefix: "/blog")]
 class BlogController extends Controller
 {
+
+	private function getBannerImage(?string $banner_image): ?string
+	{
+		if (!$banner_image) {
+			return null;
+		}
+		$basename = basename($banner_image);
+		$public_uploads = config("paths.public_uploads");
+		return sprintf("%s/%s", $public_uploads, $basename);
+	}
+
 	#[Get("/", "blog.index")]
 	public function index(): string
 	{
-		return "wip";
+		$posts = Post::search(
+			["status", "Published"]
+		);
+		return latte("blog/index.latte", [
+			"posts" => $posts,
+		]);
 	}
 
 	#[Get("/{year}/{month}/{slug}", "blog.index")]
@@ -30,6 +46,7 @@ class BlogController extends Controller
 			if (date("Y-m-d H:i:s") >= $post->published_at) {
 				return latte("blog/show.latte", [
 					"post" => $post,
+					"banner_image" => $this->getBannerImage($post->banner_image),
 					"published_at" => Carbon::createFromDate($post->published_at)->toFormattedDateString(),
 				]);
 			}
@@ -43,9 +60,10 @@ class BlogController extends Controller
 		$post = Post::find($post);
 		if ($post) {
 			$uri = "/blog/preview/{$post->id}";
-            header("HX-Push-Url: $uri");
+			header("HX-Push-Url: $uri");
 			return latte("blog/preview.latte", [
 				"post" => $post,
+				"banner_image" => $this->getBannerImage($post->banner_image),
 				"published_at" => Carbon::createFromDate($post->published_at)->toFormattedDateString(),
 			]);
 		}
