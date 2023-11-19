@@ -5,7 +5,7 @@
 	{include parent}
 	<form method="POST" hx-encoding="multipart/form-data">
 	{csrf()|noescape}
-		<table>
+		<table class="w-100">
 			<tbody>
 			{foreach $form['columns'] as $column => $title}
 				<tr class="form-row">

@@ -131,9 +131,9 @@ class FormControls
             $public_uploads = config("paths.public_uploads");
             $path = sprintf("%s/%s", $public_uploads, $basename);
             $control .=
-                "<div class='d-flex align-items-center control-file p-1'>";
+                "<div class='d-flex align-items-center control-file py-1'>";
             $control .= sprintf(
-                '<label title="%s" class="truncate file-label" for="%s">%s</label>',
+                '<label title="%s" class="truncate file-label flex-grow-1" for="%s">%s</label>',
                 $basename,
                 $name,
                 $basename

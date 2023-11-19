@@ -24,8 +24,8 @@
 #edit form, #create form {
   margin-top: 20px;
 }
-.form-row {
-  margin-bottom: 10px;
+.form-row td {
+  padding: 6px;
 }
 .form-row .label {
   color: #555;
@@ -37,8 +37,11 @@
 .form-row .control-textarea {
   height: 300px;
 }
+.form-row .control-file, .form-row .control-image {
+  width: 100%;
+}
 .form-row .control-image {
-  max-width: 100%;
+  max-width: 300px;
 }
 .form-row .file-button {
   font-size: 1.1rem !important;
