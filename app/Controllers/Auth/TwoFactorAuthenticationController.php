@@ -58,9 +58,7 @@ final class TwoFactorAuthenticationController extends Controller
                 ],
             ])
         ) {
-            if (
-                Auth::validateCode($this->user, request()->code)
-            ) {
+            if (Auth::validateCode($this->user, request()->code)) {
                 return Auth::signIn($this->user);
             } else {
                 Validate::addError("code", "Bad code, please try again");

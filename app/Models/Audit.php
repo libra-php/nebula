@@ -15,4 +15,3 @@ final class Audit extends Model
     {
     }
 }
-

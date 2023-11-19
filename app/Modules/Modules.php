@@ -15,7 +15,8 @@ class Modules extends Module
             "modules.module_title" => "Title",
             "(SELECT user_types.name
                 FROM user_types
-                WHERE user_types.id = modules.user_type) as permission_level" => "Permission Level",
+                WHERE user_types.id = modules.user_type) as permission_level" =>
+                "Permission Level",
             "modules.created_at" => "Created At",
         ];
 

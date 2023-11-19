@@ -48,7 +48,6 @@ class Auth
         }
     }
 
-
     public static function lockUser(User $user)
     {
         // Set user lock expires_at (unix time)
@@ -69,8 +68,13 @@ class Auth
     public static function handleLockedUser(User $user)
     {
         // Redirect to sign in page and set messaage
-        $unlocks_at = Carbon::createFromTimestamp($user->reset_expires_at)->diffForHumans();
-        Flash::addFlash("warning",  "This account is currently locked.<br>Account will unlock {$unlocks_at}.");
+        $unlocks_at = Carbon::createFromTimestamp(
+            $user->reset_expires_at
+        )->diffForHumans();
+        Flash::addFlash(
+            "warning",
+            "This account is currently locked.<br>Account will unlock {$unlocks_at}."
+        );
         return redirectRoute("sign-in.index");
     }
 
@@ -101,7 +105,9 @@ class Auth
             ]);
             $template = latte("auth/mail/forgot-password.latte", [
                 "name" => $user->name,
-                "link" => config("app.url") . buildRoute('password-reset.index', $user->uuid, $token),
+                "link" =>
+                    config("app.url") .
+                    buildRoute("password-reset.index", $user->uuid, $token),
                 "project" => config("app.name"),
             ]);
             smtp()->send(

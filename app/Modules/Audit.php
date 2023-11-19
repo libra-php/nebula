@@ -24,10 +24,7 @@ class Audit extends Module
             "audit.old_value" => null,
             "audit.new_value" => null,
         ];
-        $this->where = [
-            ["old_value IS NOT NULL"],
-            ["new_value IS NOT NULL"],
-        ];
+        $this->where = [["old_value IS NOT NULL"], ["new_value IS NOT NULL"]];
         $this->table_format = [
             "diff" => fn($row, $column) => $this->formatDiff($row),
         ];
@@ -61,18 +58,24 @@ class Audit extends Module
 
     public function formatDiff($audit): string
     {
-        return $this->htmlDiff($audit->old_value ?? 'NULL', $audit->new_value ?? 'NULL');
+        return $this->htmlDiff(
+            $audit->old_value ?? "NULL",
+            $audit->new_value ?? "NULL"
+        );
     }
 
     private function diff(mixed $old, mixed $new)
     {
-        $matrix = array();
+        $matrix = [];
         $maxlen = 0;
         foreach ($old as $oindex => $ovalue) {
             $nkeys = array_keys($new, $ovalue);
             foreach ($nkeys as $nindex) {
-                $matrix[$oindex][$nindex] = isset($matrix[$oindex - 1][$nindex - 1]) ?
-                    $matrix[$oindex - 1][$nindex - 1] + 1 : 1;
+                $matrix[$oindex][$nindex] = isset(
+                    $matrix[$oindex - 1][$nindex - 1]
+                )
+                    ? $matrix[$oindex - 1][$nindex - 1] + 1
+                    : 1;
                 if ($matrix[$oindex][$nindex] > $maxlen) {
                     $maxlen = $matrix[$oindex][$nindex];
                     $omax = $oindex + 1 - $maxlen;
@@ -80,30 +83,55 @@ class Audit extends Module
                 }
             }
         }
-        if ($maxlen == 0) return array(array('d' => $old, 'i' => $new));
+        if ($maxlen == 0) {
+            return [["d" => $old, "i" => $new]];
+        }
         return array_merge(
-            $this->diff(array_slice($old, 0, $omax), array_slice($new, 0, $nmax)),
+            $this->diff(
+                array_slice($old, 0, $omax),
+                array_slice($new, 0, $nmax)
+            ),
             array_slice($new, $nmax, $maxlen),
-            $this->diff(array_slice($old, $omax + $maxlen), array_slice($new, $nmax + $maxlen))
+            $this->diff(
+                array_slice($old, $omax + $maxlen),
+                array_slice($new, $nmax + $maxlen)
+            )
         );
     }
 
     private function htmlDiff(string $old, string $new): string
     {
-        if (trim($old) === '') $old = "(empty string)";
-        if (trim($new) === '') $new = "(empty string)";
+        if (trim($old) === "") {
+            $old = "(empty string)";
+        }
+        if (trim($new) === "") {
+            $new = "(empty string)";
+        }
         $ret = '<div class="d-flex">';
-        $diff = $this->diff(preg_split("/[\s]+/", $old), preg_split("/[\s]+/", $new));
+        $diff = $this->diff(
+            preg_split("/[\s]+/", $old),
+            preg_split("/[\s]+/", $new)
+        );
         foreach ($diff as $k) {
-            if (is_array($k))
-                $ret .= (!empty($k['d']) ? "<div title='Removed' class='audit-old truncate'>" . implode(' ', $k['d']) . "</div> " : '') .
-                    (!empty($k['i']) ? "<div title='Added' class='audit-new truncate'>" . implode(' ', $k['i']) . "</div> " : '');
-            else $ret .= $k . ' ';
+            if (is_array($k)) {
+                $ret .=
+                    (!empty($k["d"])
+                        ? "<div title='Removed' class='audit-old truncate'>" .
+                            implode(" ", $k["d"]) .
+                            "</div> "
+                        : "") .
+                    (!empty($k["i"])
+                        ? "<div title='Added' class='audit-new truncate'>" .
+                            implode(" ", $k["i"]) .
+                            "</div> "
+                        : "");
+            } else {
+                $ret .= $k . " ";
+            }
         }
         $ret .= "</div>";
         return $ret;
     }
-
 
     protected function hasRowActionPermission(string $name, string $id): bool
     {

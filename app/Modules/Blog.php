@@ -23,9 +23,7 @@ class Blog extends Module
             "Draft" => "status = 'Draft'",
             "Published" => "status = 'Published'",
         ];
-        $this->search = [
-            "title",
-        ];
+        $this->search = ["title"];
         $this->filter_datetime = "created_at";
         $this->joins = ["INNER JOIN users ON posts.user_id = users.id"];
 
@@ -55,18 +53,18 @@ class Blog extends Module
             "content" => "editor",
         ];
         $this->select_options = [
-            "user_id" => db()->selectAll("SELECT id, name
+            "user_id" => db()->selectAll(
+                "SELECT id, name
                 FROM users
-                WHERE id = ?", user()->id),
+                WHERE id = ?",
+                user()->id
+            ),
             "status" => [
                 option("Draft", "Draft"),
                 option("Published", "Published"),
-            ]
+            ],
         ];
-        $this->addRowAction(
-            "preview_post",
-            "Preview",
-        );
+        $this->addRowAction("preview_post", "Preview");
 
         parent::__construct("blog");
     }
@@ -79,7 +77,7 @@ class Blog extends Module
             if ($post) {
                 $route = buildRoute("blog.preview", $post->id);
                 redirect($route);
-                exit;
+                exit();
             }
         }
     }

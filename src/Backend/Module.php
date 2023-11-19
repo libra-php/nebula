@@ -569,10 +569,10 @@ class Module
             "warning",
             "Oops! The requested module could not be found"
         );
-        $is_part = $partial ? 'content' : null;
+        $is_part = $partial ? "content" : null;
         $response = $this->response(
             404,
-            latte($this->getCustomIndex(), $this->getIndexData(),  $is_part)
+            latte($this->getCustomIndex(), $this->getIndexData(), $is_part)
         );
         echo $response->send();
         exit();
@@ -584,10 +584,10 @@ class Module
     public function permissionDenied($partial = false): never
     {
         Flash::addFlash("error", "Permission denied");
-        $is_part = $partial ? 'content' : null;
+        $is_part = $partial ? "content" : null;
         $response = $this->response(
             403,
-            latte($this->getCustomIndex(), $this->getIndexData(),  $is_part)
+            latte($this->getCustomIndex(), $this->getIndexData(), $is_part)
         );
         echo $response->send();
         exit();
@@ -599,10 +599,10 @@ class Module
     public function fatalError($partial = false): never
     {
         Flash::addFlash("error", "Fatal error");
-        $is_part = $partial ? 'content' : null;
+        $is_part = $partial ? "content" : null;
         $response = $this->response(
             200,
-            latte($this->getCustomIndex(), $this->getIndexData(),  $is_part)
+            latte($this->getCustomIndex(), $this->getIndexData(), $is_part)
         );
         echo $response->send();
         exit();
@@ -735,12 +735,14 @@ class Module
         // Deal with "null" string
         array_walk(
             $data,
-            fn (&$value, $key) => ($value =
-                is_string($value) && strtolower($value) === "null" ? null : $value)
+            fn(&$value, $key) => ($value =
+                is_string($value) && strtolower($value) === "null"
+                    ? null
+                    : $value)
         );
         return array_filter(
             $data,
-            fn ($value, $key) => $key != "csrf_token" &&
+            fn($value, $key) => $key != "csrf_token" &&
                 !in_array($this->form_controls[$key], $filtered_controls),
             ARRAY_FILTER_USE_BOTH
         );
@@ -812,8 +814,8 @@ class Module
      */
     function convert($size): string
     {
-        $units = array('b', 'kb', 'mb', 'gb', 'tb', 'pb');
-        $value = round($size / pow(1024, ($i = floor(log($size, 1024)))), 2);
+        $units = ["b", "kb", "mb", "gb", "tb", "pb"];
+        $value = round($size / pow(1024, $i = floor(log($size, 1024))), 2);
         $unit = $units[$i];
         return sprintf("%s%s", $value, $unit);
     }
@@ -832,7 +834,7 @@ class Module
         $memory_total = $this->convert($memory);
         foreach (["Slow DB:" => db()->trace_counts] as $title => $traces) {
             if ($traces) {
-                uasort($traces, fn ($a, $b) => $b["time"] <=> $a["time"]);
+                uasort($traces, fn($a, $b) => $b["time"] <=> $a["time"]);
                 $i = 0;
 
                 foreach ($traces as $key => $value) {
@@ -841,10 +843,8 @@ class Module
                         break;
                     }
                     $pct =
-                        number_format(
-                            ($value["time"] / $db_total) * 100,
-                            2
-                        ) . "%";
+                        number_format(($value["time"] / $db_total) * 100, 2) .
+                        "%";
                     $slow_traces[] = [
                         "file" => $key,
                         "count" => $value["count"],
@@ -881,14 +881,14 @@ class Module
         ) {
             return moduleRoute($route_name, $module_name, $id);
         };
-        $gravatar = fn (string $str) => md5(strtolower(trim($str)));
+        $gravatar = fn(string $str) => md5(strtolower(trim($str)));
         $singular = function (string $str) {
             return substr($str, -1) === "s" ? rtrim($str, "s") : $str;
         };
-        $request = fn (string $column) => request()->has($column)
+        $request = fn(string $column) => request()->has($column)
             ? request()->$column
             : "";
-        $session = fn (string $column) => session()->has($column)
+        $session = fn(string $column) => session()->has($column)
             ? session()->get($column)
             : "";
         return [
@@ -1047,23 +1047,29 @@ class Module
             $idx++;
         }
         // Finally, columns with null values shouldn't be rendered
-        return array_filter($filtered_table_columns, fn($value) => !is_null($value));
+        return array_filter(
+            $filtered_table_columns,
+            fn($value) => !is_null($value)
+        );
     }
 
     /**
      * Apply a format function for a table value
      */
-    protected function tableFormat(array &$data):  void
+    protected function tableFormat(array &$data): void
     {
         foreach ($data as &$datum) {
             foreach ($datum as $column => $value) {
                 $tf = new TableFormat();
                 if (isset($this->table_format[$column])) {
                     if (is_callable($this->table_format[$column])) {
-                        $datum[$column] = $this->table_format[$column]((object)$datum, $column);
+                        $datum[$column] = $this->table_format[$column](
+                            (object) $datum,
+                            $column
+                        );
                         continue;
                     }
-                    $datum[$column] = match($this->table_format[$column]) {
+                    $datum[$column] = match ($this->table_format[$column]) {
                         "dollar" => $tf->dollar($column, $value),
                         default => $tf->text($column, $value),
                     };
@@ -1082,14 +1088,16 @@ class Module
     {
         $this->processTableRequest();
         $data = $this->tableData();
-        if (!empty($data)) $this->tableFormat($data);
+        if (!empty($data)) {
+            $this->tableFormat($data);
+        }
 
-        $has_delete_permission = fn (string $id) => $this->hasDeletePermission(
+        $has_delete_permission = fn(string $id) => $this->hasDeletePermission(
             $id
         );
-        $has_edit_permission = fn (string $id) => $this->hasEditPermission($id);
-        $has_create_permission = fn () => $this->hasCreatePermission();
-        $has_row_action_permission = fn (
+        $has_edit_permission = fn(string $id) => $this->hasEditPermission($id);
+        $has_create_permission = fn() => $this->hasCreatePermission();
+        $has_row_action_permission = fn(
             string $name,
             string $id
         ) => $this->hasRowActionPermission($name, $id);
@@ -1107,7 +1115,7 @@ class Module
                     moduleRoute("module.index.part", $this->module_name) .
                     "'",
                 "hx-target='#module'",
-                "hx-trigger='change'",
+                "hx-trigger='change'"
             );
             return $control;
         };
@@ -1199,8 +1207,8 @@ class Module
         $data = null;
         $data = !is_null($qb)
             ? db()
-            ->run($qb->build(), $qb->values())
-            ->fetch()
+                ->run($qb->build(), $qb->values())
+                ->fetch()
             : [];
         if (!$data) {
             $this->moduleNotFound();
@@ -1213,7 +1221,11 @@ class Module
                 "module.index.part",
                 $this->module_name
             ),
-            "Edit ({$name})" => moduleRoute("module.edit.part", $this->module_name, $id),
+            "Edit ({$name})" => moduleRoute(
+                "module.edit.part",
+                $this->module_name,
+                $id
+            ),
         ];
 
         return [
@@ -1238,8 +1250,8 @@ class Module
         }
         $template =
             !is_null($this->table_name) && trim($this->table_name) != ""
-            ? $this->getIndexTemplate()
-            : $this->getCustomIndex();
+                ? $this->getIndexTemplate()
+                : $this->getCustomIndex();
         return latte($template, $this->getIndexData());
     }
 
@@ -1250,8 +1262,8 @@ class Module
         }
         $template =
             !is_null($this->table_name) && trim($this->table_name) != ""
-            ? $this->getIndexTemplate()
-            : $this->getCustomIndex();
+                ? $this->getIndexTemplate()
+                : $this->getCustomIndex();
         return latte($template, $this->getIndexData(), "content");
     }
 

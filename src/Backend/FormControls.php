@@ -57,7 +57,7 @@ class FormControls
             $name,
             $name,
             $attrs,
-            htmlspecialchars($value ?? ""),
+            htmlspecialchars($value ?? "")
         );
     }
 
@@ -112,7 +112,7 @@ class FormControls
         array $options,
         ...$attrs
     ): string {
-        $null_title = preg_match("/filter_select/", $name) ? 'All' : 'None';
+        $null_title = preg_match("/filter_select/", $name) ? "All" : "None";
         $null = [(object) ["id" => "NULL", "name" => $null_title]];
         return $this->select($name, $value, [...$null, ...$options], ...$attrs);
     }
@@ -208,7 +208,7 @@ class FormControls
             $name,
             $value,
             "datetime-local",
-            "form-control",
+            "form-control"
         );
         return $datetime;
     }

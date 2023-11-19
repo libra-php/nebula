@@ -20,7 +20,10 @@ class ModuleController extends Controller
     {
         // Check if backend is in maintenance mode
         if (config("backend.maintenance_mode")) {
-            Flash::addFlash("warning", "Maintenance mode. Please check back soon.");
+            Flash::addFlash(
+                "warning",
+                "Maintenance mode. Please check back soon."
+            );
             redirectRoute("sign-in.index");
         }
         // Using the route params to determine the module, or 404
@@ -57,7 +60,7 @@ class ModuleController extends Controller
         try {
             $module_class = new $class();
         } catch (\Throwable $th) {
-            if (config('app.debug')) {
+            if (config("app.debug")) {
                 Flash::addFlash("info", $th->getMessage());
             }
             return null;

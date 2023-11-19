@@ -67,9 +67,7 @@ final class TwoFactorRegisterController extends Controller
                 ],
             ])
         ) {
-            if (
-                Auth::validateCode($this->user, request()->code)
-            ) {
+            if (Auth::validateCode($this->user, request()->code)) {
                 session()->set("register_two_fa", false);
                 return Auth::signIn($this->user);
             } else {
