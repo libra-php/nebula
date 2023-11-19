@@ -28,7 +28,11 @@
   padding: 6px;
 }
 .form-row .label {
+  max-width: 140px !important;
   color: #555;
+}
+.form-row .control {
+  width: 100%;
 }
 .form-row .control-color {
   width: 42px !important;
