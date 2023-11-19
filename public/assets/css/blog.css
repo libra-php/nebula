@@ -7,8 +7,8 @@
   font-family: 'Merriweather', serif;
   line-height: 1.75rem;
 }
-#post .info {
-  font-size: 0.7rem;
+#post #info {
+  font-size: 0.9rem;
 }
 #post p img {
   width: auto;

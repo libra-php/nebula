@@ -20,6 +20,7 @@ class BlogController extends Controller
 	public function show(string $year, string $month, string $slug): string
 	{
 		$post = Post::search(
+			["status", "Published"],
 			["YEAR(published_at)", "<=", $year],
 			["MONTH(published_at)", "<=", $month],
 			["slug", $slug]

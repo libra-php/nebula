@@ -19,11 +19,20 @@ class Blog extends Module
             "posts.updated_at" => "Updated At",
             "posts.created_at" => "Created At",
         ];
+        $this->filter_links = [
+            "Draft" => "status = 'Draft'",
+            "Published" => "status = 'Published'",
+        ];
+        $this->search = [
+            "title",
+        ];
         $this->filter_datetime = "created_at";
         $this->joins = ["INNER JOIN users ON posts.user_id = users.id"];
 
         $this->form_columns = [
+            "banner_image" => "Banner Image",
             "user_id" => "Author",
+            "status" => "Status",
             "published_at" => "Publish Date",
             "slug" => "Slug",
             "title" => "Title",
@@ -33,9 +42,12 @@ class Blog extends Module
         $this->validation = [
             "title" => ["required"],
             "user_id" => ["required"],
+            "slug" => ["required"],
         ];
         $this->form_controls = [
+            "banner_image" => "image",
             "user_id" => "select",
+            "status" => "select",
             "slug" => "input",
             "published_at" => "datetime",
             "title" => "input",
@@ -43,7 +55,13 @@ class Blog extends Module
             "content" => "editor",
         ];
         $this->select_options = [
-            "user_id" => db()->selectAll("SELECT id, name FROM users ORDER BY name"),
+            "user_id" => db()->selectAll("SELECT id, name
+                FROM users
+                WHERE id = ?", user()->id),
+            "status" => [
+                option("Draft", "Draft"),
+                option("Published", "Published"),
+            ]
         ];
         $this->addRowAction(
             "preview_post",

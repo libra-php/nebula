@@ -31,7 +31,7 @@
   color: #555;
   padding-top: 2px;
   max-width: 150px;
-  width: 150px;
+  width: 150px !important;
 }
 .form-row .control {
 }
@@ -43,6 +43,7 @@
   height: 300px;
 }
 .form-row .control-image {
+  max-width: 100%;
 }
 .form-row .file-button {
   font-size: 1.1rem !important;
