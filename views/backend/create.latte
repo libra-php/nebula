@@ -10,7 +10,10 @@
 			{foreach $form['columns'] as $column => $title}
 				<tr class="form-row">
 					<td class="label truncate text-end align-top">
-						<strong class="form-label truncate" title="{$title}">{$title}</strong>
+						<strong class="form-label truncate" title="{$title}">
+							{$title}
+							{if $column in $form['required']}<span class="text-danger">*</span>{/if}
+						</strong>
 					</td>
 					<td class="control ps-2">
 						{$controls($column, '')|noescape}
@@ -30,6 +33,9 @@
 			</tbody>
 		</table>
 	</form>
+	<div class="my-2 text-secondary" n:if="$form['required']">
+		<small><span class="text-danger">*</span> indicates a required field</small>
+	</div>
 </section>
 {include 'profiler.latte'}
 <script>

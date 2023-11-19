@@ -1191,9 +1191,15 @@ class Module
             "controls" => $fc,
             "form" => [
                 "data" => [],
+                "required" => $this->getRequiredForm(),
                 "columns" => $this->form_columns,
             ],
         ];
+    }
+
+    protected function getRequiredForm()
+    {
+        return array_keys(array_filter($this->validation, fn($rules) => in_array('required', $rules)));
     }
 
     /**
@@ -1227,7 +1233,6 @@ class Module
                 $id
             ),
         ];
-
         return [
             ...$this->commonData(),
             "title_name" => $data[$this->name_col] ?? $id,
@@ -1236,6 +1241,7 @@ class Module
             "controls" => $fc,
             "form" => [
                 "data" => $data,
+                "required" => $this->getRequiredForm(),
                 "columns" => $this->form_columns,
             ],
         ];
