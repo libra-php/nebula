@@ -1,7 +1,7 @@
 {layout "../layout/module.latte"}
 
 {block content}
-<section id="create">
+<section id="create" class="p-2">
 	{include parent}
 	<form method="POST" hx-encoding="multipart/form-data">
 	{csrf()|noescape}
@@ -29,5 +29,9 @@
 	</form>
 </section>
 {include 'profiler.latte'}
+<script>
+document.title = {$app["name"]} + " " + {$module_title} + " — Create";
+</script>
+<script src="/assets/js/tinymce/tinymce.min.js"></script>
 <script src='/assets/js/form.js'></script>
 {/block}

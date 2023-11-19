@@ -1,0 +1,17 @@
+{layout "../layout/base.latte"}
+
+{block head}
+{include parent}
+<link rel="stylesheet" href="/assets/css/blog.css" defer>
+{/block}
+
+{block body}
+<section id="main">
+	{block content}
+	{/block}
+</section>
+{/block}
+
+{block body_scripts}
+{include parent}
+{/block}

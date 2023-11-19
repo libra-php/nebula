@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controllers\Module;
 
 use App\Models\Module as NebulaModule;
 use Nebula\Alerts\Flash;
@@ -113,7 +113,7 @@ class ModuleController extends Controller
     }
 
     #[Get("/{module}/create/part", "module.create.part", ["push-url"])]
-    public function create_part(string $module): string
+    public function create_part(string $module)
     {
         return $this->module->createPartial();
     }

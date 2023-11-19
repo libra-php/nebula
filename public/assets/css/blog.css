@@ -1,0 +1,19 @@
+/** Blog */
+#post h1.header {
+  font-family: 'Anton', sans-serif;
+  font-size: 3rem;
+}
+#post p {
+  font-family: 'Merriweather', serif;
+  line-height: 1.75rem;
+}
+#post .info {
+  font-size: 0.7rem;
+}
+#post p img {
+  width: auto;
+  padding: 10px;
+  border-radius: 6px;
+  clear: both;
+}
+

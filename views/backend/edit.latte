@@ -1,9 +1,9 @@
 {layout "../layout/module.latte"}
 
 {block content}
-<section id="edit">
+<section id="edit" class="p-2">
 	{include parent}
-	<form method="POST" hx-encoding="multipart/form-data">
+	<form method="POST" hx-encoding="multipart/form-data" onSubmit="tinymce.triggerSave()">
 	{csrf()|noescape}
 	{foreach $form['columns'] as $column => $title}
 		<div class="container-fluid d-flex form-row w-100">
@@ -29,6 +29,10 @@
 	</form>
 </section>
 {include 'profiler.latte'}
+<script>
+document.title = {$app["name"]} + " " + {$module_title} + " — Edit (" + {$title_name} + ")";
+</script>
+<script src="/assets/js/tinymce/tinymce.min.js"></script>
 <script src='/assets/js/form.js'></script>
 {/block}
 

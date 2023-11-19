@@ -6,7 +6,7 @@
   {include "../backend/sidebar.latte"}
   <section id="module" class="p-2">
   {block content}
-    <nav aria-label="breadcrumb">
+    <nav aria-label="breadcrumb" id="breadrumbs">
       <ol class="breadcrumb" hx-boost="true">
         {foreach $breadcrumbs as $title => $link}
         <li class="breadcrumb-item" {if $title === 'Home'}data-module='home' onClick="handleSidebarActive(event)"{/if}><a hx-target="#module" href="{$link}">{$title}</a></li>

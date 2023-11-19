@@ -11,7 +11,7 @@ class Model implements NebulaModel
 {
     use ProtectedData;
 
-    public string $table_name;
+    public string $table;
     public string $primary_key;
     public array $table_columns;
     protected array $guarded = ["id", "created_at", "updated_at"];
@@ -26,8 +26,8 @@ class Model implements NebulaModel
         // Get the static class (e.g. User)
         $class = app()->get(static::class);
         // Table name and primary key should be defined, otherwise throw error
-        if (!property_exists($class, "table_name")) {
-            throw new \Error("table_name must be defined for " . static::class);
+        if (!property_exists($class, "table")) {
+            throw new \Error("table must be defined for " . static::class);
         }
         if (!property_exists($class, "primary_key")) {
             throw new \Error(
@@ -45,7 +45,7 @@ class Model implements NebulaModel
     {
         if (!isset($this->table_columns)) {
             $this->table_columns = db()
-                ->query("DESCRIBE $this->table_name")
+                ->query("DESCRIBE $this->table")
                 ->fetchAll(PDO::FETCH_COLUMN);
         }
         return $this->table_columns;
@@ -69,7 +69,7 @@ class Model implements NebulaModel
     {
         $model = self::staticClass();
         // Build the sql query
-        $qb = QueryBuilder::select($model->table_name)
+        $qb = QueryBuilder::select($model->table)
             ->columns($model->getTableColumns())
             ->where(...$args);
         // Select one item from the db
@@ -106,7 +106,7 @@ class Model implements NebulaModel
     {
         // A new model will not have data, so we
         // will fill it in with table columns
-        $table_columns = $this->getTableColumns($this->table_name);
+        $table_columns = $this->getTableColumns($this->table);
         $diff_columns = array_diff($table_columns, $this->guarded);
         $update_columns = [];
         foreach ($diff_columns as $column) {
@@ -145,8 +145,8 @@ class Model implements NebulaModel
     public function insert(array $data, $ignore = false): mixed
     {
         $qb = $ignore
-            ? QueryBuilder::insertIgnore($this->table_name)->columns($data)
-            : QueryBuilder::insert($this->table_name)->columns($data);
+            ? QueryBuilder::insertIgnore($this->table)->columns($data)
+            : QueryBuilder::insert($this->table)->columns($data);
         $result = db()->run($qb->build(), $qb->values());
         if (!$result) {
             return null;
@@ -165,7 +165,7 @@ class Model implements NebulaModel
         $model = self::staticClass();
         $model->setup();
         // Note: we use $this->id to refer to the current model
-        $qb = QueryBuilder::update($model->table_name)
+        $qb = QueryBuilder::update($model->table)
             ->columns($data)
             ->where([$model->primary_key, "=", $this->id]);
         $result = db()->run($qb->build(), $qb->values());
@@ -179,7 +179,7 @@ class Model implements NebulaModel
     {
         $model = self::staticClass();
         $model->setup();
-        $qb = QueryBuilder::delete($model->table_name)->where([
+        $qb = QueryBuilder::delete($model->table)->where([
             $model->primary_key,
             $this->id,
         ]);

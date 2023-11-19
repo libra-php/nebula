@@ -1,7 +1,7 @@
 {layout "../layout/module.latte"}
 
 {block content}
-<section id="table">
+<section id="table" class="p-2">
 	{include parent}
 	<div id="actions" class="my-4">
 		<a n:if="$table['create'] && $has_create_permission()" class="btn btn-success" href="{$route('module.create.part')}" hx-target="#module" hx-boost="true" title="Create new record">Create</a>
@@ -125,7 +125,7 @@
 								{elseif $column === $key_col}
 									<td title="{$title}"><span class="text-secondary">{$datum[$column]}</span></td>
 								{else}
-									<td title="{$title}">{$datum[$column]}</td>
+									<td title="{$title}">{$datum[$column]|noescape}</td>
 								{/if}
 							{/foreach}
 							<td>
@@ -194,4 +194,7 @@
 		</section>
 	</section>
 </section>
+<script>
+document.title = {$app["name"]} + " " + {$module_title};
+</script>
 {/block}

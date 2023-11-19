@@ -2,7 +2,7 @@
 
 namespace Nebula\Backend;
 
-use App\Models\Module as NebulaModule;
+use App\Models\Module as ModuleModel;
 use Nebula\Alerts\Flash;
 use Nebula\Database\QueryBuilder;
 use Nebula\Traits\Http\Response;
@@ -62,7 +62,7 @@ class Module
         ".svg",
         ".ico",
     ];
-    /** Controls **/
+    /** Controls */
     protected array $form_controls = [];
     protected array $select_options = [];
     /** Table */
@@ -71,6 +71,8 @@ class Module
     protected array $table_columns = [];
     protected array $table_data = [];
     protected bool $expand_filters = false;
+    /** Format */
+    protected array $table_format = [];
     // Columns that are searchable
     protected array $search = [];
     // Search term
@@ -104,7 +106,7 @@ class Module
 
     public function __construct(protected string $module_name)
     {
-        $module = NebulaModule::search(["module_name", $module_name]);
+        $module = ModuleModel::search(["module_name", $module_name]);
         $this->table_name = $module->module_table ?? "";
         $this->module_title = $module->module_title ?? "Unknown";
         $this->module_icon = $module->module_icon ?? "package";
@@ -537,7 +539,7 @@ class Module
      */
     protected function hasEditPermission(string $id): bool
     {
-        return $this->table_edit;
+        return $this->table_edit && !empty($this->form_columns);
     }
 
     /**
@@ -546,7 +548,7 @@ class Module
      */
     protected function hasCreatePermission(): bool
     {
-        return $this->table_create;
+        return $this->table_create && !empty($this->form_columns);
     }
 
     /**
@@ -856,9 +858,9 @@ class Module
             "show_profiler" => config("database.show_profiler"),
             "global_start" => $_SERVER["REQUEST_TIME_FLOAT"],
             "total_memory" => $memory_total,
-            "total_time" => number_format($total,6),
-            "db_total_time" => number_format($db_total,6),
-            "php_total_time" => number_format($php_total,6),
+            "total_time" => number_format($total, 6),
+            "db_total_time" => number_format($db_total, 6),
+            "php_total_time" => number_format($php_total, 6),
             "db_num_queries" => db()->num_queries ?? 0,
             "slow_traces" => $slow_traces ?? [],
         ];
@@ -916,48 +918,49 @@ class Module
      */
     protected function formControls(?string $id = null): \Closure
     {
-        $controls = function ($name, $value, ...$args) use ($id) {
+        $controls = function ($column, $value, ...$args) use ($id) {
             $fc = new FormControls($id);
-            if (!isset($this->form_controls[$name])) {
-                return $fc->plain($name, $value);
+            if (!isset($this->form_controls[$column])) {
+                return $fc->plain($column, $value);
             }
-            if (is_callable($this->form_controls[$name])) {
-                return $this->form_controls[$name]($name, $value, ...$args);
+            if (is_callable($this->form_controls[$column])) {
+                return $this->form_controls[$column]($column, $value, ...$args);
             }
-            return match ($this->form_controls[$name]) {
-                "input" => $fc->input($name, $value, "text"),
-                "textarea" => $fc->textarea($name, $value),
+            return match ($this->form_controls[$column]) {
+                "input" => $fc->input($column, $value, "text"),
+                "textarea" => $fc->textarea($column, $value),
+                "editor" => $fc->editor($column, $value),
                 "disabled" => $fc->input(
-                    $name,
+                    $column,
                     $value,
                     "text",
                     attrs: "disabled=true"
                 ),
                 "readonly" => $fc->input(
-                    $name,
+                    $column,
                     $value,
                     "text",
                     attrs: "readonly"
                 ),
-                "plain" => $fc->plain($name, $value),
+                "plain" => $fc->plain($column, $value),
                 "select" => $fc->select(
-                    $name,
+                    $column,
                     $value,
-                    isset($this->select_options[$name])
-                        ? $this->select_options[$name]
+                    isset($this->select_options[$column])
+                        ? $this->select_options[$column]
                         : []
                 ),
                 "nselect" => $fc->nselect(
-                    $name,
+                    $column,
                     $value,
-                    isset($this->select_options[$name])
-                        ? $this->select_options[$name]
+                    isset($this->select_options[$column])
+                        ? $this->select_options[$column]
                         : []
                 ),
-                "number" => $fc->input($name, $value, "number"),
-                "color" => $fc->input($name, $value, "color"),
+                "number" => $fc->input($column, $value, "number"),
+                "color" => $fc->input($column, $value, "color"),
                 "upload" => $fc->file(
-                    $name,
+                    $column,
                     $value,
                     sprintf(
                         'accept="%s"',
@@ -965,16 +968,17 @@ class Module
                     )
                 ),
                 "image" => $fc->image(
-                    $name,
+                    $column,
                     $value,
                     sprintf(
                         'accept="%s"',
                         implode(", ", $this->image_extensions)
                     )
                 ),
-                "checkbox" => $fc->checkbox($name, $value ?? 0),
-                "switch" => $fc->switch($name, $value ?? 0),
-                default => $fc->plain($name, $value),
+                "checkbox" => $fc->checkbox($column, $value ?? 0),
+                "switch" => $fc->switch($column, $value ?? 0),
+                "datetime" => $fc->datetime($column, $value),
+                default => $fc->plain($column, $value),
             };
         };
         return $controls;
@@ -1042,7 +1046,32 @@ class Module
             $filtered_table_columns[$filtered[$idx]] = $value;
             $idx++;
         }
-        return $filtered_table_columns;
+        // Finally, columns with null values shouldn't be rendered
+        return array_filter($filtered_table_columns, fn($value) => !is_null($value));
+    }
+
+    /**
+     * Apply a format function for a table value
+     */
+    protected function tableFormat(array &$data):  void
+    {
+        foreach ($data as &$datum) {
+            foreach ($datum as $column => $value) {
+                $tf = new TableFormat();
+                if (isset($this->table_format[$column])) {
+                    if (is_callable($this->table_format[$column])) {
+                        $datum[$column] = $this->table_format[$column]((object)$datum, $column);
+                        continue;
+                    }
+                    $datum[$column] = match($this->table_format[$column]) {
+                        "dollar" => $tf->dollar($column, $value),
+                        default => $tf->text($column, $value),
+                    };
+                } else {
+                    $datum[$column] = $tf->text($column, $value);
+                }
+            }
+        }
     }
 
     /**
@@ -1053,6 +1082,7 @@ class Module
     {
         $this->processTableRequest();
         $data = $this->tableData();
+        if (!empty($data)) $this->tableFormat($data);
 
         $has_delete_permission = fn (string $id) => $this->hasDeletePermission(
             $id
@@ -1176,17 +1206,19 @@ class Module
             $this->moduleNotFound();
         }
         $fc = $this->formControls($id);
+        $name = $data[$this->name_col] ?? $id;
         $breadcrumbs = [
             "Home" => moduleRoute("module.index.part", "home"),
             $this->module_title => moduleRoute(
                 "module.index.part",
                 $this->module_name
             ),
-            "Edit" => moduleRoute("module.edit.part", $this->module_name, $id),
+            "Edit ({$name})" => moduleRoute("module.edit.part", $this->module_name, $id),
         ];
 
         return [
             ...$this->commonData(),
+            "title_name" => $data[$this->name_col] ?? $id,
             "breadcrumbs" => $breadcrumbs,
             "id" => $id,
             "controls" => $fc,

@@ -41,11 +41,23 @@ class FormControls
     {
         $attrs = implode(" ", $attrs);
         return sprintf(
-            '<textarea type="text" class="form-control control-textarea w-100" id="%s" name="%s" placeholder="..." %s>%s</textarea>',
+            '<textarea class="form-control control-textarea w-100" id="%s" name="%s" placeholder="..." %s>%s</textarea>',
             $name,
             $name,
             $attrs,
             htmlspecialchars($value ?? "")
+        );
+    }
+
+    public function editor(string $name, ?string $value, ...$attrs): string
+    {
+        $attrs = implode(" ", $attrs);
+        return sprintf(
+            '<textarea class="form-control control-editor w-100" id="editor-%s" name="%s" %s>%s</textarea>',
+            $name,
+            $name,
+            $attrs,
+            htmlspecialchars($value ?? ""),
         );
     }
 
@@ -188,6 +200,17 @@ class FormControls
             "<div class='form-check form-switch'>%s</div>",
             $hidden . $checkbox
         );
+    }
+
+    public function datetime(string $name, ?string $value): string
+    {
+        $datetime = $this->input(
+            $name,
+            $value,
+            "datetime-local",
+            "form-control",
+        );
+        return $datetime;
     }
 
     public function range(string $name, ?string $value): string

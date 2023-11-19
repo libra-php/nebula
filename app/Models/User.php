@@ -6,7 +6,7 @@ use Nebula\Model\Model;
 
 final class User extends Model
 {
-    public string $table_name = "users";
+    public string $table = "users";
     public string $primary_key = "id";
 
     // Columns won't be inserted/updated
@@ -16,7 +16,7 @@ final class User extends Model
     {
     }
 
-    public function type()
+    public function type(): mixed
     {
         return db()->select(
             "SELECT * FROM user_types WHERE id = ?",

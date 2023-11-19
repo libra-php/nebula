@@ -2,6 +2,7 @@
 
 namespace App\Modules;
 
+use App\Models\Audit as AuditModel;
 use Nebula\Alerts\Flash;
 use Nebula\Backend\Module;
 
@@ -17,11 +18,18 @@ class Audit extends Module
             "audit.table_name" => "Table",
             "audit.table_id" => "ID",
             "audit.field" => "Field",
-            "ifnull(audit.old_value, 'NULL') as old_value" => "Old",
-            "'🠮' as sep" => "",
-            "ifnull(audit.new_value, 'NULL') as new_value" => "New",
+            "audit.id as diff" => "Diff",
             "audit.message" => "Message",
             "audit.created_at" => "Created At",
+            "audit.old_value" => null,
+            "audit.new_value" => null,
+        ];
+        $this->where = [
+            ["old_value IS NOT NULL"],
+            ["new_value IS NOT NULL"],
+        ];
+        $this->table_format = [
+            "diff" => fn($row, $column) => $this->formatDiff($row),
         ];
         $this->joins = ["INNER JOIN users ON audit.user_id = users.id"];
         $this->search = ["table_name", "table_id", "field", "name"];
@@ -51,13 +59,56 @@ class Audit extends Module
         parent::__construct("audit");
     }
 
+    public function formatDiff($audit): string
+    {
+        return $this->htmlDiff($audit->old_value ?? 'NULL', $audit->new_value ?? 'NULL');
+    }
+
+    private function diff(mixed $old, mixed $new)
+    {
+        $matrix = array();
+        $maxlen = 0;
+        foreach ($old as $oindex => $ovalue) {
+            $nkeys = array_keys($new, $ovalue);
+            foreach ($nkeys as $nindex) {
+                $matrix[$oindex][$nindex] = isset($matrix[$oindex - 1][$nindex - 1]) ?
+                    $matrix[$oindex - 1][$nindex - 1] + 1 : 1;
+                if ($matrix[$oindex][$nindex] > $maxlen) {
+                    $maxlen = $matrix[$oindex][$nindex];
+                    $omax = $oindex + 1 - $maxlen;
+                    $nmax = $nindex + 1 - $maxlen;
+                }
+            }
+        }
+        if ($maxlen == 0) return array(array('d' => $old, 'i' => $new));
+        return array_merge(
+            $this->diff(array_slice($old, 0, $omax), array_slice($new, 0, $nmax)),
+            array_slice($new, $nmax, $maxlen),
+            $this->diff(array_slice($old, $omax + $maxlen), array_slice($new, $nmax + $maxlen))
+        );
+    }
+
+    private function htmlDiff(string $old, string $new): string
+    {
+        if (trim($old) === '') $old = "(empty string)";
+        if (trim($new) === '') $new = "(empty string)";
+        $ret = '<div class="d-flex">';
+        $diff = $this->diff(preg_split("/[\s]+/", $old), preg_split("/[\s]+/", $new));
+        foreach ($diff as $k) {
+            if (is_array($k))
+                $ret .= (!empty($k['d']) ? "<div title='Removed' class='audit-old truncate'>" . implode(' ', $k['d']) . "</div> " : '') .
+                    (!empty($k['i']) ? "<div title='Added' class='audit-new truncate'>" . implode(' ', $k['i']) . "</div> " : '');
+            else $ret .= $k . ' ';
+        }
+        $ret .= "</div>";
+        return $ret;
+    }
+
+
     protected function hasRowActionPermission(string $name, string $id): bool
     {
-        $row = db()->select(
-            "SELECT * FROM $this->table_name WHERE $this->key_col = ?",
-            $id
-        );
-        if (in_array($row->message, ["UPDATE", "UNDO"])) {
+        $audit = AuditModel::find($id);
+        if (in_array($audit->message, ["UPDATE", "UNDO"])) {
             return true;
         }
         return false;
@@ -67,20 +118,20 @@ class Audit extends Module
     {
         parent::processTableRequest();
         if (request()->has("undo_change")) {
-            $audit_row = db()->select("SELECT * FROM audit WHERE id = ?", request()->id);
+            $audit = AuditModel::find(request()->id);
             $result = db()->query(
-                "UPDATE $audit_row->table_name SET $audit_row->field = ? WHERE id = ?",
-                $audit_row->old_value,
-                $audit_row->table_id
+                "UPDATE $audit->table_name SET $audit->field = ? WHERE id = ?",
+                $audit->old_value,
+                $audit->table_id
             );
             if ($result) {
                 Flash::addFlash("success", "Old value restored successfully");
                 $this->audit(
                     user()->id,
-                    $audit_row->table_name,
-                    $audit_row->table_id,
-                    $audit_row->field,
-                    $audit_row->old_value,
+                    $audit->table_name,
+                    $audit->table_id,
+                    $audit->field,
+                    $audit->old_value,
                     "UNDO"
                 );
             } else {
