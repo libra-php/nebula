@@ -1092,7 +1092,7 @@ class Module
     /**
      * Returns an array of all form_columns that are required
      */
-    protected function getRequiredForm()
+    protected function getRequiredForm(): array
     {
         return array_keys(array_filter($this->validation, fn ($rules) => in_array('required', $rules)));
     }
