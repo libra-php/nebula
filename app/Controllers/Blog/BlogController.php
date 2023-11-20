@@ -39,7 +39,7 @@ class BlogController extends Controller
         return latte("blog/not-found.latte");
     }
 
-    #[Get("/{year}/{month}/{slug}/part", "blog.show.part")]
+    #[Get("/{year}/{month}/{slug}/part", "blog.show.part", ["push-url"])]
     public function show_part(string $year, string $month, string $slug): string
     {
         $post = Post::search(

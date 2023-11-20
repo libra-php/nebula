@@ -1,12 +1,12 @@
 {layout "../layout/base.latte"}
 
-{block title}{include parent} - Two Factor Authentication{/block}
+{block title}{include parent} - Two-Factor Authentication{/block}
 
 {block body}
 <section id="auth-two-factor-register" class="form-auth d-flex justify-content-center">
   <form hx-post="{route('two-factor-register.post')}" hx-boost="true" hx-target="#body">
     {csrf()|noescape}
-    <h1 class="h3 mb-3 fw-normal text-center">Two factor authentication</h1>
+    <h1 class="h3 mb-3 fw-normal text-center">Two-factor authentication</h1>
     <div class="d-flex justify-content-center p-2">
       <img src="{$url}" alt="QR code" title="QR Code">
     </div>

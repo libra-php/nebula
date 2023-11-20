@@ -8,7 +8,7 @@
 			<div n:if="$post->bannerLink()" class="" style="width: 100%; height: 100%; background-position: center; background-size: cover; background-image: url('{$post->bannerLink()}')"></div>
 		</div>
 		<div class="card-body" hx-boost="true">
-			<a href="{$post->showPartLink()}" hx-target="#blog" hx-select="#post" hx-swap="outerHTML" hx-push-url="true" hx-replace-url="{$post->showLink()}"><h3 class="card-title">{$post->title}</h3></a>
+			<a href="{$post->showPartLink()}" hx-target="#blog" hx-select="#post" hx-swap="outerHTML"><h3 class="card-title">{$post->title}</h3></a>
 			<h5 class="card-subtitle mb-2">{$post->subtitle}</h5>
 			<small>
 			<div class="text-muted">Published At: {$post->publishedAt()}</div>
