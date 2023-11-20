@@ -53,6 +53,9 @@ class Blog extends Module
             "subtitle" => "input",
             "content" => "editor",
         ];
+        $this->form_defaults = [
+            "published_at" => date("Y-m-d H:i:s"),
+        ];
         $this->select_options = [
             "user_id" => db()->selectAll(
                 "SELECT id, name

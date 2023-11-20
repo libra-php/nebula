@@ -28,6 +28,7 @@ class Module
     protected bool $edit_view = true;
     protected bool $create_view = true;
     protected array $form_columns = [];
+    protected array $form_defaults = [];
     protected array $form_data = [];
     protected array $file_extensions = [
         ".txt",
@@ -876,6 +877,9 @@ class Module
      */
     public function commonData(): array
     {
+        $buildRoute = function(string $name, ...$replacements) {
+            return buildRoute($name, ...$replacements);
+        };
         $route = function (string $route_name, ?string $id = null) {
             return moduleRoute($route_name, $this->module_name, $id);
         };
@@ -904,6 +908,7 @@ class Module
             "gravatar" => $gravatar,
             "route" => $route,
             "moduleRoute" => $moduleRoute,
+            "buildRoute" => $buildRoute,
             "route_name" => request()->route->getName(),
             "module_icon" => $this->module_icon,
             "module_name" => $this->module_name,
@@ -1208,6 +1213,7 @@ class Module
             "controls" => $fc,
             "form" => [
                 "data" => [],
+                "defaults" => $this->form_defaults,
                 "required" => $this->getRequiredForm(),
                 "columns" => $this->form_columns,
             ],
