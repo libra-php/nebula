@@ -28,6 +28,9 @@
 							<button type="button" class="btn btn-primary" hx-post="{$route('module.update', $id)}" hx-target="#module" title="Update record" hx-disabled-elt="this">Update</button>
 							<a class="btn btn-secondary ms-1" href="{$route('module.index.part')}" hx-target="#module" hx-boost="true" title="Cancel">Cancel</a>
 						</div>
+						<div class="my-2 text-secondary" n:if="$form['required']">
+							<small><span class="text-danger">*</span> required field</small>
+						</div>
 					</td>
 				</tr>
 			</tbody>

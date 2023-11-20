@@ -999,7 +999,7 @@ class Module
         }
         if ($limit) {
             $this->limit = $limit;
-            $this->offset = 1;
+            $this->offset = 0;
         }
         $qb = $this->getIndexQuery();
         $stmt = db()->run($qb->build(), $qb->values());

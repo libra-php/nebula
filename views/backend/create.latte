@@ -22,20 +22,22 @@
 				</tr>
 			{/foreach}
 				<tr>
-					<td></td>
+					<td>
+
+					</td>
 					<td>
 						<div class="p-2 d-flex">
 							<button type="button" class="btn btn-success" hx-post="{$route('module.store')}" hx-target="#module" title="Save record" hx-disabled-elt="this">Save</button>
 							<a class="btn btn-secondary ms-1" href="{$route('module.index.part')}" hx-target="#module" hx-boost="true" title="Cancel">Cancel</a>
+						</div>
+						<div class="my-2 text-secondary" n:if="$form['required']">
+							<small><span class="text-danger">*</span> required field</small>
 						</div>
 					</td>
 				</tr>
 			</tbody>
 		</table>
 	</form>
-	<div class="my-2 text-secondary" n:if="$form['required']">
-		<small><span class="text-danger">*</span> indicates a required field</small>
-	</div>
 </section>
 {include 'profiler.latte'}
 <script>
