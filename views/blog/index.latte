@@ -3,7 +3,10 @@
 {block content}
 <section id="blog" class="container">
 	{foreach $posts as $post}
-	<div class="card">
+	<div class="card mb-2 rounded-3"> <div class="d-flex justify-content-center align-items-center">
+		<div class="d-flex" style="width: 142px; height: 142px; min-width: 130px;">
+			<div n:if="$post->bannerLink()" class="" style="width: 100%; height: 100%; background-position: center; background-size: cover; background-image: url('{$post->bannerLink()}')"></div>
+		</div>
 		<div class="card-body" hx-boost="true">
 			<a href="{$post->showPartLink()}" hx-target="#blog" hx-select="#post" hx-swap="outerHTML" hx-push-url="true" hx-replace-url="{$post->showLink()}"><h3 class="card-title">{$post->title}</h3></a>
 			<h5 class="card-subtitle mb-2">{$post->subtitle}</h5>
@@ -11,6 +14,7 @@
 			<div class="text-muted">Published At: {$post->publishedAt()}</div>
 			<div class="text-muted">{$post->calculateReadTime()} min read</div>
 			</small>
+		</div>
 		</div>
 	</div>
 	{/foreach}
