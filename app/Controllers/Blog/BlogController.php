@@ -10,6 +10,26 @@ use StellarRouter\{Get, Group};
 #[Group(prefix: "/blog")]
 class BlogController extends Controller
 {
+    /**
+    * Calculates approximate read time
+    */
+    function calculateReadTime($content, $wordsPerMinute = 200)
+    {
+        // Remove HTML tags (if any)
+        $cleanContent = strip_tags($content);
+
+        // Count the number of words in the content
+        $wordCount = str_word_count($cleanContent);
+
+        // Calculate read time in minutes
+        $readTimeMinutes = $wordCount / $wordsPerMinute;
+
+        // Round up to the nearest minute
+        $readTimeMinutes = round($readTimeMinutes);
+
+        return $readTimeMinutes;
+    }
+
     private function getBannerImage(?string $banner_image): ?string
     {
         if (!$banner_image) {
@@ -43,6 +63,7 @@ class BlogController extends Controller
             if (date("Y-m-d H:i:s") >= $post->published_at) {
                 return latte("blog/show.latte", [
                     "post" => $post,
+                    "read_time" => $this->calculateReadTime($post->content),
                     "banner_image" => $this->getBannerImage(
                         $post->banner_image
                     ),
@@ -64,6 +85,7 @@ class BlogController extends Controller
             header("HX-Push-Url: $uri");
             return latte("blog/preview.latte", [
                 "post" => $post,
+                "read_time" => $this->calculateReadTime($post->content),
                 "banner_image" => $this->getBannerImage($post->banner_image),
                 "published_at" => Carbon::createFromDate(
                     $post->published_at

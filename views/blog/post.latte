@@ -10,7 +10,8 @@
 </div>
 <div id="info" class="my-3 container">
 	<span id="publish-date">Published: {$published_at}</span><br />
-	<span id="author">Author: {$post->author()->name}</span>
+	<span id="author">Author: {$post->author()->name}</span><br />
+	<span id="read-time">{$read_time} min read</span>
 </div>
 <div id="content" class="container">
 	{$post->content|noescape}
