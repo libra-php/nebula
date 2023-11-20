@@ -310,8 +310,8 @@ class Module
             $idx = request()->filter_count;
             if (isset($this->filter_links[$idx])) {
                 $this->where[] = [$this->filter_links[$idx]];
-                $count = $this->getTotalResults();
-                echo json($count);
+                $count = $this->getTotalResults(1001);
+                echo $count > 1000 ? '+1000' : $count;
             }
             exit();
         }
@@ -992,10 +992,14 @@ class Module
     /**
      * Get the total number of results from the index query
      */
-    protected function getTotalResults(): int
+    protected function getTotalResults(?int $limit = null): int
     {
         if (empty($this->table_columns)) {
             return 0;
+        }
+        if ($limit) {
+            $this->limit = $limit;
+            $this->offset = 1;
         }
         $qb = $this->getIndexQuery();
         $stmt = db()->run($qb->build(), $qb->values());

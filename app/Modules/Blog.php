@@ -40,6 +40,7 @@ class Blog extends Module
         $this->validation = [
             "title" => ["required"],
             "user_id" => ["required"],
+            "published_at" => ["required"],
             "slug" => ["required"],
         ];
         $this->form_controls = [
