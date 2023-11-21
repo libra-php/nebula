@@ -10,9 +10,9 @@
 			{foreach $form['columns'] as $column => $title}
 				<tr class="form-row">
 					<td class="label truncate text-end align-top">
-						<strong class="form-label truncate" title="{$title}">
+						<strong class="form-label" title="{$title}">
 							{$title}
-							{if $column in $form['required']}<span class="text-danger">*</span>{/if}
+							{if $column in $form['required']}<span class="text-danger"><small>*</small></span>{/if}
 						</strong>
 					</td>
 					<td class="control ps-2">
