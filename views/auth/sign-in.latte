@@ -6,7 +6,7 @@
 <section id="auth-sign-in" class="form-auth d-flex justify-content-center">
   <form hx-post="{route('sign-in.post')}" hx-boost="true" hx-target="#body">
     {csrf()|noescape}
-    <h1 class="h3 mb-3 fw-normal text-center">Please sign in</h1>
+    <h1 class="h3 mb-3 fw-normal text-center">Please Sign In</h1>
     <div n:if="$has_flash" class="my-2">
         {getFlashMessages()|noescape}
     </div>
