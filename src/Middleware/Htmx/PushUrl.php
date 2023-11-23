@@ -1,13 +1,15 @@
 <?php
 
-namespace Nebula\Middleware\Http;
+namespace Nebula\Middleware\Htmx;
 
 use Nebula\Interfaces\Http\{Response, Request};
 use Nebula\Interfaces\Middleware\Middleware;
 use Closure;
 
 /**
- * This middleware pushes url history via HX-Push-Url
+ * HTMX Response Middleware
+ * pushes a new url into the history stack
+ * HX-Push-Url https://htmx.org/docs
  *
  * @package Nebula\Middleware\Http
  */
@@ -31,16 +33,5 @@ class PushUrl implements Middleware
         }
 
         return $response;
-    }
-
-    private function moduleRoute(string $module, ?string $id = null): string
-    {
-        if (!is_null($id)) {
-            $route_path = route("module.edit");
-            $route_path = str_replace("{id}", $id, $route_path);
-        } else {
-            $route_path = route("module.index");
-        }
-        return str_replace("{module}", $module, $route_path);
     }
 }
