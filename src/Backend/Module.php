@@ -215,7 +215,7 @@ class Module
             $this->limit = 10_000;
             $this->page = 1;
             while ($this->page <= $this->total_pages) {
-                $data = $this->tableData();
+                $data = $this->getTableData();
                 foreach ($data as $item) {
                     fputcsv($fp, $item);
                 }
@@ -1014,7 +1014,7 @@ class Module
     /**
      * Returns an array of data used for the table view
      */
-    protected function tableData(): array|bool
+    protected function getTableData(): array|bool
     {
         if (is_null($this->table_name) || empty($this->table_columns)) {
             return false;
@@ -1109,7 +1109,7 @@ class Module
     protected function getIndexData(): array
     {
         $this->processTableRequest();
-        $data = $this->tableData();
+        $data = $this->getTableData();
         if (!empty($data)) {
             $this->tableFormat($data);
         }
