@@ -17,8 +17,10 @@ return new class implements Migration
                 ('home', 'App\\\\Modules\\\\Home', null, 'Home', 'home', 3),
                 ('audit', 'App\\\\Modules\\\\Audit', 'audit', 'Audit', 'flag', 1),
                 ('modules', 'App\\\\Modules\\\\Modules', 'modules', 'Modules', 'cpu', 1),
+                ('blog', 'App\\\\Modules\\\\Blog', 'posts', 'Blog', 'feather', 1),
                 ('sessions', 'App\\\\Modules\\\\Sessions', 'sessions', 'Sessions', 'activity', 2),
-                ('users', 'App\\\\Modules\\\\Users', 'users', 'Users', 'users', 2)");
+                ('users', 'App\\\\Modules\\\\Users', 'users', 'Users', 'users', 2)
+                ");
     }
 
     public function down(): string
