@@ -877,7 +877,7 @@ class Module
      */
     public function commonData(): array
     {
-        $buildRoute = function(string $name, ...$replacements) {
+        $buildRoute = function (string $name, ...$replacements) {
             return buildRoute($name, ...$replacements);
         };
         $route = function (string $route_name, ?string $id = null) {
