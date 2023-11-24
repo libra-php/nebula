@@ -13,9 +13,8 @@ if (typeof checkboxes === 'undefined') {
 
 // WYSIWYG editor
 tinymce.init({
-  plugins: 'powerpaste casechange searchreplace autolink directionality visualblocks visualchars image link media mediaembed codesample table charmap pagebreak nonbreaking anchor tableofcontents insertdatetime advlist lists checklist wordcount tinymcespellchecker editimage help formatpainter permanentpen charmap linkchecker emoticons advtable export autosave advcode code fullscreen',
+  plugins: 'searchreplace autolink directionality visualblocks visualchars image link media codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap emoticons autosave code fullscreen',
   toolbar: 'undo redo print spellcheckdialog formatpainter | blocks fontfamily fontsize | bold italic underline forecolor backcolor | link image | alignleft aligncenter alignright alignjustify | code',
-  advcode_inline: true,
   autosave_interval: '3s',
   height: "800px",
   setup: function(editor) {
