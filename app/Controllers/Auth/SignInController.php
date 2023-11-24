@@ -22,7 +22,7 @@ final class SignInController extends Controller
         ]);
     }
 
-    #[Get("/sign-in/part", "sign-in.part", ["push-url=/admin/sign-in"])]
+    #[Get("/sign-in/part", "sign-in.part", ["push-url"])]
     public function part(): string
     {
         return latte(

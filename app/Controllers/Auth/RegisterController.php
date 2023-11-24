@@ -26,7 +26,7 @@ final class RegisterController extends Controller
         ]);
     }
 
-    #[Get("/register/part", "register.part", ["push-url=/register"])]
+    #[Get("/register/part", "register.part", ["push-url"])]
     public function part(): string
     {
         return latte(

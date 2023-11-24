@@ -23,23 +23,13 @@ final class TwoFactorAuthenticationController extends Controller
         $this->user = $user;
     }
 
-    #[
-        Get("/two-factor-authentication", "two-factor-authentication.index", [
-            "push-url",
-        ])
-    ]
+    #[Get("/two-factor-authentication", "two-factor-authentication.index", ["push-url"])]
     public function index(): string
     {
         return latte("auth/two-factor-authentication.latte");
     }
 
-    #[
-        Get(
-            "/two-factor-authentication/part",
-            "two-factor-authentication.part",
-            ["push-url=/admin/two-factor-authentication"]
-        )
-    ]
+    #[Get("/two-factor-authentication/part", "two-factor-authentication.part", ["push-url"])]
     public function part(): string
     {
         return latte("auth/two-factor-authentication.latte", block: "body");
