@@ -26,7 +26,7 @@ final class PasswordResetController extends Controller
         return $this->response(403, "Invalid token");
     }
 
-    #[Get("/password-reset/{uuid}/{token}/part", "password-reset.part")]
+    #[Get("/password-reset/{uuid}/{token}/part", "password-reset.part", ["push-url"])]
     public function part($uuid, $token): string
     {
         $user = User::search(["uuid", $uuid], ["reset_token", $token]);
