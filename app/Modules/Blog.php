@@ -68,14 +68,13 @@ class Blog extends Module
                 option("Published", "Published"),
             ],
         ];
-        $this->addRowAction("preview_post", "Preview");
+        $this->addFormAction("preview_post", "Preview");
 
         parent::__construct("blog");
     }
 
-    protected function processTableRequest(): void
+    private function preview(): void
     {
-        parent::processTableRequest();
         if (request()->has("preview_post")) {
             $post = Post::find(request()->id);
             if ($post) {
@@ -84,5 +83,11 @@ class Blog extends Module
                 exit();
             }
         }
+    }
+
+    protected function processFormRequest(?string $id = null): void
+    {
+        parent::processFormRequest($id);
+        $this->preview();
     }
 }

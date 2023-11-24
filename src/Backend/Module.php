@@ -30,6 +30,7 @@ class Module
     protected array $form_columns = [];
     protected array $form_defaults = [];
     protected array $form_data = [];
+    protected array $form_actions = [];
     protected array $file_extensions = [
         ".txt",
         ".pdf",
@@ -163,13 +164,33 @@ class Module
         $this->handleSession();
     }
 
+    /**
+     * Add a row action to the table
+     */
     protected function addRowAction(
         string $name,
         string $title,
         ?string $confirm = null,
-        string $class = "primary"
+        string $class = "primary",
     ): void {
         $this->row_actions[] = [
+            "name" => $name,
+            "title" => $title,
+            "confirm" => $confirm,
+            "class" => $class,
+        ];
+    }
+
+    /**
+     * Add an action to the form
+     */
+    protected function addFormAction(
+        string $name,
+        string $title,
+        ?string $confirm = null,
+        string $class = "primary",
+    ): void {
+        $this->form_actions[] = [
             "name" => $name,
             "title" => $title,
             "confirm" => $confirm,
@@ -1258,6 +1279,7 @@ class Module
             "id" => $id,
             "controls" => $fc,
             "form" => [
+                "actions" => $this->form_actions,
                 "data" => $data,
                 "required" => $this->getRequiredForm(),
                 "columns" => $this->form_columns,

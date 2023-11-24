@@ -4,7 +4,19 @@
 <section id="edit" class="p-2">
 	{include parent}
 	<form method="POST" hx-encoding="multipart/form-data">
-	{csrf()|noescape}
+		{csrf()|noescape}
+		<div n:if="$form['actions']" class="my-2">
+		{foreach $form['actions'] as $action}
+			<a
+				class="row-action btn btn-sm btn-{$action['class']} ms-1"
+				href="{$route('module.edit', $id)}?{$action['name']}=true&id={$id}"
+				{if $action['confirm']}hx-confirm="{$action['confirm']}"{/if}
+				title="{$action['title']}"
+				hx-target="#module">
+				{$action['title']}
+			</a>
+		{/foreach}
+		</div>
 		<table class="w-100">
 			<tbody>
 			{foreach $form['columns'] as $column => $title}
