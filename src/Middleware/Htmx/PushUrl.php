@@ -27,7 +27,7 @@ class PushUrl implements Middleware
                 $route_name = $request->route->getName();
                 $params = $request->route->getParameters();
                 $uri = buildRoute($route_name, ...$params);
-                $uri = str_replace('/part', '', $uri);
+                $uri = str_replace("/part", "", $uri);
             }
             $response->setHeader("HX-Push-Url", $uri);
         }

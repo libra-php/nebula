@@ -30,15 +30,15 @@ final class Post extends Model
 
     public function showLink(): string
     {
-        $year = date('Y', strtotime($this->published_at));
-        $month = date('m', strtotime($this->published_at));
+        $year = date("Y", strtotime($this->published_at));
+        $month = date("m", strtotime($this->published_at));
         return buildRoute("blog.show", $year, $month, $this->slug);
     }
 
     public function showPartLink(): string
     {
-        $year = date('Y', strtotime($this->published_at));
-        $month = date('m', strtotime($this->published_at));
+        $year = date("Y", strtotime($this->published_at));
+        $month = date("m", strtotime($this->published_at));
         return buildRoute("blog.show.part", $year, $month, $this->slug);
     }
 
@@ -53,8 +53,8 @@ final class Post extends Model
     }
 
     /**
-    * Calculates approximate read time
-    */
+     * Calculates approximate read time
+     */
     public function calculateReadTime(int $wpm = 200): int
     {
         // Remove HTML tags (if any)
@@ -71,5 +71,4 @@ final class Post extends Model
 
         return $readTimeMinutes;
     }
-
 }

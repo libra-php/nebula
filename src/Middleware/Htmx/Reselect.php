@@ -24,14 +24,10 @@ class Reselect implements Middleware
             $index = middlewareIndex($route_middleware, "reselect");
             $uri = str_replace("reselect=", "", $route_middleware[$index]);
             if ($uri !== "reselect") {
-				$response->setHeader("HX-Reselect", $uri);
+                $response->setHeader("HX-Reselect", $uri);
             }
         }
 
         return $response;
     }
 }
-
-
-
-

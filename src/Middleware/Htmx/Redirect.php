@@ -24,11 +24,10 @@ class Redirect implements Middleware
             $index = middlewareIndex($route_middleware, "redirect");
             $uri = str_replace("redirect=", "", $route_middleware[$index]);
             if ($uri !== "redirect") {
-				$response->setHeader("HX-Redirect", $uri);
+                $response->setHeader("HX-Redirect", $uri);
             }
         }
 
         return $response;
     }
 }
-

@@ -20,15 +20,17 @@ class ReplaceUrl implements Middleware
         $response = $next($request);
 
         $route_middleware = $request->route?->getMiddleware();
-        if ($route_middleware && preg_grep("/replace-url/", $route_middleware)) {
+        if (
+            $route_middleware &&
+            preg_grep("/replace-url/", $route_middleware)
+        ) {
             $index = middlewareIndex($route_middleware, "replace-url");
             $uri = str_replace("replace-url=", "", $route_middleware[$index]);
             if ($uri !== "replace-url") {
-				$response->setHeader("HX-Replace-Url", $uri);
+                $response->setHeader("HX-Replace-Url", $uri);
             }
         }
 
         return $response;
     }
 }
-

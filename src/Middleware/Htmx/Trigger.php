@@ -24,15 +24,10 @@ class Trigger implements Middleware
             $index = middlewareIndex($route_middleware, "trigger");
             $uri = str_replace("trigger=", "", $route_middleware[$index]);
             if ($uri !== "trigger") {
-				$response->setHeader("HX-Target", $uri);
+                $response->setHeader("HX-Target", $uri);
             }
         }
 
         return $response;
     }
 }
-
-
-
-
-

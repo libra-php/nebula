@@ -9,7 +9,6 @@ use StellarRouter\{Get, Group};
 #[Group(prefix: "/blog")]
 class BlogController extends Controller
 {
-
     #[Get("/", "blog.index")]
     public function index(): string
     {

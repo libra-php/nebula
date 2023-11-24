@@ -24,13 +24,10 @@ class Retarget implements Middleware
             $index = middlewareIndex($route_middleware, "retarget");
             $uri = str_replace("retarget=", "", $route_middleware[$index]);
             if ($uri !== "retarget") {
-				$response->setHeader("HX-Retarget", $uri);
+                $response->setHeader("HX-Retarget", $uri);
             }
         }
 
         return $response;
     }
 }
-
-
-

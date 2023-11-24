@@ -171,7 +171,7 @@ class Module
         string $name,
         string $title,
         ?string $confirm = null,
-        string $class = "primary",
+        string $class = "primary"
     ): void {
         $this->row_actions[] = [
             "name" => $name,
@@ -188,7 +188,7 @@ class Module
         string $name,
         string $title,
         ?string $confirm = null,
-        string $class = "primary",
+        string $class = "primary"
     ): void {
         $this->form_actions[] = [
             "name" => $name,
@@ -333,7 +333,7 @@ class Module
             if (isset($this->filter_links[$idx])) {
                 $this->where[] = [$this->filter_links[$idx]];
                 $count = $this->getTotalResults(1001);
-                echo $count > 1000 ? '+1000' : $count;
+                echo $count > 1000 ? "+1000" : $count;
             }
             exit();
         }
@@ -755,22 +755,29 @@ class Module
         $filtered_controls = ["upload", "image"];
         $data = request()->data();
         // Only columns defined in form_columns are valid
-        $data = array_filter($data, function ($value, $key) {
-            $table_columns = $this->tableAlias($this->form_columns);
-            $columns = array_keys($table_columns);
-            return in_array($key, $columns);
-        }, ARRAY_FILTER_USE_BOTH);
+        $data = array_filter(
+            $data,
+            function ($value, $key) {
+                $table_columns = $this->tableAlias($this->form_columns);
+                $columns = array_keys($table_columns);
+                return in_array($key, $columns);
+            },
+            ARRAY_FILTER_USE_BOTH
+        );
         // Deal with "null" string
         array_walk(
             $data,
-            fn (&$value, $key) => ($value =
+            fn(&$value, $key) => ($value =
                 is_string($value) && strtolower($value) === "null"
-                ? null
-                : $value)
+                    ? null
+                    : $value)
         );
         return array_filter(
             $data,
-            fn ($key) => !in_array($this->form_controls[$key], $filtered_controls),
+            fn($key) => !in_array(
+                $this->form_controls[$key],
+                $filtered_controls
+            ),
             ARRAY_FILTER_USE_KEY
         );
     }
@@ -861,7 +868,7 @@ class Module
         $memory_total = $this->convert($memory);
         foreach (["Slow DB:" => db()->trace_counts] as $title => $traces) {
             if ($traces) {
-                uasort($traces, fn ($a, $b) => $b["time"] <=> $a["time"]);
+                uasort($traces, fn($a, $b) => $b["time"] <=> $a["time"]);
                 $i = 0;
 
                 foreach ($traces as $key => $value) {
@@ -898,7 +905,7 @@ class Module
      */
     public function commonData(): array
     {
-        $buildRoute = function(string $name, ...$replacements) {
+        $buildRoute = function (string $name, ...$replacements) {
             return buildRoute($name, ...$replacements);
         };
         $route = function (string $route_name, ?string $id = null) {
@@ -911,14 +918,14 @@ class Module
         ) {
             return moduleRoute($route_name, $module_name, $id);
         };
-        $gravatar = fn (string $str) => md5(strtolower(trim($str)));
+        $gravatar = fn(string $str) => md5(strtolower(trim($str)));
         $singular = function (string $str) {
             return substr($str, -1) === "s" ? rtrim($str, "s") : $str;
         };
-        $request = fn (string $column) => request()->has($column)
+        $request = fn(string $column) => request()->has($column)
             ? request()->$column
             : "";
-        $session = fn (string $column) => session()->has($column)
+        $session = fn(string $column) => session()->has($column)
             ? session()->get($column)
             : "";
         return [
@@ -1084,7 +1091,7 @@ class Module
         // Finally, columns with null values shouldn't be rendered
         return array_filter(
             $filtered_table_columns,
-            fn ($value) => !is_null($value)
+            fn($value) => !is_null($value)
         );
     }
 
@@ -1120,7 +1127,12 @@ class Module
      */
     protected function getRequiredForm(): array
     {
-        return array_keys(array_filter($this->validation, fn ($rules) => in_array('required', $rules)));
+        return array_keys(
+            array_filter(
+                $this->validation,
+                fn($rules) => in_array("required", $rules)
+            )
+        );
     }
 
     /**
@@ -1135,12 +1147,12 @@ class Module
             $this->tableFormat($data);
         }
 
-        $has_delete_permission = fn (string $id) => $this->hasDeletePermission(
+        $has_delete_permission = fn(string $id) => $this->hasDeletePermission(
             $id
         );
-        $has_edit_permission = fn (string $id) => $this->hasEditPermission($id);
-        $has_create_permission = fn () => $this->hasCreatePermission();
-        $has_row_action_permission = fn (
+        $has_edit_permission = fn(string $id) => $this->hasEditPermission($id);
+        $has_create_permission = fn() => $this->hasCreatePermission();
+        $has_row_action_permission = fn(
             string $name,
             string $id
         ) => $this->hasRowActionPermission($name, $id);
@@ -1252,8 +1264,8 @@ class Module
         $data = null;
         $data = !is_null($qb)
             ? db()
-            ->run($qb->build(), $qb->values())
-            ->fetch()
+                ->run($qb->build(), $qb->values())
+                ->fetch()
             : [];
         if (!$data) {
             $this->moduleNotFound();
@@ -1296,8 +1308,8 @@ class Module
         }
         $template =
             !is_null($this->table_name) && trim($this->table_name) != ""
-            ? $this->getIndexTemplate()
-            : $this->getCustomIndex();
+                ? $this->getIndexTemplate()
+                : $this->getCustomIndex();
         return latte($template, $this->getIndexData());
     }
 
@@ -1308,8 +1320,8 @@ class Module
         }
         $template =
             !is_null($this->table_name) && trim($this->table_name) != ""
-            ? $this->getIndexTemplate()
-            : $this->getCustomIndex();
+                ? $this->getIndexTemplate()
+                : $this->getCustomIndex();
         return latte($template, $this->getIndexData(), "content");
     }
 

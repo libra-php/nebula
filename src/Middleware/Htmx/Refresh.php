@@ -21,10 +21,9 @@ class Refresh implements Middleware
 
         $route_middleware = $request->route?->getMiddleware();
         if ($route_middleware && preg_grep("/refresh/", $route_middleware)) {
-			$response->setHeader("HX-Refresh", "true");
+            $response->setHeader("HX-Refresh", "true");
         }
 
         return $response;
     }
 }
-

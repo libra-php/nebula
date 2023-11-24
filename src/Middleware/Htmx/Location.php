@@ -24,7 +24,7 @@ class Location implements Middleware
             $index = middlewareIndex($route_middleware, "location");
             $uri = str_replace("location=", "", $route_middleware[$index]);
             if ($uri !== "location") {
-				$response->setHeader("HX-Location", $uri);
+                $response->setHeader("HX-Location", $uri);
             }
         }
 

@@ -24,12 +24,10 @@ class Reswap implements Middleware
             $index = middlewareIndex($route_middleware, "reswap");
             $uri = str_replace("reswap=", "", $route_middleware[$index]);
             if ($uri !== "reswap") {
-				$response->setHeader("HX-Reswap", $uri);
+                $response->setHeader("HX-Reswap", $uri);
             }
         }
 
         return $response;
     }
 }
-
-

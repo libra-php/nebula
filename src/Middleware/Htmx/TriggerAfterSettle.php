@@ -20,20 +20,21 @@ class TriggerAfterSettle implements Middleware
         $response = $next($request);
 
         $route_middleware = $request->route?->getMiddleware();
-        if ($route_middleware && preg_grep("/trigger-after-settle/", $route_middleware)) {
+        if (
+            $route_middleware &&
+            preg_grep("/trigger-after-settle/", $route_middleware)
+        ) {
             $index = middlewareIndex($route_middleware, "trigger-after-settle");
-            $uri = str_replace("trigger-after-settle=", "", $route_middleware[$index]);
+            $uri = str_replace(
+                "trigger-after-settle=",
+                "",
+                $route_middleware[$index]
+            );
             if ($uri !== "trigger-after-settle") {
-				$response->setHeader("HX-Target-After-Settle", $uri);
+                $response->setHeader("HX-Target-After-Settle", $uri);
             }
         }
 
         return $response;
     }
 }
-
-
-
-
-
-

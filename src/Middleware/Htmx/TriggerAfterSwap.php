@@ -20,21 +20,21 @@ class TriggerAfterSwap implements Middleware
         $response = $next($request);
 
         $route_middleware = $request->route?->getMiddleware();
-        if ($route_middleware && preg_grep("/trigger-after-swap/", $route_middleware)) {
+        if (
+            $route_middleware &&
+            preg_grep("/trigger-after-swap/", $route_middleware)
+        ) {
             $index = middlewareIndex($route_middleware, "trigger-after-swap");
-            $uri = str_replace("trigger-after-swap=", "", $route_middleware[$index]);
+            $uri = str_replace(
+                "trigger-after-swap=",
+                "",
+                $route_middleware[$index]
+            );
             if ($uri !== "trigger-after-swap") {
-				$response->setHeader("HX-Target-After-Swap", $uri);
+                $response->setHeader("HX-Target-After-Swap", $uri);
             }
         }
 
         return $response;
     }
 }
-
-
-
-
-
-
-
