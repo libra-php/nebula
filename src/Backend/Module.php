@@ -582,7 +582,7 @@ class Module
     /**
      * Return permission denied response
      */
-    public function permissionDenied($partial = false): never
+    public function permissionDenied(bool $partial = false): never
     {
         Flash::addFlash("error", "Permission denied");
         $is_part = $partial ? "content" : null;
@@ -597,7 +597,7 @@ class Module
     /**
      * Return fatal error response
      */
-    public function fatalError($partial = false): never
+    public function fatalError(bool $partial = false): never
     {
         Flash::addFlash("error", "Fatal error");
         $is_part = $partial ? "content" : null;
