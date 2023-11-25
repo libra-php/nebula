@@ -19,8 +19,7 @@ return new class implements Migration
                 ('modules', 'App\\\\Modules\\\\Modules', 'modules', 'Modules', 'bi bi-box', 1),
                 ('blog', 'App\\\\Modules\\\\Blog', 'posts', 'Blog', 'bi bi-feather', 2),
                 ('sessions', 'App\\\\Modules\\\\Sessions', 'sessions', 'Sessions', 'bi bi-flag', 2),
-                ('home', 'App\\\\Modules\\\\Home', null, 'Home', 'bi bi-house', 3),
-                ");
+                ('home', 'App\\\\Modules\\\\Home', null, 'Home', 'bi bi-house', 3) ");
     }
 
     public function down(): string
