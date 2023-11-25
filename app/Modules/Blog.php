@@ -69,7 +69,7 @@ class Blog extends Module
                 option("Published", "Published"),
             ],
         ];
-        $this->addFormAction("preview_post", "Preview");
+        $this->addFormAction("preview_post", "<i class='bi bi-eye me-1'></i> Preview");
 
         parent::__construct("blog");
     }

@@ -4,14 +4,12 @@
 <section id="table" class="p-2">
 	{include parent}
 	{include "table-actions.latte"}
-	<section id="module-table-cont">
-		{include "filter-accordion.latte"}
-		{include "filter-links.latte"}
-		<section id="module-table">
-			{include 'table.latte'}
-			{include 'pagination.latte'}
-			{include 'profiler.latte'}
-		</section>
+	{include "filter-accordion.latte"}
+	{include "filter-links.latte"}
+	<section id="module-table">
+		{include 'table.latte'}
+		{include 'pagination.latte'}
+		{include 'profiler.latte'}
 	</section>
 </section>
 {/block}

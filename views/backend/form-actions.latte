@@ -6,7 +6,7 @@
 			{if $action['confirm']}hx-confirm="{$action['confirm']}"{/if}
 			title="{$action['title']}"
 			hx-target="#module">
-			{$action['title']}
+			{$action['title']|noescape}
 		</a>
 	{/foreach}
 </div>

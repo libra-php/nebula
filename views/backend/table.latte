@@ -45,15 +45,15 @@
 								{if $action['confirm']}hx-confirm="{$action['confirm']}"{/if}
 								title="{$action['title']}"
 								hx-target="#module">
-								{$action['title']}
+								{$action['title']|noescape}
 							</a>
 						{/foreach}
 						<a n:if="$table['edit'] && $has_edit_permission($datum[$key_col])" class="row-action btn btn-sm btn-outline-primary ms-1" href="{$route('module.edit.part', $datum[$key_col])}"
-							hx-target="#module" title="Edit record">Edit</a>
+							hx-target="#module" title="Edit record"><i class="bi bi-pencil me-1" /> Edit</a>
 						<a n:if="$table['destroy'] && $has_delete_permission($datum[$key_col])" class="row-action btn btn-sm btn-outline-danger ms-1" hx-delete="{$route('module.destroy', $datum[$key_col])}"
 							hx-target="#module"
 							hx-confirm="Are you sure you want to delete this record? This action cannot be undone."
-							title="Delete record">Delete</a>
+							title="Delete record"><i class="bi bi-trash me-1" /> Delete</a>
 					</div>
 				</td>
 			</tr>

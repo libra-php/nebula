@@ -14,12 +14,12 @@ return new class implements Migration
             // 2: admin
             // 3: standard
             return Schema::raw("INSERT INTO modules (module_name, class_name, module_table, module_title, module_icon, user_type) VALUES
-                ('users', 'App\\\\Modules\\\\Users', 'users', 'Users', 'users', 1),
-                ('audit', 'App\\\\Modules\\\\Audit', 'audit', 'Audit', 'flag', 1),
-                ('modules', 'App\\\\Modules\\\\Modules', 'modules', 'Modules', 'cpu', 1),
-                ('blog', 'App\\\\Modules\\\\Blog', 'posts', 'Blog', 'feather', 2),
-                ('sessions', 'App\\\\Modules\\\\Sessions', 'sessions', 'Sessions', 'activity', 2),
-                ('home', 'App\\\\Modules\\\\Home', null, 'Home', 'home', 3),
+                ('users', 'App\\\\Modules\\\\Users', 'users', 'Users', 'bi bi-people', 1),
+                ('audit', 'App\\\\Modules\\\\Audit', 'audit', 'Audit', 'bi bi-clipboard-check', 1),
+                ('modules', 'App\\\\Modules\\\\Modules', 'modules', 'Modules', 'bi bi-box', 1),
+                ('blog', 'App\\\\Modules\\\\Blog', 'posts', 'Blog', 'bi bi-feather', 2),
+                ('sessions', 'App\\\\Modules\\\\Sessions', 'sessions', 'Sessions', 'bi bi-flag', 2),
+                ('home', 'App\\\\Modules\\\\Home', null, 'Home', 'bi bi-house', 3),
                 ");
     }
 

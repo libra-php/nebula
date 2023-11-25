@@ -1240,6 +1240,11 @@ class Module
             ),
             "Create" => moduleRoute("module.create.part", $this->module_name),
         ];
+        // Remember request values
+        $columns = $this->getFilteredFormColumns();
+        foreach ($columns as $column => $value) {
+            $this->form_defaults[$column] = $value;
+        }
         return [
             ...$this->commonData(),
             "breadcrumbs" => $breadcrumbs,

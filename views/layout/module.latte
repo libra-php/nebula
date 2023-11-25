@@ -6,15 +6,9 @@
   {include "../backend/sidebar.latte"}
   <section id="module" class="p-2">
   {block content}
-    <nav aria-label="breadcrumb" id="breadrumbs">
-      <ol class="breadcrumb" hx-boost="true">
-        {foreach $breadcrumbs as $title => $link}
-        <li class="breadcrumb-item" {if $title === 'Home'}data-module='home'{/if}><a hx-target="#module" href="{$link}">{$title}</a></li>
-        {/foreach}
-      </ol>
-    </nav>
+    {include "breadcrumbs.latte"}
     <div class="module-title">
-      <h1>{$module_title}</h1>
+      <h1><i class="{$module_icon} me-1" /> {$module_title}</h1>
     </div>
     <div class="alerts" n:if="$has_flash">
       {getFlashMessages()|noescape}

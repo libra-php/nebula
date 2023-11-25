@@ -1,6 +1,6 @@
 <div n:if="$has_filter_links" class="d-flex my-1">
 	{foreach $filter_links as $title => $clause}
-		<a hx-boost="true" href="{$route('module.index.part')}?filter_link={$title|escapeUrl}" hx-target="#module-table-ocnt" hx-select="#module-table-cont" title="Filter on {$title}">
+		<a hx-boost="true" href="{$route('module.index')}?filter_link={$title|escapeUrl}" hx-target="#module" hx-select="#module" hx-swap="outerHTML" title="Filter on {$title}">
 			<span class="badge filter-link pill me-1 {if $filter_link == $title}active{/if}">{$title}
 				[<span class="count">?</span>]
 			</span>

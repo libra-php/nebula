@@ -36,6 +36,8 @@
         "phpmailer/phpmailer": "^6.8",
         "predis/predis": "^2.2",
         "sonata-project/google-authenticator": "^2.3",
+        "tinymce/tinymce": "^6.8",
+        "twbs/bootstrap-icons": "^1.11",
         "twig/twig": "^3.0",
         "vlucas/phpdotenv": "^5.5"
     },
