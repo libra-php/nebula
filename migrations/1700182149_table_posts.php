@@ -13,13 +13,13 @@ return new class implements Migration
         return Schema::create("posts", function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger("user_id");
-            $table->enum("status", ["Draft", "Published"])->default("'Draft'");
+            $table->enum("status", ["Draft", "Published", "Archived"])->default("'Draft'");
             $table->varchar("slug");
             $table->varchar("title");
             $table->varchar("subtitle")->nullable();
-            $table->text("content");
+            $table->text("content")->nullable();
             $table->mediumText("banner_image")->nullable();
-            $table->dateTime("published_at");
+            $table->dateTime("published_at")->nullable();
             $table->timestamps();
             $table->primaryKey("id");
             $table->foreignKey("user_id")

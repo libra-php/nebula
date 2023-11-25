@@ -40,7 +40,6 @@ class Blog extends Module
         $this->validation = [
             "title" => ["required"],
             "user_id" => ["required"],
-            "published_at" => ["required"],
             "slug" => ["required"],
         ];
         $this->form_controls = [
@@ -55,6 +54,7 @@ class Blog extends Module
         ];
         $this->form_defaults = [
             "published_at" => date("Y-m-d H:i:s"),
+            "status" => "Draft",
         ];
         $this->select_options = [
             "user_id" => db()->selectAll(
@@ -64,6 +64,7 @@ class Blog extends Module
                 user()->id
             ),
             "status" => [
+                option("Archived", "Archived"),
                 option("Draft", "Draft"),
                 option("Published", "Published"),
             ],

@@ -20,6 +20,7 @@ class Users extends Module
             "name" => "Name",
             "email" => "Email",
         ];
+        $this->search = ["uuid", "name", "email"];
 
         $this->validation = [
             "name" => ["required"],

@@ -267,6 +267,9 @@
 #sidebar .nav-pills li.nav-item a {
   color: #aaa !important;
 }
+#sidebar .nav-pills li.nav-item a:hover {
+  color: aliceblue !important;
+}
 #sidebar li.nav-item a.dropdown-item svg {
   width: 18px;
   height: 18px;

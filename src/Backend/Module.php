@@ -585,7 +585,7 @@ class Module
     /**
      * Return module not found response
      */
-    public function moduleNotFound($partial = false): never
+    public function moduleNotFound(bool $partial = false): never
     {
         Flash::addFlash(
             "warning",
@@ -1381,6 +1381,8 @@ class Module
             if ($result) {
                 $this->auditColumns($columns, $id, "INSERT");
                 Flash::addFlash("success", "Record created successfully");
+                // Redirect to edit
+                return $this->editPartial($id);
             } else {
                 Flash::addFlash(
                     "danger",
