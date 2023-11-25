@@ -1,4 +1,17 @@
 <p>You are now signed in!</p>
 <script>
 document.title = {$app["name"]} + " [Admin] Home";
+function handleSidebarActive() {
+  const sidebar_links = document.querySelectorAll('#sidebar .nav-pills li.nav-item');
+  sidebar_links.forEach((l) => {
+    const uri = window.location.href;
+    const mod = l.dataset.module;
+    if (mod === 'home') {
+      l.classList.add("active")
+    } else {
+      l.classList.remove("active")
+    }
+  });
+}
+handleSidebarActive();
 </script>

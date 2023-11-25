@@ -1,0 +1,33 @@
+<form method="POST" hx-encoding="multipart/form-data">
+	<div class="my-2 text-muted" n:if="$form['required']">
+		<small><span class="text-danger">*</span> indicates required field</small>
+	</div>
+	{csrf()|noescape}
+	<table class="w-100">
+		<tbody>
+		{foreach $form['columns'] as $column => $title}
+			<tr class="form-row">
+				<td class="label truncate text-end align-top">
+					<strong class="form-label" title="{$title}">
+						{$title}
+						{if $column in $form['required']}<span class="text-danger"><small>*</small></span>{/if}
+					</strong>
+				</td>
+				<td class="control ps-2">
+					{$controls($column, $form['defaults'][$column] ?? '')|noescape}
+					{include '../layout/components/validation.latte', name: $column}
+				</td>
+			</tr>
+		{/foreach}
+			<tr>
+				<td></td>
+				<td>
+					<div class="p-2 d-flex">
+						<button type="button" class="btn btn-success" hx-post="{$route('module.store')}" hx-target="#module" title="Save record" hx-disabled-elt="this">Save</button>
+						<a class="btn btn-secondary ms-1" href="{$route('module.index.part')}" hx-target="#module" hx-boost="true" title="Cancel">Cancel</a>
+					</div>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</form>

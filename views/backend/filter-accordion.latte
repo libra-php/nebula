@@ -1,0 +1,71 @@
+<div class="accordion mb-3" id="filter-accordion" n:if="$has_filter_search || $has_filter_datetime || $has_filter_select">
+	<div class="accordion-item">
+		<h2 class="accordion-header" id="accordion-filter">
+		  <button class="accordion-button {if !$expand_filters}collapsed{/if}" type="button" data-bs-toggle="collapse" data-bs-target="#filters" aria-expanded="{if !$expand_filters}true{/if}" aria-controls="filters">
+			Filters
+		  </button>
+		</h2>
+		<div id="filters" class="accordion-collapse collapse {if $expand_filters}show{/if}" aria-labelledby="accordion-filter" data-bs-parent="#filter-accordion">
+			<div class="p-3">
+				<div id="filter-search" class="d-flex align-items-center" n:if="$has_filter_search">
+					<label class="p-1 pe-2 tuncate" for="search-input"><strong>Search</strong></label>
+					<input id="search-input"
+						type="search"
+						name="search"
+						class="form-control form-control-sm"
+						hx-get="{$route('module.index.part')}"
+						placeholder="..."
+						value="{$filter_search_term}"
+						hx-trigger="keyup changed delay:500ms, search"
+						hx-target="#module"/>
+				</div>
+				<div id="filter-datetime" n:if="$has_filter_datetime">
+					<div class="d-flex align-items-center">
+						<label class="p-1 pe-2 truncate" for="date-from"><strong>From</strong></label>
+						<div class="input-group">
+							<input type="datetime-local"
+								hx-get="{$route('module.index.part')}"
+								hx-target="#module"
+								hx-trigger="change"
+								class="form-control form-control-sm"
+								id="date-from"
+								name="date_from"
+								value="{$filter_date_from}"
+								min=""
+								max="" />
+							{if $filter_date_from != ''}
+							<button name="date_from" hx-get="{$route('module.index.part')}" hx-target="#module" class="btn btn-sm btn-outline-danger" onClick="document.getElementById('date-from').value = '';">&#128465;</button>
+							{/if}
+						</div>
+					</div>
+					<div class="d-flex align-items-center">
+						<label class="p-1 pe-2 truncate" for="date-from"><strong>To</strong></label>
+						<div class="input-group">
+							<input type="datetime-local"
+								hx-get="{$route('module.index.part')}"
+								hx-target="#module"
+								hx-trigger="change"
+								class="form-control form-control-sm"
+								id="date-to"
+								name="date_to"
+								value="{$filter_date_to}"
+								min=""
+								max="" />
+							{if $filter_date_to != ''}
+							<button name="date_to" hx-get="{$route('module.index.part')}" hx-target="#module" class="btn btn-sm btn-outline-danger" onClick="document.getElementById('date-to').value = '';">&#128465;</button>
+							{/if}
+						</div>
+					</div>
+				</div>
+				<div id="filter-select" class="d-flex flex-column" n:if="$has_filter_select">
+					{foreach $filter_select as $column => $title}
+						<div class="d-flex align-items-center justify-content-start">
+							<label for="filter_select[{$column}]" class="p-1 pe-2 truncate flex-break" for="" title="{$title}"><strong>{$title}</strong></label>
+						{$filter_select_control($column, $filter_selections[$column] ?? '')|noescape}
+						</div>
+					{/foreach}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

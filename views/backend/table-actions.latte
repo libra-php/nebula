@@ -1,0 +1,4 @@
+<div id="actions" class="mt-4 mb-3">
+	<a n:if="$table['create'] && $has_create_permission()" class="btn btn-success" href="{$route('module.create.part')}" hx-target="#module" hx-boost="true" title="Create new record">Create</a>
+	<a n:if="$table['export_csv']" class="btn btn-primary" href="{$route('module.index')}?export_csv=true" title="Export to CSV">Export CSV</a>
+</div>

@@ -12,10 +12,10 @@
 			</a>
 			<ul class="dropdown-menu text-small shadow p-2" aria-labelledby="user-dropdown">
 				{foreach $module_links as $link}
-				<li onClick="handleSidebarActive(event)" class="nav-item" title="{$link['title']}" data-module="{$link['name']}">
-					<a href="{$moduleRoute('module.index.part', $link['name'])}"
-						class="dropdown-item d-flex align-items-center" hx-target="#module">
-						<i data-feather="{$link['icon']}" /><span class="ps-2">{$link['title']}</span>
+				<li class="nav-item" title="{$link['title']}" data-module="{$link['name']}">
+					<a href="{$moduleRoute('module.index', $link['name'])}"
+						class="dropdown-item d-flex align-items-center"  hx-swap="outerHTML" hx-select="#main" hx-target="#main">
+						<span class="ps-2">{$link['title']}</span>
 					</a>
 				</li>
 				{/foreach}
@@ -23,9 +23,7 @@
 					<hr class="dropdown-divider">
 				</li>
 				<li class="nav-item">
-					<a class="dropdown-item" href="{$route('sign-out.index')}" hx-target="body"><i
-							data-feather="log-out" /> Sign
-						out</a>
+					<a class="dropdown-item" href="{$route('sign-out.index')}" hx-target="body">Sign out</a>
 				</li>
 			</ul>
 		</div>

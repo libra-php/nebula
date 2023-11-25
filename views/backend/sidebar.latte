@@ -2,9 +2,9 @@
   <div class="d-flex flex-column flex-shrink-0 text-light h-100">
     <ul id="sidebar-links" class="nav nav-pills flex-column mb-auto pt-3">
       {foreach $module_links as $link}
-        <li onClick="handleSidebarActive(event)" class="nav-item {if $module_name === $link['name']}active{/if}" title="{$link['title']}" data-module='{$link['name']}'>
-          <a href="{$moduleRoute('module.index.part', $link['name'])}" class="nav-link d-flex align-items-center text-white" hx-target="#module">
-            <i data-feather="{$link['icon']}" /><span class="d-none d-lg-block">{$link['title']}</span>
+        <li class="nav-item {if $module_name === $link['name']}active{/if}" title="{$link['title']}" data-module='{$link['name']}'>
+          <a href="{$moduleRoute('module.index', $link['name'])}" class="nav-link d-flex align-items-center text-white" hx-swap="outerHTML" hx-select="#main" hx-target="#main">
+            <span class="d-none d-lg-block">{$link['title']}</span>
           </a>
         </li>
       {/foreach}
@@ -21,8 +21,7 @@
       </a>
       <ul class="dropdown-menu text-small shadow p-2" aria-labelledby="user-dropdown">
         <li class="nav-item">
-          <a class="dropdown-item" href="{$route('sign-out.index')}" hx-target="body"><i data-feather="log-out" /> Sign
-            out</a>
+          <a class="dropdown-item" href="{$route('sign-out.index')}" hx-target="body"> Sign out</a>
         </li>
       </ul>
     </div>
