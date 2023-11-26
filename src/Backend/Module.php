@@ -701,7 +701,7 @@ class Module
             $table_id,
             $field
         );
-        if (db()->statement->rowCount() == 0 || $old->new_value != $value) {
+        if (db()->statement->rowCount() == 0 || $old->new_value !== $value) {
             db()->run(
                 "INSERT INTO audit SET
                 user_id = ?,

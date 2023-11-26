@@ -24,7 +24,6 @@ class Audit extends Module
             "audit.old_value" => null,
             "audit.new_value" => null,
         ];
-        $this->where = [["old_value IS NOT NULL"], ["new_value IS NOT NULL"]];
         $this->table_format = [
             "diff" => fn($row, $column) => $this->formatDiff($row),
         ];

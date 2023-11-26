@@ -21,7 +21,7 @@ class Modules extends Module
         ];
 
         $this->form_columns = [
-            "module_name" => "Name",
+            "module_name" => "Route",
             "class_name" => "Class",
             "module_table" => "Table",
             "module_title" => "Title",
