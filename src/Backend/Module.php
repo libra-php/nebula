@@ -752,23 +752,14 @@ class Module
      */
     protected function getFilteredFormColumns(): array
     {
-        $filtered_controls = ["upload", "image"];
         $data = request()->data();
-        // Only columns defined in form_columns are valid
-        $data = array_filter(
-            $data,
-            function ($value, $key) {
-                $table_columns = $this->tableAlias($this->form_columns);
-                $columns = array_keys($table_columns);
-                return in_array($key, $columns);
-            },
-            ARRAY_FILTER_USE_BOTH
-        );
         // Only real table columns are considered
         $table_columns = db()
             ->query("DESCRIBE $this->table_name")
             ->fetchAll(PDO::FETCH_COLUMN);
-        $data = array_filter($data, fn($key) => in_array($key, $table_columns), ARRAY_FILTER_USE_KEY);
+        // Filter out file/image columns
+        $filtered_controls = ["upload", "image"];
+        $data = array_filter($data, fn($key) => in_array($key, $table_columns) && !in_array($this->form_columns[$key], $filtered_controls), ARRAY_FILTER_USE_KEY);
         // Deal with "null" string
         array_walk(
             $data,
@@ -777,14 +768,7 @@ class Module
                     ? null
                     : $value)
         );
-        return array_filter(
-            $data,
-            fn($key) => !in_array(
-                $this->form_controls[$key],
-                $filtered_controls
-            ),
-            ARRAY_FILTER_USE_KEY
-        );
+        return $data;
     }
 
     /**
