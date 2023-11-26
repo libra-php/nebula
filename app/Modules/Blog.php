@@ -70,32 +70,32 @@ class Blog extends Module
                 option("Published", "Published"),
             ],
         ];
-        $this->addRowAction("preview_post", "<i class='bi bi-eye me-1'></i> Preview");
-        $this->addFormAction("preview_post", "<i class='bi bi-eye me-1'></i> Preview");
 
         parent::__construct("blog");
     }
 
-    private function preview(): void
+    private function preview(?string $id = null): void
     {
         if (request()->has("preview_post")) {
             $post = Post::find(request()->id);
             if ($post) {
-                echo latte("blog/preview.latte", ["post" => $post]);
+                echo latte("blog/preview.latte", [
+                    "post" => $post,
+                    "link" => is_null($id)
+                        ? moduleRoute("module.index", $this->module_name)
+                        : moduleRoute("module.edit", $this->module_name, $id)
+                ]);
                 exit();
             }
         }
     }
 
-    protected function processTableRequest(?string $id = null): void
-    {
-        $this->preview();
-        parent::processTableRequest($id);
-    }
-
     protected function processFormRequest(?string $id = null): void
     {
-        $this->preview();
+        if (!is_null($id)) {
+            $this->addFormAction("preview_post", "Preview", "<i class='bi bi-eye me-1'></i> Preview");
+            $this->preview($id);
+        }
         parent::processTableRequest($id);
     }
 }

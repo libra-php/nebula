@@ -44,8 +44,10 @@
 								href="{$route('module.index')}?{$action['name']}=true&id={$datum[$key_col]}"
 								{if $action['confirm']}hx-confirm="{$action['confirm']}"{/if}
 								title="{$action['title']}"
-								hx-target="#module">
-								{$action['title']|noescape}
+								hx-target="#module"
+								{=$action['attrs']|implode:' '|noescape}
+								>
+								{$action['label']|noescape}
 							</a>
 						{/foreach}
 						<a n:if="$table['edit'] && $has_edit_permission($datum[$key_col])" class="row-action btn btn-sm btn-outline-primary ms-1" href="{$route('module.edit.part', $datum[$key_col])}"

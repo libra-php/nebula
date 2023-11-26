@@ -14,7 +14,7 @@ class BlogController extends Controller
     {
         $posts = Post::search(["status", "Published"]);
         return latte("blog/index.latte", [
-            "posts" => $posts,
+            "posts" => $posts ?? [],
         ]);
     }
 

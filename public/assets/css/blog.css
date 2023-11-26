@@ -6,17 +6,10 @@
   font-family: 'Anton', sans-serif;
   font-size: 5rem;
 }
+#post #info {
+  font-size: 0.9rem;
+}
 #post p {
   font-family: 'Merriweather', serif;
   line-height: 1.75rem;
 }
-#post #info {
-  font-size: 0.9rem;
-}
-#post p img {
-  width: auto;
-  padding: 10px;
-  border-radius: 6px;
-  clear: both;
-}
-

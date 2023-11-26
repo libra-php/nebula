@@ -1,7 +1,12 @@
+
+{layout "../layout/blog.latte"}
+
+{block content}
 <section id="post">
 	<div class="d-flex align-items-center">
-		<button class="btn btn-sm btn-primary" onClick="history.back()">Back</button>
+		<a class="btn btn-sm btn-primary" href="{$link}">Back</a>
 	</div>
 	<hr>
 	{include "./post.latte"}
 </section>
+{/block}

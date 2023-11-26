@@ -1,12 +1,14 @@
-<div n:if="$form['actions']" class="py-2">
+<div n:if="$form['actions']" class="mt-4">
 	{foreach $form['actions'] as $action}
 		<a
 			class="row-action btn btn-sm btn-{$action['class']} ms-1"
 			href="{$route('module.edit', $id)}?{$action['name']}=true&id={$id}"
 			{if $action['confirm']}hx-confirm="{$action['confirm']}"{/if}
 			title="{$action['title']}"
-			hx-target="#module">
-			{$action['title']|noescape}
+			hx-target="#module"
+			{=$action['attrs']|implode:' '|noescape}
+			>
+			{$action['label']|noescape}
 		</a>
 	{/foreach}
 </div>

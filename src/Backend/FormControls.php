@@ -139,7 +139,7 @@ class FormControls
                 $basename
             );
             $control .= sprintf(
-                '<div class="d-flex ms-2"><a title="View" class="btn btn-sm btn-outline-info file-button" href="%s">&#128065;</a></div>',
+                '<div class="d-flex ms-2"><a title="View" class="btn btn-sm btn-outline-info file-button" hx-boost="false" href="%s">&#128065;</a></div>',
                 $path,
                 $value,
                 $value

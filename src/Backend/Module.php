@@ -170,14 +170,18 @@ class Module
     protected function addRowAction(
         string $name,
         string $title,
+        string $label,
         ?string $confirm = null,
-        string $class = "primary"
+        string $class = "primary",
+        ...$attrs
     ): void {
         $this->row_actions[] = [
             "name" => $name,
             "title" => $title,
+            "label" => $label,
             "confirm" => $confirm,
             "class" => $class,
+            "attrs" => $attrs
         ];
     }
 
@@ -187,14 +191,18 @@ class Module
     protected function addFormAction(
         string $name,
         string $title,
+        string $label,
         ?string $confirm = null,
-        string $class = "primary"
+        string $class = "primary",
+        ...$attrs
     ): void {
         $this->form_actions[] = [
             "name" => $name,
             "title" => $title,
+            "label" => $label,
             "confirm" => $confirm,
             "class" => $class,
+            "attrs" => $attrs
         ];
     }
 
@@ -757,9 +765,7 @@ class Module
         $table_columns = db()
             ->query("DESCRIBE $this->table_name")
             ->fetchAll(PDO::FETCH_COLUMN);
-        // Filter out file/image columns
-        $filtered_controls = ["upload", "image"];
-        $data = array_filter($data, fn($key) => in_array($key, $table_columns) && !in_array($this->form_columns[$key], $filtered_controls), ARRAY_FILTER_USE_KEY);
+        $data = array_filter($data, fn($value, $key) => is_string ($value) && in_array($key, $table_columns), ARRAY_FILTER_USE_BOTH);
         // Deal with "null" string
         array_walk(
             $data,
@@ -1394,7 +1400,7 @@ class Module
                 $this->auditColumns($columns, $id, "INSERT");
                 Flash::addFlash("success", "Record created successfully");
                 // Redirect to edit
-                return $this->editPartial($id);
+                return redirectModule("module.edit", $this->module_name, $id);
             } else {
                 Flash::addFlash(
                     "danger",
@@ -1423,6 +1429,8 @@ class Module
             if ($result) {
                 $this->auditColumns($columns, $id, "UPDATE");
                 Flash::addFlash("success", "Record updated successfully");
+                // Redirect to edit
+                return redirectModule("module.edit", $this->module_name, $id);
             } else {
                 Flash::addFlash(
                     "danger",

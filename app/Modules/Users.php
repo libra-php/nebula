@@ -50,7 +50,7 @@ class Users extends Module
             "Me" => "id = " . user()->id,
             "Others" => "id != " . user()->id,
         ];
-        $this->addRowAction("preview_qr", "<i class='bi bi-qr-code me-1'></i> QR");
+        $this->addRowAction("preview_qr", "QR", "<i class='bi bi-qr-code me-1'></i> QR");
 
         parent::__construct("users");
     }
@@ -86,7 +86,8 @@ class Users extends Module
             $user = User::find(request()->id);
             if ($user) {
                 $url = Auth::urlQR($user);
-                echo latte("auth/qr.latte", ["url" => $url]);
+                $link = moduleRoute("module.index", $this->module_name);
+                echo latte("auth/qr.latte", ["url" => $url, "link" => $link]);
                 exit;
             }
         }

@@ -1,34 +1,36 @@
-<form method="POST" hx-boost="true" hx-encoding="multipart/form-data">
-	{csrf()|noescape}
-	{include "form-actions.latte"}
-	<div class="my-2 text-muted" n:if="$form['required']">
-		<small><span class="text-danger">*</span> indicates required field</small>
-	</div>
-	<table id="edit-table" class="w-100">
-		<tbody>
-		{foreach $form['columns'] as $column => $title}
-			<tr class="form-row">
-				<td class="label truncate text-end align-top">
-					<strong class="form-label" title="{$title}">
-						{$title}
-						{if $column in $form['required']}<span class="text-danger"><small>*</small></span>{/if}
-					</strong>
-				</td>
-				<td class="control ps-2">
-					{$controls($column, $form['data'][$column] ?? '')|noescape}
-					{include '../layout/components/validation.latte', name: $column}
-				</td>
-			</tr>
-		{/foreach}
-			<tr>
-				<td></td>
-				<td>
-					<div class="p-2 d-flex">
-						<button type="button" class="btn btn-primary" hx-post="{$route('module.update', $id)}" hx-target="#module" title="Update record" hx-disabled-elt="this"><i class="bi bi-save me-1" /> Update</button>
-						<a class="btn btn-secondary ms-1" href="{$route('module.index.part')}" hx-target="#module" title="Cancel"><i class="bi bi-x-square me-1" /> Cancel</a>
-					</div>
-				</td>
-			</tr>
-		</tbody>
-	</table>
-</form>
+{include "form-actions.latte"}
+<div class="table-responsive">
+	<form method="POST" hx-boost="true" hx-encoding="multipart/form-data">
+		{csrf()|noescape}
+		<div class="mb-2 text-muted" n:if="$form['required']">
+			<small><span class="text-danger">*</span> indicates required field</small>
+		</div>
+		<table id="edit-table" class="w-100">
+			<tbody>
+			{foreach $form['columns'] as $column => $title}
+				<tr class="form-row">
+					<td class="label truncate text-end align-top">
+						<strong class="form-label" title="{$title}">
+							{$title}
+							{if $column in $form['required']}<span class="text-danger"><small>*</small></span>{/if}
+						</strong>
+					</td>
+					<td class="control ps-2">
+						{$controls($column, $form['data'][$column] ?? '')|noescape}
+						{include '../layout/components/validation.latte', name: $column}
+					</td>
+				</tr>
+			{/foreach}
+				<tr>
+					<td></td>
+					<td>
+						<div class="p-2 d-flex">
+							<button type="button" class="btn btn-primary" hx-post="{$route('module.update', $id)}" hx-target="#module" title="Update record" hx-disabled-elt="this"><i class="bi bi-save me-1" /> Update</button>
+							<a class="btn btn-secondary ms-1" href="{$route('module.index.part')}" hx-target="#module" title="Cancel"><i class="bi bi-x-square me-1" /> Cancel</a>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</form>
+</div>
