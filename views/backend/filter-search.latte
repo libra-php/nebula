@@ -1,0 +1,12 @@
+<div id="filter-search" class="d-flex align-items-center" n:if="$has_filter_search">
+	<label class="p-1 pe-2 tuncate" for="search-input"><strong>Search</strong></label>
+	<input id="search-input"
+		type="search"
+		name="search"
+		class="form-control form-control-sm"
+		hx-get="{$route('module.index.part')}"
+		placeholder="..."
+		value="{$filter_search_term}"
+		hx-trigger="keyup changed delay:500ms, search"
+		hx-target="#module"/>
+</div>
