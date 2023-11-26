@@ -4,11 +4,8 @@
 <section id="create" class="p-2">
 	{include parent}
 	{include "form-create.latte"}
+	{include 'profiler.latte'}
 </section>
-{include 'profiler.latte'}
-<script>
-document.title = {$app["name"]} + " [Admin] " + {$module_title} + " — Create";
-</script>
 <script src="/assets/js/tinymce/tinymce.min.js"></script>
 <script src='/assets/js/form.js'></script>
 {/block}

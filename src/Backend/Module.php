@@ -764,6 +764,11 @@ class Module
             },
             ARRAY_FILTER_USE_BOTH
         );
+        // Only real table columns are considered
+        $table_columns = db()
+            ->query("DESCRIBE $this->table_name")
+            ->fetchAll(PDO::FETCH_COLUMN);
+        $data = array_filter($data, fn($key) => in_array($key, $table_columns), ARRAY_FILTER_USE_KEY);
         // Deal with "null" string
         array_walk(
             $data,
@@ -786,8 +791,13 @@ class Module
      * Validate request based on user-supplied rules
      * @param array<int,mixed> $rules
      */
-    protected function validate(array $rules): bool
+    protected function validate(array &$rules): bool
     {
+        // Auto-fix the validation titles
+        foreach ($rules as $column => $rule) {
+            $title = $this->form_columns[$column] ?? $column;
+            $rules[$column] = [$title => $rule];
+        }
         $result = Validate::request($rules);
         $this->errors = Validate::$errors;
         return $result;
@@ -827,8 +837,9 @@ class Module
      */
     protected function getEditQuery(string $id): QueryBuilder
     {
+        $columns = $this->getFilteredFormColumns();
         $qb = QueryBuilder::select($this->table_name)
-            ->columns(array_keys($this->form_columns))
+            ->columns(array_keys($columns))
             ->where([$this->key_col, $id]);
 
         return $qb;
@@ -966,6 +977,7 @@ class Module
             }
             return match ($this->form_controls[$column]) {
                 "input" => $fc->input($column, $value, "text"),
+                "password" => $fc->input($column, $value, "password"),
                 "textarea" => $fc->textarea($column, $value),
                 "editor" => $fc->editor($column, $value),
                 "disabled" => $fc->input(
@@ -1304,6 +1316,16 @@ class Module
         ];
     }
 
+    protected function storeOverride(array $data): array
+    {
+        return $data;
+    }
+
+    protected function updateOverride(array $data): array
+    {
+        return $data;
+    }
+
     /**-------- ENDPOINTS -----------------------------------------------*/
     /* Endpoints are called from ModuleController */
     public function index(): string
@@ -1377,6 +1399,7 @@ class Module
         }
         if ($this->validate($this->validation) && $this->table_create) {
             $columns = $this->getFilteredFormColumns();
+            $columns = $this->storeOverride($columns);
             $qb = QueryBuilder::insert($this->table_name)->columns($columns);
             $result = (bool) db()->run($qb->build(), $qb->values());
             $id = db()->lastInsertId();
@@ -1405,6 +1428,7 @@ class Module
         }
         if ($this->validate($this->validation) && $this->table_edit) {
             $columns = $this->getFilteredFormColumns();
+            $columns = $this->updateOverride($columns);
             $qb = QueryBuilder::update($this->table_name)
                 ->columns($columns)
                 ->where(["id", $id]);

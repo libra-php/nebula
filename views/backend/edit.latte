@@ -4,11 +4,8 @@
 <section id="edit" class="p-2">
 	{include parent}
 	{include "form-edit.latte"}
+	{include 'profiler.latte'}
 </section>
-{include 'profiler.latte'}
-<script>
-document.title = {$app["name"]} + " [Admin] " + {$module_title} + " — Edit (" + {$title_name} + ")";
-</script>
 <script src="/assets/js/tinymce/tinymce.min.js"></script>
 <script src='/assets/js/form.js'></script>
 {/block}

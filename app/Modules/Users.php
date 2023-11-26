@@ -2,6 +2,7 @@
 
 namespace App\Modules;
 
+use App\Auth;
 use Nebula\Backend\Module;
 
 class Users extends Module
@@ -19,17 +20,29 @@ class Users extends Module
         $this->form_columns = [
             "name" => "Name",
             "email" => "Email",
+            "password" => "Password",
+            "password_match" => "Password (again)",
         ];
         $this->search = ["uuid", "name", "email"];
 
         $this->validation = [
             "name" => ["required"],
             "email" => ["required", "email"],
+            "password" => [
+                "required",
+                "min_length=8",
+                "uppercase=1",
+                "lowercase=1",
+                "symbol=1",
+            ],
+            "password_match" => ["required", "match"],
         ];
 
         $this->form_controls = [
-            "name" => "disabled",
-            "email" => "disabled",
+            "name" => "input",
+            "email" => "input",
+            "password" => "password",
+            "password_match" => "password",
         ];
 
         $this->filter_links = [
@@ -38,6 +51,21 @@ class Users extends Module
         ];
 
         parent::__construct("users");
+    }
+
+    protected function storeOverride(array $data): array
+    {
+        $data['password'] = Auth::hashPassword($data['password']);
+        $data['two_fa_secret'] = Auth::generateTwoFASecret();
+        unset($data['password_match']);
+        return $data;
+    }
+
+    protected function updateOverride(array $data): array
+    {
+        $data['password'] = Auth::hashPassword($data['password']);
+        unset($data['password_match']);
+        return $data;
     }
 
     protected function hasEditPermission(string $id): bool

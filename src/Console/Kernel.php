@@ -516,9 +516,4 @@ EOT;
         $this->echo("Error! Something went wrong.");
         exit();
     }
-
-    protected function adminPassword()
-    {
-        $this->write("wip");
-    }
 }
