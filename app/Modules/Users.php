@@ -3,6 +3,7 @@
 namespace App\Modules;
 
 use App\Auth;
+use App\Models\User;
 use Nebula\Backend\Module;
 
 class Users extends Module
@@ -49,6 +50,7 @@ class Users extends Module
             "Me" => "id = " . user()->id,
             "Others" => "id != " . user()->id,
         ];
+        $this->addRowAction("preview_qr", "<i class='bi bi-qr-code me-1'></i> QR");
 
         parent::__construct("users");
     }
@@ -76,5 +78,18 @@ class Users extends Module
     protected function hasDeletePermission(string $id): bool
     {
         return $id != user()->id;
+    }
+
+    protected function processTableRequest(?string $id = null): void
+    {
+        if (request()->has("preview_qr")) {
+            $user = User::find(request()->id);
+            if ($user) {
+                $url = Auth::urlQR($user);
+                echo latte("auth/qr.latte", ["url" => $url]);
+                exit;
+            }
+        }
+        parent::processTableRequest($id);
     }
 }

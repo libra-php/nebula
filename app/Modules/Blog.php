@@ -20,6 +20,7 @@ class Blog extends Module
             "posts.created_at" => "Created At",
         ];
         $this->filter_links = [
+            "Archived" => "status = 'Archived'",
             "Draft" => "status = 'Draft'",
             "Published" => "status = 'Published'",
         ];
@@ -69,6 +70,7 @@ class Blog extends Module
                 option("Published", "Published"),
             ],
         ];
+        $this->addRowAction("preview_post", "<i class='bi bi-eye me-1'></i> Preview");
         $this->addFormAction("preview_post", "<i class='bi bi-eye me-1'></i> Preview");
 
         parent::__construct("blog");
@@ -79,16 +81,21 @@ class Blog extends Module
         if (request()->has("preview_post")) {
             $post = Post::find(request()->id);
             if ($post) {
-                $route = buildRoute("blog.preview", $post->id);
-                redirect($route);
+                echo latte("blog/preview.latte", ["post" => $post]);
                 exit();
             }
         }
     }
 
+    protected function processTableRequest(?string $id = null): void
+    {
+        $this->preview();
+        parent::processTableRequest($id);
+    }
+
     protected function processFormRequest(?string $id = null): void
     {
-        parent::processFormRequest($id);
         $this->preview();
+        parent::processTableRequest($id);
     }
 }

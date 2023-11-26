@@ -57,18 +57,4 @@ class BlogController extends Controller
         }
         return latte("blog/not-found.latte", [], "content");
     }
-
-    #[Get("/preview/{post}", "blog.preview", ["auth"])]
-    public function preview(string $post): string
-    {
-        $post = Post::find($post);
-        if ($post) {
-            $uri = "/blog/preview/{$post->id}";
-            header("HX-Push-Url: $uri");
-            return latte("blog/preview.latte", [
-                "post" => $post,
-            ]);
-        }
-        return latte("blog/not-found.latte");
-    }
 }
