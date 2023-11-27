@@ -117,7 +117,7 @@ class Module
     /**
      * Return module info used in links
      */
-    public function getLinkInfo()
+    public function getLinkInfo(): array
     {
         return [$this->module_name, $this->module_title, $this->module_icon];
     }
@@ -765,14 +765,14 @@ class Module
         $table_columns = db()
             ->query("DESCRIBE $this->table_name")
             ->fetchAll(PDO::FETCH_COLUMN);
-        $data = array_filter($data, fn($value, $key) => is_string ($value) && in_array($key, $table_columns), ARRAY_FILTER_USE_BOTH);
+        $data = array_filter($data, fn ($value, $key) => is_string($value) && in_array($key, $table_columns), ARRAY_FILTER_USE_BOTH);
         // Deal with "null" string
         array_walk(
             $data,
-            fn(&$value, $key) => ($value =
+            fn (&$value, $key) => ($value =
                 is_string($value) && strtolower($value) === "null"
-                    ? null
-                    : $value)
+                ? null
+                : $value)
         );
         return $data;
     }
@@ -869,7 +869,7 @@ class Module
         $memory_total = $this->convert($memory);
         foreach (["Slow DB:" => db()->trace_counts] as $title => $traces) {
             if ($traces) {
-                uasort($traces, fn($a, $b) => $b["time"] <=> $a["time"]);
+                uasort($traces, fn ($a, $b) => $b["time"] <=> $a["time"]);
                 $i = 0;
 
                 foreach ($traces as $key => $value) {
@@ -919,14 +919,14 @@ class Module
         ) {
             return moduleRoute($route_name, $module_name, $id);
         };
-        $gravatar = fn(string $str) => md5(strtolower(trim($str)));
+        $gravatar = fn (string $str) => md5(strtolower(trim($str)));
         $singular = function (string $str) {
             return substr($str, -1) === "s" ? rtrim($str, "s") : $str;
         };
-        $request = fn(string $column) => request()->has($column)
+        $request = fn (string $column) => request()->has($column)
             ? request()->$column
             : "";
-        $session = fn(string $column) => session()->has($column)
+        $session = fn (string $column) => session()->has($column)
             ? session()->get($column)
             : "";
         return [
@@ -1093,7 +1093,7 @@ class Module
         // Finally, columns with null values shouldn't be rendered
         return array_filter(
             $filtered_table_columns,
-            fn($value) => !is_null($value)
+            fn ($value) => !is_null($value)
         );
     }
 
@@ -1132,7 +1132,7 @@ class Module
         return array_keys(
             array_filter(
                 $this->validation,
-                fn($rules) => in_array("required", $rules)
+                fn ($rules) => in_array("required", $rules)
             )
         );
     }
@@ -1149,12 +1149,12 @@ class Module
             $this->tableFormat($data);
         }
 
-        $has_delete_permission = fn(string $id) => $this->hasDeletePermission(
+        $has_delete_permission = fn (string $id) => $this->hasDeletePermission(
             $id
         );
-        $has_edit_permission = fn(string $id) => $this->hasEditPermission($id);
-        $has_create_permission = fn() => $this->hasCreatePermission();
-        $has_row_action_permission = fn(
+        $has_edit_permission = fn (string $id) => $this->hasEditPermission($id);
+        $has_create_permission = fn () => $this->hasCreatePermission();
+        $has_row_action_permission = fn (
             string $name,
             string $id
         ) => $this->hasRowActionPermission($name, $id);
@@ -1271,8 +1271,8 @@ class Module
         $data = null;
         $data = !is_null($qb)
             ? db()
-                ->run($qb->build(), $qb->values())
-                ->fetch()
+            ->run($qb->build(), $qb->values())
+            ->fetch()
             : [];
         if (!$data) {
             $this->moduleNotFound();
@@ -1306,18 +1306,23 @@ class Module
         ];
     }
 
+    /**
+     * Override data before storing in db
+     */
     protected function storeOverride(array $data): array
     {
         return $data;
     }
 
+    /**
+     * Override data before updating db
+     */
     protected function updateOverride(array $data): array
     {
         return $data;
     }
 
     /**-------- ENDPOINTS -----------------------------------------------*/
-    /* Endpoints are called from ModuleController */
     public function index(): string
     {
         if (!$this->hasIndexPermission()) {
@@ -1325,8 +1330,8 @@ class Module
         }
         $template =
             !is_null($this->table_name) && trim($this->table_name) != ""
-                ? $this->getIndexTemplate()
-                : $this->getCustomIndex();
+            ? $this->getIndexTemplate()
+            : $this->getCustomIndex();
         return latte($template, $this->getIndexData());
     }
 
@@ -1337,8 +1342,8 @@ class Module
         }
         $template =
             !is_null($this->table_name) && trim($this->table_name) != ""
-                ? $this->getIndexTemplate()
-                : $this->getCustomIndex();
+            ? $this->getIndexTemplate()
+            : $this->getCustomIndex();
         return latte($template, $this->getIndexData(), "content");
     }
 
