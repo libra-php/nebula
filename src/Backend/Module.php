@@ -16,7 +16,7 @@ class Module
 
     /** Module */
     protected string $module_title = "";
-    protected string $module_icon = "package";
+    protected string $module_icon = "bi bi-box";
     protected ?string $table_name = null;
     protected string $name_col = "name";
     protected string $key_col = "id";
@@ -111,7 +111,7 @@ class Module
         $module = ModuleModel::search(["module_name", $module_name]);
         $this->table_name = $module->module_table ?? "";
         $this->module_title = $module->module_title ?? "Unknown";
-        $this->module_icon = $module->module_icon ?? "package";
+        $this->module_icon = $module->module_icon ?? "bi bi-box";
     }
 
     /**
@@ -209,7 +209,7 @@ class Module
     /**
      * Record the active user session
      */
-    protected function handleSession()
+    protected function handleSession(): void
     {
         db()->query(
             "INSERT INTO sessions SET user_id = ?, method = ?, uri = ?",
@@ -222,7 +222,7 @@ class Module
     /**
      * Handle exporting to csv
      */
-    protected function handleExportCsv()
+    protected function handleExportCsv(): void
     {
         if (request()->has("export_csv")) {
             $name = sprintf("%s_export_%s.csv", $this->module_name, time());
