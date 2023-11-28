@@ -308,6 +308,7 @@ class Module
                 );
             }
             redirectModule("module.edit", $this->module_name, $id);
+            exit;
         }
     }
 
@@ -1405,7 +1406,8 @@ class Module
                 $this->auditColumns($columns, $id, "INSERT");
                 Flash::addFlash("success", "Record created successfully");
                 // Redirect to edit
-                return redirectModule("module.edit", $this->module_name, $id);
+                redirectModule("module.edit", $this->module_name, $id);
+                exit;
             } else {
                 Flash::addFlash(
                     "danger",
@@ -1435,7 +1437,8 @@ class Module
                 $this->auditColumns($columns, $id, "UPDATE");
                 Flash::addFlash("success", "Record updated successfully");
                 // Redirect to edit
-                return redirectModule("module.edit", $this->module_name, $id);
+                redirectModule("module.edit", $this->module_name, $id);
+                exit;
             } else {
                 Flash::addFlash(
                     "danger",

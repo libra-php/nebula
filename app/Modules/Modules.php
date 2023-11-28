@@ -21,7 +21,7 @@ class Modules extends Module
         ];
 
         $this->form_columns = [
-            "module_name" => "Route",
+            "module_name" => "Name",
             "class_name" => "Class",
             "module_table" => "Table",
             "module_title" => "Title",
@@ -30,10 +30,10 @@ class Modules extends Module
         ];
 
         $this->validation = [
-            "module_name" => ["required"],
-            "class_name" => ["required"],
+            "module_name" => ["required", "is_lowercase", "no_spaces"],
+            "class_name" => ["required", "is_class"],
             "module_title" => ["required"],
-            "user_type" => ["required"],
+            "user_type" => ["required", "integer"],
         ];
 
         $this->form_controls = [

@@ -25,6 +25,12 @@ class Validate
         "symbol" => "%label requires at least %rule_extra symbol character",
         "reg_ex" => "%label is invalid",
         "unique" => "%label must be unique",
+        "is_lowercase" => "%label must be lowercase",
+        "is_uppercase" => "%label must be uppercase",
+        "slug" => "%label must be in a url slug format",
+        "is_class" => "%label must exist",
+        "is_file" => "%label must exist",
+        "no_spaces" => "%label cannot contain any spaces",
     ];
     public static $errors = [];
     public static $custom = [];
@@ -75,25 +81,35 @@ class Validate
                 $label = null;
             }
             foreach ($ruleset as $rule_raw) {
-                $rule_split = explode("=", $rule_raw);
-                $rule = $rule_split[0];
-                $extra = count($rule_split) == 2 ? $rule_split[1] : "";
-                $label = $label ? $label : ucfirst($request_item);
-                $result = match ($rule) {
-                    "string" => self::isString($value),
-                    "numeric" => self::isNumeric($value),
-                    "email" => self::isEmail($value),
-                    "required" => self::isRequired($value),
-                    "match" => self::isMatch($request_item, $value),
-                    "min_length" => self::isMinLength($value, $extra),
-                    "max_length" => self::isMaxLength($value, $extra),
-                    "uppercase" => self::isUppercase($value, $extra),
-                    "lowercase" => self::isLowercase($value, $extra),
-                    "symbol" => self::isSymbol($value, $extra),
-                    "reg_ex" => self::regEx($value, $extra),
-                    "unique" => self::unique($value, $extra, $request_item),
-                    default => true,
-                };
+                if (is_callable($rule_raw)) {
+                    $result = $rule_raw($value);
+                } else {
+                    $rule_split = explode("=", $rule_raw);
+                    $rule = $rule_split[0];
+                    $extra = count($rule_split) == 2 ? $rule_split[1] : "";
+                    $label = $label ? $label : ucfirst($request_item);
+                    $result = match ($rule) {
+                        "string" => self::isString($value),
+                        "numeric" => self::isNumeric($value),
+                        "email" => self::isEmail($value),
+                        "required" => self::isRequired($value),
+                        "match" => self::isMatch($request_item, $value),
+                        "min_length" => self::isMinLength($value, $extra),
+                        "max_length" => self::isMaxLength($value, $extra),
+                        "uppercase" => self::isUppercaseCount($value, $extra),
+                        "lowercase" => self::isLowercaseCount($value, $extra),
+                        "symbol" => self::isSymbol($value, $extra),
+                        "reg_ex" => self::regEx($value, $extra),
+                        "is_uppercase" => self::isUppercase($value),
+                        "is_lowercase" => self::isLowercase($value),
+                        "no_spaces" => self::noSpaces($value),
+                        "slug" => self::slug($value),
+                        "is_class" => self::classExists($value),
+                        "is_file" => self::fileExists($value),
+                        "unique" => self::unique($value, $extra, $request_item),
+                        default => true,
+                    };
+                }
                 if (!$result) {
                     self::registerError($rule, [
                         "%rule" => $rule,
@@ -193,25 +209,80 @@ class Validate
     }
 
     /**
-     * Request value is uppercase
+     * Request value has at least $count uppercase characters
      * @param mixed $value
      * @param mixed $count
      */
-    public static function isUppercase($value, $count): bool
+    public static function isUppercaseCount($value, $count): bool
     {
         preg_match_all("/[A-Z]/", $value, $matches);
         return !empty($matches[0]) && count($matches) >= $count;
     }
 
     /**
-     * Request value is lowercase
+     * Request value is uppercase
+     * @param mixed $value
+     */
+    public static function isUppercase($value): bool
+    {
+        return $value === strtoupper($value);
+    }
+
+    /**
+     * Request value has at least $count lowercase characters
      * @param mixed $value
      * @param mixed $count
      */
-    public static function isLowercase($value, $count): bool
+    public static function isLowercaseCount($value, $count): bool
     {
         preg_match_all("/[a-z]/", $value, $matches);
         return !empty($matches[0]) && count($matches) >= $count;
+    }
+
+    /**
+     * Request value is lowercase
+     * @param mixed $value
+     */
+    public static function isLowercase($value): bool
+    {
+        return $value === strtolower($value);
+    }
+
+    /**
+     * Request value cannot contain spaces
+     * @param mixed $value
+     */
+    public static function noSpaces($value): bool
+    {
+        return strpos($value, ' ') === false;
+    }
+
+    /**
+     * Request value must be url slug
+     * @param mixed $value
+     */
+    public static function slug($value): bool
+    {
+        preg_match_all("/^[a-z0-9]+(?:-[a-z0-9]+)*$/", $value, $matches);
+        return !empty($matches[0]);
+    }
+
+    /**
+     * Request value is a class that must exist
+     * @param mixed $value
+     */
+    public static function classExists($value): bool
+    {
+        return class_exists($value);
+    }
+
+    /**
+     * Request value is a filepath that must exist
+     * @param mixed $value
+     */
+    public static function fileExists($value): bool
+    {
+        return file_exists($value);
     }
 
     /**

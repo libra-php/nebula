@@ -50,6 +50,7 @@ class Audit extends Module
         $this->addRowAction(
             "undo_change",
             "Undo",
+            "Undo",
             "Are you sure you want to restore this value?"
         );
         parent::__construct("audit");
