@@ -3,6 +3,7 @@
 namespace App\Modules;
 
 use Nebula\Backend\Module;
+use Nebula\Validation\Validate;
 
 class Test extends Module
 {
@@ -63,10 +64,14 @@ class Test extends Module
          * key: form column to validate
          * value: array of validation rules
          */
+        // Override the custom validation message
+        Validate::$messages["name_custom"] = "%label must not equal 'test'!!!!";
         $this->validation = [
-            "name" => ["required"],
+            // Note: you can use custom validation, too
+            "name" => ["required", fn($value) => trim(strtolower($value)) !== 'test'],
             "number" => ["required", "numeric"],
         ];
+
 
         /**
          * Edit & Create view controls

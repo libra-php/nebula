@@ -27,7 +27,7 @@ class Validate
         "unique" => "%label must be unique",
         "is_lowercase" => "%label must be lowercase",
         "is_uppercase" => "%label must be uppercase",
-        "slug" => "%label must be in a url slug format",
+        "slug" => "%label must be a valid url format",
         "is_class" => "%label must exist",
         "is_file" => "%label must exist",
         "no_spaces" => "%label cannot contain any spaces",
@@ -82,6 +82,10 @@ class Validate
             }
             foreach ($ruleset as $rule_raw) {
                 if (is_callable($rule_raw)) {
+                    $rule = $request_item . "_custom";
+                    if (!isset(self::$messages[$rule])) {
+                        self::$messages[$rule] = "%label is invalid";
+                    }
                     $result = $rule_raw($value);
                 } else {
                     $rule_split = explode("=", $rule_raw);

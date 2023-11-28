@@ -41,7 +41,7 @@ class Blog extends Module
         $this->validation = [
             "title" => ["required"],
             "user_id" => ["required"],
-            "slug" => ["required"],
+            "slug" => ["required", "is_lowercase", "slug"],
         ];
         $this->form_controls = [
             "banner_image" => "image",
