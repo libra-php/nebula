@@ -4,12 +4,13 @@ namespace App\Modules;
 
 use App\Auth;
 use App\Models\User;
-use Nebula\Backend\Module;
+use Nebula\Admin\Module;
 
 class Users extends Module
 {
     public function __construct()
     {
+        $this->name_col = "uuid";
         $this->table_columns = [
             "id" => "ID",
             "uuid" => "UUID",
@@ -17,17 +18,38 @@ class Users extends Module
             "email" => "Email",
             "created_at" => "Created At",
         ];
+        $this->search = ["uuid", "name", "email"];
+
+        $this->filter_links = [
+            "Me" => "id = " . user()->id,
+            "Others" => "id != " . user()->id,
+        ];
 
         $this->form_columns = [
             "name" => "Name",
             "email" => "Email",
+            "user_type" => "Type",
             "password" => "Password",
             "password_match" => "Password (again)",
         ];
-        $this->search = ["uuid", "name", "email"];
+
+        $this->form_controls = [
+            "name" => "input",
+            "email" => "input",
+            "user_type" => "select",
+            "password" => "password",
+            "password_match" => "password",
+        ];
+
+        $this->select_options = [
+            "user_type" => db()->selectAll(
+                "SELECT id, name FROM user_types ORDER BY level DESC"
+            ),
+        ];
 
         $this->validation = [
             "name" => ["required"],
+            "user_type" => ["required"],
             "email" => ["required", "email"],
             "password" => [
                 "required",
@@ -39,20 +61,7 @@ class Users extends Module
             "password_match" => ["required", "match"],
         ];
 
-        $this->form_controls = [
-            "name" => "input",
-            "email" => "input",
-            "password" => "password",
-            "password_match" => "password",
-        ];
-
-        $this->filter_links = [
-            "Me" => "id = " . user()->id,
-            "Others" => "id != " . user()->id,
-        ];
         $this->addRowAction("preview_qr", "QR", "<i class='bi bi-qr-code me-1'></i> QR");
-
-        parent::__construct("users");
     }
 
     protected function storeOverride(array $data): array
@@ -80,7 +89,7 @@ class Users extends Module
         return $id != user()->id;
     }
 
-    protected function processTableRequest(?string $id = null): void
+    protected function processTableRequest(): void
     {
         if (request()->has("preview_qr")) {
             $user = User::find(request()->id);
@@ -91,6 +100,6 @@ class Users extends Module
                 exit;
             }
         }
-        parent::processTableRequest($id);
+        parent::processTableRequest();
     }
 }

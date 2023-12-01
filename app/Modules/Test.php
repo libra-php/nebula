@@ -2,7 +2,7 @@
 
 namespace App\Modules;
 
-use Nebula\Backend\Module;
+use Nebula\Admin\Module;
 use Nebula\Validation\Validate;
 
 class Test extends Module
@@ -11,29 +11,22 @@ class Test extends Module
     {
         /**
          * Table columns for Index view
-         * key: column for table query
+         * key: column for table query (column or subquery or injected value ie, '100' as dollar)
          * value: table header label
+         * tip: if you set the value to null, the value is not rendered
          */
         $this->table_columns = [
             "id" => "ID",
             "name" => "Name",
             "number" => "Number",
+            "'100' as dollar" => "Dollar",
             "updated_at" => "Updated At",
             "created_at" => "Created At",
         ];
 
         /**
-         * Searchable table columns
-         */
-        $this->search = ["number", "name", "comment"];
-
-        /**
-         * Date fitler column
-         */
-        $this->filter_datetime = "created_at";
-
-        /**
          * Table filter links
+         * Located obove the table as links with counts
          * key: link label
          * value: where clause filter
          */
@@ -41,6 +34,41 @@ class Test extends Module
             "All" => "1=1",
             "Over 9000" => "number > 9000",
         ];
+
+        /**
+         * Table column formatting
+         * key: table column
+         * value: format type (can be pre-defined like 'dollar' or a callback fn)
+         */
+        $this->table_format = [
+            "number" => fn($datum, $column) => $datum->$column > 9000
+                ? sprintf('<span class="text-success">%s</span>', $datum->$column)
+                : sprintf('<span class="text-danger">%s</span>', $datum->$column),
+            "dollar" => "dollar"
+        ];
+
+        /**
+         * Searchable table columns, just provide the column name
+         * Control is located in the filter accordion
+         */
+        $this->search = ["number", "name", "comment"];
+
+        /**
+         * Date fitler column
+         * Controls will be rendered in the filter accordion
+         */
+        $this->filter_datetime = "created_at";
+
+        /**
+         * Select filters
+         * Control is located in the filter accordion
+         * key: column to filter on
+         * value: title of select
+         */
+        $this->filter_select = [
+            "dropdown" => "Animals",
+        ];
+
 
         /**
          * Form columns for Edit & Create views
@@ -57,26 +85,13 @@ class Test extends Module
             "color" => "Colour",
             "checkbox" => "Checkbox",
             "switch" => "Switch",
+            'test' => "Test",
         ];
-
-        /**
-         * Form validation columns / rules
-         * key: form column to validate
-         * value: array of validation rules
-         */
-        // Override the custom validation message
-        Validate::$messages["name_custom"] = "%label must not equal 'test'!!!!";
-        $this->validation = [
-            // Note: you can use custom validation, too
-            "name" => ["required", fn($value) => trim(strtolower($value)) !== 'test'],
-            "number" => ["required", "numeric"],
-        ];
-
 
         /**
          * Edit & Create view controls
          * key: form column
-         * value: control type
+         * value: control type (can be pre-defined like 'input' or a callback fn)
          */
         $this->form_controls = [
             "number" => "number",
@@ -90,20 +105,27 @@ class Test extends Module
             "image" => "image",
             "checkbox" => "checkbox",
             "switch" => "switch",
+            "test" => fn($column, $value) => 'Hello!',
         ];
 
         /**
-         * Select filters
-         * key: column to filter on
-         * value: title of select
+         * Form validation columns / rules
+         * Inspired by Laravel
+         * key: form column to validate
+         * value: array of validation rules
          */
-        $this->filter_select = [
-            "dropdown" => "Animals",
+        // example: override the custom validation message
+        Validate::$messages["name_custom"] = "%label must not equal 'test'!!!!";
+        $this->validation = [
+            // note: custom validation here
+            "name" => ["required", fn($value) => trim(strtolower($value)) !== 'test'],
+            "number" => ["required", "numeric"],
+            "color" => ["color"],
         ];
 
         /**
-         * The options for a select control
-         * key: form column
+         * The options for a dropdown table filter (filter_select) or dropdown control (form column)
+         * key: form column (corresponding to fitler/column)
          * value: query or array
          * query: db query of (id = option value & name = option label)
          * array: array of options (key = option value & name = option label)
@@ -120,7 +142,5 @@ class Test extends Module
                 option(8, "Tiger"),
             ],
         ];
-
-        parent::__construct("test");
     }
 }

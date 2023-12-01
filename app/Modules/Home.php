@@ -2,15 +2,10 @@
 
 namespace App\Modules;
 
-use Nebula\Backend\Module;
+use Nebula\Admin\Module;
 
 class Home extends Module
 {
-    public function __construct()
-    {
-        parent::__construct("home");
-    }
-
     protected function customContent(): string
     {
         return latte("backend/home.latte");

@@ -2,7 +2,7 @@
 
 namespace App\Modules;
 
-use Nebula\Backend\Module;
+use Nebula\Admin\Module;
 
 class Modules extends Module
 {
@@ -54,7 +54,5 @@ class Modules extends Module
                 "SELECT id, name FROM user_types ORDER BY level DESC"
             ),
         ];
-
-        parent::__construct("modules");
     }
 }

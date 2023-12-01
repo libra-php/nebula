@@ -1,4 +1,4 @@
-<div n:if="$post->bannerLink()" id="blog-jumbo" class="p-5 rounded-3 d-flex align-items-center justify-content-center" style="background-position: center; background-size: cover; background-image: url('{$post->bannerLink()}')">
+<div n:if="$post->bannerLink()" id="blog-jumbo" class="p-5 d-flex align-items-center justify-content-center" style="background-position: center; background-size: cover; background-image: url('{$post->bannerLink()}')">
 	<div id="overlay" class="d-flex flex-column text-white p-2" style="background-color: rgba(0,0,0,0.5)">
 		<h1 class="header">{$post->title}</h1>
 		<h4 n:if="$post->subtitle">{$post->subtitle}</h4>

@@ -4,7 +4,7 @@ namespace App\Modules;
 
 use App\Models\Audit as AuditModel;
 use Nebula\Alerts\Flash;
-use Nebula\Backend\Module;
+use Nebula\Admin\Module;
 
 class Audit extends Module
 {
@@ -25,7 +25,7 @@ class Audit extends Module
             "audit.new_value" => null,
         ];
         $this->table_format = [
-            "diff" => fn($row, $column) => $this->formatDiff($row),
+            "diff" => fn($datum, $column) => $this->formatDiff($datum),
         ];
         $this->joins = ["INNER JOIN users ON audit.user_id = users.id"];
         $this->search = ["table_name", "table_id", "field", "name"];
@@ -41,10 +41,14 @@ class Audit extends Module
         ];
         $this->select_options = [
             "users.name" => db()->selectAll(
-                "SELECT name as id, concat(name, ' (', email, ')') as name FROM users ORDER BY name"
+                "SELECT name as id, concat(name, ' (', email, ')') as name
+                FROM users
+                ORDER BY name"
             ),
             "table_name" => db()->selectAll(
-                "SELECT distinct table_name as id, table_name as name FROM audit ORDER BY table_name"
+                "SELECT distinct table_name as id, table_name as name
+                FROM audit
+                ORDER BY table_name"
             ),
         ];
         $this->addRowAction(
@@ -53,7 +57,6 @@ class Audit extends Module
             "Undo",
             "Are you sure you want to restore this value?"
         );
-        parent::__construct("audit");
     }
 
     public function formatDiff($audit): string
@@ -116,7 +119,7 @@ class Audit extends Module
             if (is_array($k)) {
                 $ret .=
                     (!empty($k["d"])
-                        ? "<div title='Removed' class='audit-old truncate'>" .
+                        ? "<div title='Removed' class='audit-old truncate me-2'>" .
                             implode(" ", $k["d"]) .
                             "</div> "
                         : "") .
@@ -148,7 +151,9 @@ class Audit extends Module
         if (request()->has("undo_change")) {
             $audit = AuditModel::find(request()->id);
             $result = db()->query(
-                "UPDATE $audit->table_name SET $audit->field = ? WHERE id = ?",
+                "UPDATE $audit->table_name SET
+                $audit->field = ?
+                WHERE id = ?",
                 $audit->old_value,
                 $audit->table_id
             );

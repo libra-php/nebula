@@ -2,7 +2,6 @@
 
 namespace Nebula\Validation;
 
-use Nebula\Alerts\Flash;
 use Nebula\Database\QueryBuilder;
 
 class Validate
@@ -27,10 +26,14 @@ class Validate
         "unique" => "%label must be unique",
         "is_lowercase" => "%label must be lowercase",
         "is_uppercase" => "%label must be uppercase",
-        "slug" => "%label must be a valid url format",
+        "slug" => "%label must be a valid URL format",
         "is_class" => "%label must exist",
         "is_file" => "%label must exist",
         "no_spaces" => "%label cannot contain any spaces",
+        "url" => "%label must be a valid URL",
+        "ipv4" => "%label must be a valid IPv4 address",
+        "ipv6" => "%label must be a valid IPv6 address",
+        "color" => "%label must be a valid hexadecimal color code"
     ];
     public static $errors = [];
     public static $custom = [];
@@ -66,13 +69,6 @@ class Validate
     public static function request(array $request_rules): bool
     {
         foreach ($request_rules as $request_item => $ruleset) {
-            if (!request()->has($request_item)) {
-                Flash::addFlash(
-                    "warning",
-                    "Validation error: '{$request_item}' missing from request."
-                );
-                return false;
-            }
             $value = request()->get($request_item) ?? null;
             if (!array_is_list($ruleset)) {
                 $label = array_keys($ruleset)[0];
@@ -110,6 +106,10 @@ class Validate
                         "slug" => self::slug($value),
                         "is_class" => self::classExists($value),
                         "is_file" => self::fileExists($value),
+                        "url" => self::url($value),
+                        "ipv4" => self::ipv4($value),
+                        "ipv6" => self::ipv6($value),
+                        "color" => self::color($value),
                         "unique" => self::unique($value, $extra, $request_item),
                         default => true,
                     };
@@ -169,10 +169,15 @@ class Validate
      */
     public static function isRequired($value): bool
     {
-        $value = trim($value);
-        return !is_null($value) &&
-            $value !== "" &&
-            strtolower($value) !== "null";
+        if (is_array($value)) {
+            return !empty($value);
+        } else if (is_string($value)) {
+            $value = trim($value);
+            return !is_null($value) &&
+                $value !== "" &&
+                strtolower($value) !== "null";
+        }
+        return false;
     }
 
     /**
@@ -287,6 +292,45 @@ class Validate
     public static function fileExists($value): bool
     {
         return file_exists($value);
+    }
+
+    /**
+     * Request value must be a valid URL
+     * @param mixed $value
+     */
+    public static function url($value): bool
+    {
+        if (substr($value, 0, 4) !== 'http') {
+            $value = "https://".$value;
+        }
+        return filter_var($value, FILTER_VALIDATE_URL);
+    }
+
+    /**
+     * Request value must be a valid IP (v4) address
+     * @param mixed $value
+     */
+    public static function ipv4($value): bool
+    {
+        return filter_var($value, FILTER_VALIDATE_IP);
+    }
+
+    /**
+     * Request value must be a valid IP (v6) address
+     * @param mixed $value
+     */
+    public static function ipv6($value): bool
+    {
+        return filter_var($value, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6);
+    }
+
+    /**
+     * Request value must be a valid IP (v6) address
+     * @param mixed $value
+     */
+    public static function color($value): bool
+    {
+        return self::regEx($value, "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$");
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 
-namespace Nebula\Backend;
+namespace Nebula\Admin;
 
 class FormControls
 {

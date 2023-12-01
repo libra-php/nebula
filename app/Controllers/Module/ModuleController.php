@@ -2,9 +2,9 @@
 
 namespace App\Controllers\Module;
 
-use App\Models\Module as NebulaModule;
+use App\Models\Module as Model;
 use Nebula\Alerts\Flash;
-use Nebula\Backend\Module;
+use Nebula\Admin\Module;
 use Nebula\Controller\Controller;
 use Nebula\Traits\Http\Response;
 use StellarRouter\{Get, Post, Delete, Group};
@@ -18,6 +18,14 @@ class ModuleController extends Controller
 
     public function __construct()
     {
+        $this->checkMaintenanceMode();
+        $this->loadModule();
+
+        parent::__construct();
+    }
+
+    private function checkMaintenanceMode()
+    {
         // Check if backend is in maintenance mode
         if (config("backend.maintenance_mode")) {
             Flash::addFlash(
@@ -26,6 +34,10 @@ class ModuleController extends Controller
             );
             redirectRoute("sign-in.index");
         }
+    }
+
+    private function loadModule()
+    {
         // Using the route params to determine the module, or 404
         $params = request()->route->getParameters();
         if (!empty($params)) {
@@ -37,8 +49,6 @@ class ModuleController extends Controller
                 $this->fatalError();
             }
         }
-
-        parent::__construct();
     }
 
     /**
@@ -47,7 +57,7 @@ class ModuleController extends Controller
     private function getModule(string $module_name): ?Module
     {
         $module_name = strtok($module_name, "?");
-        $module = NebulaModule::search(["module_name", $module_name]);
+        $module = Model::search(["module_name", $module_name]);
         // Check if module exists
         if (is_null($module)) {
             $this->moduleNotFound();
@@ -59,34 +69,14 @@ class ModuleController extends Controller
         $class = $module->class_name;
         try {
             $module_class = new $class();
+            $module_class->init($module);
         } catch (\Throwable $th) {
             if (config("app.debug")) {
-                Flash::addFlash("info", $th->getMessage());
+                error_log($th->getMessage());
             }
             return null;
         }
         return $module_class;
-    }
-
-    #[Get("/module/permission-denied", "module.permission-denied")]
-    public function permissionDenied(): void
-    {
-        $module = new Module("error");
-        $module->fatalError();
-    }
-
-    #[Get("/module/not-found", "module.not-found")]
-    public function moduleNotFound(): void
-    {
-        $module = new Module("error");
-        $module->moduleNotFound();
-    }
-
-    #[Get("/module/fatal-error", "module.fatal-error")]
-    public function fatalError(): void
-    {
-        $module = new Module("error");
-        $module->fatalError(true);
     }
 
     /**
@@ -162,5 +152,23 @@ class ModuleController extends Controller
     public function destroy(string $module, string $id): string
     {
         return $this->module->destroy($id);
+    }
+
+    #[Get("/module/permission-denied", "module.permission-denied")]
+    public function permissionDenied(): void
+    {
+        die("permission denied");
+    }
+
+    #[Get("/module/not-found", "module.not-found")]
+    public function moduleNotFound(): void
+    {
+        die("module not found");
+    }
+
+    #[Get("/module/fatal-error", "module.fatal-error")]
+    public function fatalError(): void
+    {
+        die("fatal error");
     }
 }

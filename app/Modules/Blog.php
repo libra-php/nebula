@@ -3,7 +3,7 @@
 namespace App\Modules;
 
 use App\Models\Post;
-use Nebula\Backend\Module;
+use Nebula\Admin\Module;
 
 class Blog extends Module
 {
@@ -41,7 +41,7 @@ class Blog extends Module
         $this->validation = [
             "title" => ["required"],
             "user_id" => ["required"],
-            "slug" => ["required", "is_lowercase", "slug"],
+            "slug" => ["required", "is_lowercase", "slug", "url"],
         ];
         $this->form_controls = [
             "banner_image" => "image",
@@ -70,8 +70,6 @@ class Blog extends Module
                 option("Published", "Published"),
             ],
         ];
-
-        parent::__construct("blog");
     }
 
     private function preview(?string $id = null): void
@@ -96,6 +94,6 @@ class Blog extends Module
             $this->addFormAction("preview_post", "Preview", "<i class='bi bi-eye me-1'></i> Preview");
             $this->preview($id);
         }
-        parent::processTableRequest($id);
+        parent::processFormRequest();
     }
 }

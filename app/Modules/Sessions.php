@@ -2,7 +2,7 @@
 
 namespace App\Modules;
 
-use Nebula\Backend\Module;
+use Nebula\Admin\Module;
 
 class Sessions extends Module
 {
@@ -35,6 +35,5 @@ class Sessions extends Module
                 option("DELETE", "DELTE"),
             ],
         ];
-        parent::__construct("sessions");
     }
 }
