@@ -88,7 +88,7 @@ trait ModuleForm
      */
     protected function getEditTemplate(): string
     {
-        return "backend/edit.latte";
+        return "admin/edit.latte";
     }
 
     /**
@@ -96,7 +96,7 @@ trait ModuleForm
      */
     protected function getCreateTemplate(): string
     {
-        return "backend/create.latte";
+        return "admin/create.latte";
     }
 
     /**

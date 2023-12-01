@@ -26,8 +26,8 @@ class ModuleController extends Controller
 
     private function checkMaintenanceMode()
     {
-        // Check if backend is in maintenance mode
-        if (config("backend.maintenance_mode")) {
+        // Check if admin is in maintenance mode
+        if (config("admin.maintenance_mode")) {
             Flash::addFlash(
                 "warning",
                 "Maintenance mode. Please check back soon."

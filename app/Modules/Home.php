@@ -8,6 +8,6 @@ class Home extends Module
 {
     protected function customContent(): string
     {
-        return latte("backend/home.latte");
+        return latte("admin/home.latte");
     }
 }

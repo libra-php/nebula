@@ -389,7 +389,7 @@ trait ModuleTable
      */
     protected function getIndexTemplate(): string
     {
-        return "backend/index.latte";
+        return "admin/index.latte";
     }
 
     /**
@@ -397,7 +397,7 @@ trait ModuleTable
      */
     protected function getCustomIndex(): string
     {
-        return "backend/custom.latte";
+        return "admin/custom.latte";
     }
 
     /**
