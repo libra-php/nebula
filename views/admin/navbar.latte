@@ -14,7 +14,7 @@
 				{foreach $module_links as $link}
 				<li class="nav-item" title="{$link['title']}" data-module="{$link['name']}">
 					<a href="{$moduleRoute('module.index', $link['name'])}"
-						class="dropdown-item d-flex align-items-center" hx-select="#module" hx-target="#module">
+						class="dropdown-item d-flex align-items-center" hx-select="#main" hx-target="#main">
 						<i class="{$link['icon']}"></i> <span class="ps-2">{$link['title']}</span>
 					</a>
 				</li>
