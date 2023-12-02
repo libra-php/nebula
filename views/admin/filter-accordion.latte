@@ -7,9 +7,13 @@
 		</h2>
 		<div id="filters" class="accordion-collapse collapse {if $expand_filters}show{/if}" aria-labelledby="accordion-filter" data-bs-parent="#filter-accordion">
 			<div class="p-3">
-				{include "filter-search.latte"}
-				{include "filter-datetime.latte"}
-				{include "filter-select.latte"}
+				<table>
+					<tbody>
+						{include "filter-search.latte"}
+						{include "filter-datetime.latte"}
+						{include "filter-select.latte"}
+					</tbody>
+				</table>
 			</div>
 		</div>
 	</div>
