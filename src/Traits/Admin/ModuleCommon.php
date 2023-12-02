@@ -211,9 +211,8 @@ trait ModuleCommon
     {
         global $global_memory;
         $slow_traces = [];
-        $total = microtime(true) - $_SERVER["REQUEST_TIME_FLOAT"];
+        $php_total = microtime(true) - $_SERVER["REQUEST_TIME_FLOAT"];
         $db_total = db()->total_time ?? 0;
-        $php_total = $total - $db_total;
         $memory = memory_get_usage() - $global_memory;
         $memory_total = $this->convert($memory);
         foreach (["Slow DB:" => db()->trace_counts] as $title => $traces) {
@@ -241,10 +240,9 @@ trait ModuleCommon
         return [
             "show_profiler" => config("database.show_profiler"),
             "global_start" => $_SERVER["REQUEST_TIME_FLOAT"],
-            "total_memory" => $memory_total,
-            "total_time" => number_format($total, 6),
             "db_total_time" => number_format($db_total, 6),
             "php_total_time" => number_format($php_total, 6),
+            "php_total_memory" => $memory_total,
             "db_num_queries" => db()->num_queries ?? 0,
             "slow_traces" => $slow_traces ?? [],
         ];

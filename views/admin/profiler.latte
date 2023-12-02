@@ -5,16 +5,12 @@
 			<tr>
 				<td class="text-end pe-1"><strong>PHP</strong></td>
 				<td class="mono">{$profiler['php_total_time']}</td>
-				<td class="mono">({$profiler['total_memory']})</td>
+				<td class="mono">({$profiler['php_total_memory']})</td>
 			</tr>
 			<tr>
 				<td class="text-end pe-1"><strong>MySQL</strong></td>
 				<td class="mono">{$profiler['db_total_time']}</td>
 				<td class="mono">({$profiler['db_num_queries']} queries)</td>
-			</tr>
-			<tr>
-				<td class="text-end pe-1"><strong>Total</strong></td>
-				<td colspan="2" class="mono">{$profiler['total_time']}</td>
 			</tr>
 		</table>
 	</div>
