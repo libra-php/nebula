@@ -14,7 +14,7 @@
 				{foreach $module_links as $link}
 				<li class="nav-item" title="{$link['title']}" data-module="{$link['name']}">
 					<a href="{$moduleRoute('module.index', $link['name'])}"
-						class="dropdown-item d-flex align-items-center {if $module_name === $link['name']}active{/if}" hx-select="#module" hx-target="#module" hx-swap="outerHTML" hx-swap-oob="#navbar" hx-select-oob="#navbar">
+						class="dropdown-item d-flex align-items-center" hx-select="#module" hx-target="#module">
 						<i class="{$link['icon']}"></i> <span class="ps-2">{$link['title']}</span>
 					</a>
 				</li>
