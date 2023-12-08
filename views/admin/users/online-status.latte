@@ -1,3 +1,3 @@
-<div class="d-flex justify-content-center" hx-get="?user_online_status={$user_id}" {if $update}hx-trigger="every 5s"{/if} hx-swap="outerHTML">
+<div class="d-flex justify-content-center" hx-get="?user_online_status={$user_id}" {if $update}hx-trigger="every 10s"{/if} hx-swap="outerHTML">
 	<div class="{$class}" style="width: 15px; height: 15px; border-radius: 50%;"></div>
 </div>
