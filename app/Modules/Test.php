@@ -31,8 +31,8 @@ class Test extends Module
          * value: where clause filter
          */
         $this->filter_links = [
-            "All" => "1=1",
             "Over 9000" => "number > 9000",
+            "All" => "1=1",
         ];
 
         /**

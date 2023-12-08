@@ -27,6 +27,7 @@ class Users extends Module
         $this->filter_links = [
             "Me" => "id = " . user()->id,
             "Others" => "id != " . user()->id,
+            "All" => "1=1",
         ];
 
         $this->form_columns = [
@@ -140,7 +141,11 @@ class Users extends Module
                 $bg = "bg-warning";
             }
         }
-        return latte("admin/users/online-status.latte", ["class" => $bg, "user_id" => $user_id]);
+        return latte("admin/users/online-status.latte", [
+            "class" => $bg,
+            "user_id" => $user_id,
+            "update" => $user_id != user()->id,
+        ]);
     }
 
     protected function processTableRequest(): void
