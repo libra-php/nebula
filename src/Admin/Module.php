@@ -86,8 +86,9 @@ class Module
         if (!$this->hasCreatePermission()) {
             $this->permissionDenied();
         }
-        if ($this->validate($this->validation) && $this->table_create) {
-            $columns = $this->getFilteredFormColumns();
+        $validation_array = $this->getStoreValidation();
+        if ($this->validate($validation_array) && $this->table_create) {
+            $columns = $this->filterRequestData();
             $columns = $this->storeOverride($columns);
             $qb = QueryBuilder::insert($this->table_name)->columns($columns);
             $result = (bool) db()->run($qb->build(), $qb->values());
@@ -116,8 +117,9 @@ class Module
         if (!$this->hasEditPermission($id)) {
             $this->permissionDenied();
         }
-        if ($this->validate($this->validation) && $this->table_edit) {
-            $columns = $this->getFilteredFormColumns();
+        $validation_array = $this->getUpdateValidation();
+        if ($this->validate($validation_array) && $this->table_edit) {
+            $columns = $this->filterRequestData();
             $columns = $this->updateOverride($columns);
             $qb = QueryBuilder::update($this->table_name)
                 ->columns($columns)

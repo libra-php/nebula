@@ -16,7 +16,7 @@
 					</td>
 					<td class="control ps-2">
 						{$controls($column, $form['defaults'][$column] ?? '')|noescape}
-						{include '../layout/components/validation.latte', name: $column}
+						{include '../../layout/components/validation.latte', name: $column}
 					</td>
 				</tr>
 			{/foreach}

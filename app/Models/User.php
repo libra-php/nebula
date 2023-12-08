@@ -12,10 +12,6 @@ final class User extends Model
     // Columns won't be inserted/updated
     protected array $guarded = ["id", "uuid", "created_at", "updated_at"];
 
-    public function __construct(protected ?string $id = null)
-    {
-    }
-
     public function type(): mixed
     {
         return db()->select(

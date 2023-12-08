@@ -198,17 +198,33 @@ trait ModuleForm
     }
 
     /**
+     * Return the columns from table_name
+     */
+    protected function getTableColumns()
+    {
+        return db()
+            ->query("DESCRIBE $this->table_name")
+            ->fetchAll(PDO::FETCH_COLUMN);
+    }
+
+    /**
      * Filter out columns that should not be used in the
      * request for creation of / updating a record.
      */
-    protected function getFilteredFormColumns(): array
+    protected function filterRequestData(): array
     {
         $data = request()->data();
-        // Only real table columns are considered
-        $table_columns = db()
-            ->query("DESCRIBE $this->table_name")
-            ->fetchAll(PDO::FETCH_COLUMN);
-        $data = array_filter($data, fn ($value, $key) => is_string($value) && in_array($key, $table_columns), ARRAY_FILTER_USE_BOTH);
+
+        // Only form columns are valid
+        $columns = array_map(function ($key) {
+            $alias = explode(" as ", $key);
+            return trim(end($alias));
+        }, array_keys($this->form_columns));
+        $data = array_filter($data, fn ($key) => in_array($key, $columns), ARRAY_FILTER_USE_KEY);
+
+        // Only strings should be stored, etc
+        $data = array_filter($data, fn ($value) => is_string($value));
+
         // Deal with "null" string
         array_walk(
             $data,
@@ -220,12 +236,21 @@ trait ModuleForm
         return $data;
     }
 
-	/**
+    /**
      * Return the edit QueryBuilder
      */
     protected function getEditQuery(string $id): QueryBuilder
     {
-        $columns = $this->getFilteredFormColumns();
+        $columns = [];
+        // Get table columns as values
+        $table_columns = $this->getTableColumns();
+        // Build out columns
+        foreach ($table_columns as $idx => $column) {
+            if (key_exists($column, $this->form_columns)) {
+                $columns[$column] = '';
+            }
+        }
+        $columns = $this->editOverride($columns);
         $qb = QueryBuilder::select($this->table_name)
             ->columns(array_keys($columns))
             ->where([$this->key_col, $id]);
@@ -234,16 +259,19 @@ trait ModuleForm
     }
 
     /**
-     * Returns an array of all form_columns that are required
+     * Override data before displaying in edit view
      */
-    protected function getRequiredForm(): array
+    protected function editOverride(array $data): array
     {
-        return array_keys(
-            array_filter(
-                $this->validation,
-                fn ($rules) => in_array("required", $rules)
-            )
-        );
+        return $data;
+    }
+
+    /**
+     * Override data before displaying in create view
+     */
+    protected function createOverride(): array
+    {
+        return [];
     }
 
     /**
@@ -261,6 +289,42 @@ trait ModuleForm
     {
         return $data;
     }
+
+    /**
+     * Override update validation array
+     */
+    protected function getUpdateValidation(): array
+    {
+        return $this->validation;
+    }
+
+    /**
+     * Override store validation array
+     */
+    protected function getStoreValidation(): array
+    {
+        return $this->validation;
+    }
+
+    /**
+     * Returns an array of all form_columns that are required
+     */
+    protected function getRequiredForm(string $type = 'edit'): array
+    {
+        $validation = $this->validation;
+        if ($type === 'edit') {
+            $validation = $this->getUpdateValidation();
+        } else if ($type === 'create') {
+            $validation = $this->getStoreValidation();
+        }
+        return array_keys(
+            array_filter(
+                $validation,
+                fn ($rules) => in_array("required", $rules)
+            )
+        );
+    }
+
 
     /**
      * Return a form control closure used edit / create views
@@ -354,18 +418,18 @@ trait ModuleForm
             "Create" => moduleRoute("module.create.part", $this->module_name),
         ];
         // Remember request values
-        $columns = $this->getFilteredFormColumns();
-        foreach ($columns as $column => $value) {
-            $this->form_defaults[$column] = $value;
+        $columns = $this->getTableColumns();
+        foreach ($columns as $index => $column) {
+            $this->form_defaults[$column] = request()->$column ?? '';
         }
         return [
             ...$this->commonData(),
             "breadcrumbs" => $breadcrumbs,
             "controls" => $fc,
             "form" => [
-                "data" => [],
+                "data" => $this->createOverride(),
                 "defaults" => $this->form_defaults,
-                "required" => $this->getRequiredForm(),
+                "required" => $this->getRequiredForm('create'),
                 "columns" => $this->form_columns,
             ],
         ];
@@ -411,7 +475,7 @@ trait ModuleForm
             "form" => [
                 "actions" => $this->form_actions,
                 "data" => $data,
-                "required" => $this->getRequiredForm(),
+                "required" => $this->getRequiredForm('edit'),
                 "columns" => $this->form_columns,
             ],
         ];

@@ -1,4 +1,4 @@
-{include "form-actions.latte"}
+{include "actions.latte"}
 <div class="table-responsive">
 	<form method="POST" hx-boost="true" hx-encoding="multipart/form-data">
 		{csrf()|noescape}
@@ -17,7 +17,7 @@
 					</td>
 					<td class="control ps-2">
 						{$controls($column, $form['data'][$column] ?? '')|noescape}
-						{include '../layout/components/validation.latte', name: $column}
+						{include '../../layout/components/validation.latte', name: $column}
 					</td>
 				</tr>
 			{/foreach}

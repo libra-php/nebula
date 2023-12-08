@@ -76,6 +76,7 @@ class Validate
             } else {
                 $label = null;
             }
+            $is_required = in_array('required', $ruleset);
             foreach ($ruleset as $rule_raw) {
                 if (is_callable($rule_raw)) {
                     $rule = $request_item . "_custom";
@@ -88,6 +89,12 @@ class Validate
                     $rule = $rule_split[0];
                     $extra = count($rule_split) == 2 ? $rule_split[1] : "";
                     $label = $label ? $label : ucfirst($request_item);
+                    $value = trim($value);
+
+                    // If it isn't required and it is the empty string,
+                    // then validation should pass
+                    if (!$is_required && $value === '') continue 2;
+
                     $result = match ($rule) {
                         "string" => self::isString($value),
                         "numeric" => self::isNumeric($value),

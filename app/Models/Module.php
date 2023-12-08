@@ -10,8 +10,4 @@ final class Module extends Model
     public string $primary_key = "id";
 
     protected array $guarded = ["id", "created_at", "updated_at"];
-
-    public function __construct(protected ?string $id = null)
-    {
-    }
 }
