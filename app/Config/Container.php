@@ -60,6 +60,7 @@ return [
         $latte->setTempDirectory($config["cache_path"]);
         $latte->addFunction("csrf", fn() => csrf());
         $latte->addFunction("route", fn(string $name) => route($name));
+        $latte->addFunction("old", fn($name, $default = '') => request()->has($name) ? request()->$name : $default);
         $latte->addFunction(
             "buildRoute",
             fn(string $name, ...$replacements) => buildRoute(
