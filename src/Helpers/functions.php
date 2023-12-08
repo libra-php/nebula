@@ -141,19 +141,24 @@ function redirectModule(
     ?string $target = null
 ) {
     $route_path = moduleRoute($route_name, $module_name, $id);
+    hxRedirect($route_path, $source, $target);
+}
+
+function hxRedirect($path, $source = null, $target = null)
+{
     if ($source && $target) {
         header(
             'HX-Location: {"path":"' .
-                $route_path .
+                $path .
                 '", "source":"' .
                 $source .
                 '", "target":"' .
                 $target .
                 '"}'
         );
-    } else {
-        header("HX-Location: $route_path");
     }
+    header("HX-Location: $path");
+    exit;
 }
 
 function initLogger()

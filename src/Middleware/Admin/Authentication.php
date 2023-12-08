@@ -26,8 +26,7 @@ class Authentication implements Middleware
             !$this->isAuthenticated()
         ) {
             // Redirect or return an error response if the user is not authenticated
-            return redirectRoute("sign-in.index");
-            //return $this->response(401, "Unauthorized");
+            return $this->response(401, "Unauthorized");
         }
 
         $response = $next($request);
