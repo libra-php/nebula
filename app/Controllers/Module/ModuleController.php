@@ -154,21 +154,27 @@ class ModuleController extends Controller
         return $this->module->destroy($id);
     }
 
-    #[Get("/module/permission-denied", "module.permission-denied")]
+    #[Get("/module/permission-denied", "module.permission-denied", ["auth"])]
     public function permissionDenied(): void
     {
-        die("permission denied");
+        $response = $this->response(403, "Permission denied");
+        echo $response->send();
+        exit;
     }
 
-    #[Get("/module/not-found", "module.not-found")]
+    #[Get("/module/not-found", "module.not-found", ["auth"])]
     public function moduleNotFound(): void
     {
-        die("module not found");
+        $response = $this->response(404, "Module not found");
+        echo $response->send();
+        exit;
     }
 
-    #[Get("/module/fatal-error", "module.fatal-error")]
+    #[Get("/module/fatal-error", "module.fatal-error", ["auth"])]
     public function fatalError(): void
     {
-        die("fatal error");
+        $response = $this->response(500, "Fatal error");
+        echo $response->send();
+        exit;
     }
 }
