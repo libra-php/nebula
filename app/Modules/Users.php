@@ -148,25 +148,35 @@ class Users extends Module
         ]);
     }
 
+    private function updateUserOnlineStatus()
+    {
+        // Polls every 10 seconds
+        $user = User::find(request()->user_online_status);
+        if ($user) {
+            echo $this->isOnline($user->id);
+        }
+        exit;
+    }
+
+    private function previewQRCode()
+    {
+        // Preview the Two-Factor QR code
+        $user = User::find(request()->id);
+        if ($user) {
+            $url = Auth::urlQR($user);
+            $link = moduleRoute("module.index", $this->module_name);
+            echo latte("auth/qr.latte", ["url" => $url, "link" => $link]);
+        }
+        exit;
+    }
+
     protected function processTableRequest(): void
     {
-        // Polls every 5 seconds
         if (request()->has("user_online_status")) {
-            $user = User::find(request()->user_online_status);
-            if ($user) {
-                echo $this->isOnline($user->id);
-            }
-            exit;
+            $this->updateUserOnlineStatus();
         }
-        // Preview the Two-Factor QR code
         if (request()->has("preview_qr")) {
-            $user = User::find(request()->id);
-            if ($user) {
-                $url = Auth::urlQR($user);
-                $link = moduleRoute("module.index", $this->module_name);
-                echo latte("auth/qr.latte", ["url" => $url, "link" => $link]);
-                exit;
-            }
+            $this->previewQRCode();
         }
         parent::processTableRequest();
     }
