@@ -8,6 +8,6 @@ class Home extends Module
 {
     protected function customContent(): string
     {
-        return latte("admin/home/index.latte");
+        return latte("admin/home/index.latte", ["user" => user()]);
     }
 }
