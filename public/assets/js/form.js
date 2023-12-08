@@ -14,7 +14,7 @@ if (typeof checkboxes === 'undefined') {
 // WYSIWYG editor
 tinymce.init({
   plugins: 'searchreplace autolink directionality visualblocks visualchars image link media codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap emoticons code fullscreen',
-  toolbar: 'undo redo print spellcheckdialog formatpainter | blocks fontfamily fontsize | bold italic underline forecolor backcolor | link image | alignleft aligncenter alignright alignjustify | code',
+  toolbar: 'fullscreen | code | undo redo formatpainter | blocks fontsize | bold italic underline forecolor backcolor | link image | alignleft aligncenter alignright alignjustify',
   height: "800px",
   setup: function(editor) {
     const update = () => {
