@@ -79,6 +79,21 @@ class ModuleController extends Controller
         return $module_class;
     }
 
+    private function showAlert(string $message, int $code = 200)
+    {
+        $m = new Module();
+        Flash::addFlash("warning", $message);
+        $view = latte("admin/errors/alert.latte", [
+            ...$m->getIndexData(),
+            "module_title" => "Error",
+            "module_icon" => "bi bi-exclamation-diamond",
+            "breadcrumbs" => []
+        ]);
+        $response = $this->response($code, $view);
+        echo $response->send();
+        exit;
+    }
+
     /**
      * Table view
      */
@@ -165,9 +180,7 @@ class ModuleController extends Controller
     #[Get("/module/not-found", "module.not-found", ["auth"])]
     public function moduleNotFound(): void
     {
-        $response = $this->response(404, "Module not found");
-        echo $response->send();
-        exit;
+        $this->showAlert("Module not found", 404);
     }
 
     #[Get("/module/fatal-error", "module.fatal-error", ["auth"])]

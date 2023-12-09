@@ -542,7 +542,7 @@ trait ModuleTable
      * Return data used for index view
      * @return array<string,mixed>
      */
-    protected function getIndexData(): array
+    public function getIndexData(): array
     {
         $this->processTableRequest();
         $data = $this->getTableData();
