@@ -12,6 +12,14 @@ use StellarRouter\{Get, Post, Group};
 #[Group(prefix: "/admin")]
 final class SignInController extends Controller
 {
+    public function __construct()
+    {
+        if (user()) {
+            // User is already signed in, redirect home
+            redirectHome();
+        }
+    }
+
     #[Get("/sign-in", "sign-in.index")]
     public function index(): string
     {

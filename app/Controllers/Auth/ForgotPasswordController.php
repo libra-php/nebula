@@ -10,6 +10,13 @@ use Nebula\Controller\Controller;
 #[Group(prefix: "/admin")]
 final class ForgotPasswordController extends Controller
 {
+    public function __construct()
+    {
+        if (user()) {
+            redirectHome();
+        }
+    }
+
     #[Get("/forgot-password", "forgot-password.index")]
     public function index(): string
     {

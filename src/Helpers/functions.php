@@ -161,6 +161,12 @@ function hxRedirect($path, $source = null, $target = null)
     exit;
 }
 
+function redirectHome()
+{
+    $route = buildRoute("module.index", "home");
+    redirect($route);
+}
+
 function initLogger()
 {
     try {

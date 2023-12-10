@@ -9,7 +9,7 @@ use Nebula\Controller\Controller;
 use Nebula\Traits\Http\Response;
 use StellarRouter\{Get, Post, Delete, Group};
 
-#[Group(prefix: "/admin/v1", middleware: ["auth", "module"])]
+#[Group(prefix: "/admin", middleware: ["auth", "module"])]
 class ModuleController extends Controller
 {
     use Response;
@@ -94,9 +94,12 @@ class ModuleController extends Controller
         exit;
     }
 
-    /**
-     * Table view
-     */
+    #[Get("/", "module.admin")]
+    public function admin()
+    {
+        redirectHome();
+    }
+
     #[Post("/{module}", "module.index.post")]
     #[Get("/{module}", "module.index", ["push-url"])]
     public function index(string $module): string
@@ -169,6 +172,18 @@ class ModuleController extends Controller
         return $this->module->destroy($id);
     }
 
+    /**
+     * Module could not be found
+     */
+    #[Get("/module/not-found", "module.not-found", ["auth"])]
+    public function moduleNotFound(): void
+    {
+        $this->showAlert("Module not found", 404);
+    }
+
+    /**
+     * User does not have permission
+     */
     #[Get("/module/permission-denied", "module.permission-denied", ["auth"])]
     public function permissionDenied(): void
     {
@@ -177,12 +192,9 @@ class ModuleController extends Controller
         exit;
     }
 
-    #[Get("/module/not-found", "module.not-found", ["auth"])]
-    public function moduleNotFound(): void
-    {
-        $this->showAlert("Module not found", 404);
-    }
-
+    /**
+     * A fatal server error occurred
+     */
     #[Get("/module/fatal-error", "module.fatal-error", ["auth"])]
     public function fatalError(): void
     {

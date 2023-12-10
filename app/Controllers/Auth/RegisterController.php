@@ -16,6 +16,10 @@ final class RegisterController extends Controller
         if (!config("auth.register_enabled")) {
             redirectRoute("sign-in.part");
         }
+
+        if (user()) {
+            redirectHome();
+        }
     }
 
     #[Get("/register", "register.index")]

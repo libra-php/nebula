@@ -142,8 +142,7 @@ class Auth
             "reset_token" => null,
             "reset_expires_at" => null,
         ]);
-        $path = moduleRoute("module.index", "home");
-        redirect($path);
+        redirectHome();
     }
 
     public static function twoFactorAuthentication(User $user)
