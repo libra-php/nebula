@@ -20,7 +20,9 @@ final class ForgotPasswordController extends Controller
     #[Get("/forgot-password", "forgot-password.index")]
     public function index(): string
     {
-        return latte("auth/forgot-password.latte");
+        return latte("auth/forgot-password.latte", [
+            "show_success_message" => false
+        ]);
     }
 
     #[Get("/forgot-password/part", "forgot-password.part", ["push-url"])]
