@@ -119,12 +119,12 @@ class Audit extends Module
             if (is_array($k)) {
                 $ret .=
                     (!empty($k["d"])
-                        ? "<div title='Removed' class='audit-old truncate me-2'>" .
+                        ? "<div title='Removed' class='audit-old truncate mx-1'>" .
                             implode(" ", $k["d"]) .
                             "</div> "
                         : "") .
                     (!empty($k["i"])
-                        ? "<div title='Added' class='audit-new truncate'>" .
+                        ? "<div title='Added' class='audit-new truncate mx-1'>" .
                             implode(" ", $k["i"]) .
                             "</div> "
                         : "");
