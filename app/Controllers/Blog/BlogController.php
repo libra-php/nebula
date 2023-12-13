@@ -35,7 +35,7 @@ class BlogController extends Controller
         ]);
     }
 
-    #[Get("/part", "blog.index.part")]
+    #[Get("/part", "blog.index.part", ["push-url=/blog"])]
     public function indexPart(): string
     {
         return latte("blog/index.latte", [
