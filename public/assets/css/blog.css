@@ -1,10 +1,24 @@
 /** Blog */
+#blog #title {
+  font-family: 'Anton', sans-serif;
+  font-size: 2.5rem;
+}
+#blog #posts .image-cont {
+  width: 180px !important;
+  height: 140px !important;
+}
 #post #blog-jumbo {
-  height: 600px;
+  font-size: 120%;
+  height: inherit;
+}
+#post #overlay {
+  background-color: rgba(0,0,0,0.67);
+  padding: 20px;
+  border-radius: 8px;
 }
 #post h1.header {
   font-family: 'Anton', sans-serif;
-  font-size: 5rem;
+  font-size: 3.5rem;
 }
 #post #info {
   font-size: 0.9rem;
@@ -13,3 +27,5 @@
   font-family: 'Merriweather', serif;
   line-height: 1.75rem;
 }
+
+

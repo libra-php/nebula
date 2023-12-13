@@ -12,13 +12,13 @@
     </div>
 
     <div class="form-floating">
-      <input name="email" type="email" class="form-control" id="email" placeholder="name@example.com" autocomplete="on" value="{old('email')}">
+      <input name="email" type="email" class="form-control" id="email" placeholder="name@example.com" autocomplete="on" value="{old('email')}" required>
       <label for="email">Email address</label>
       {include '../layout/components/validation.latte', name: 'email'}
     </div>
     <div class="form-floating mt-2">
       <input name="password" type="password" class="form-control" id="password" placeholder="Password"
-        autocomplete="off">
+        autocomplete="off" required>
       <label for="password">Password</label>
       {include '../layout/components/validation.latte', name: 'password'}
     </div>

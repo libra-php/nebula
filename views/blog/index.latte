@@ -1,22 +1,29 @@
 {layout "../layout/blog.latte"}
 
 {block content}
-<section id="blog" class="container">
-	{foreach $posts as $post}
-	<div class="card mb-2 rounded-3"> <div class="d-flex justify-content-center align-items-center">
-		<div class="d-flex" style="width: 142px; height: 142px; min-width: 130px;">
-			<div n:if="$post->bannerLink()" class="" style="width: 100%; height: 100%; background-position: center; background-size: cover; background-image: url('{$post->bannerLink()}')"></div>
+<section id="blog" class="container h-100">
+	{if $posts}
+	<div id="posts">
+		{foreach $posts as $post}
+		<div class="card mb-2 rounded-3"> <div class="d-flex justify-content-center align-items-center">
+			<div class="card-body p-2" hx-boost="true">
+				<a href="{$post->showPartLink()}" hx-target="#blog" hx-select="#post" hx-swap="outerHTML"><h3 class="card-title">{$post->title}</h3></a>
+				<h5 class="card-subtitle mb-2">{$post->subtitle}</h5>
+				<small>
+				<div class="text-muted">Published At: {$post->publishedAt()}</div>
+				<div class="text-muted">{$post->calculateReadTime()} min read</div>
+				</small>
+			</div>
 		</div>
-		<div class="card-body" hx-boost="true">
-			<a href="{$post->showPartLink()}" hx-target="#blog" hx-select="#post" hx-swap="outerHTML"><h3 class="card-title">{$post->title}</h3></a>
-			<h5 class="card-subtitle mb-2">{$post->subtitle}</h5>
-			<small>
-			<div class="text-muted">Published At: {$post->publishedAt()}</div>
-			<div class="text-muted">{$post->calculateReadTime()} min read</div>
-			</small>
-		</div>
+		{/foreach}
+	</div>
+	{else}
+	<div class="d-flex flex-column justify-content-center align-items-center h-100 w-100">
+		<h3>There are no posts yet!</h3>
+		<div class="mt-3" hx-boost="true">
+		  <a class="btn btn-outline-dark btn-sm ms-2" href="/part" hx-target="#blog" hx-swap="outerHTML"><i class="bi bi-house me-1"></i> Home</a>
 		</div>
 	</div>
-	{/foreach}
+	{/if}
 </section>
 {/block}
