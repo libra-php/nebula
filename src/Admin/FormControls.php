@@ -126,17 +126,16 @@ class FormControls
             $name,
             $attrs
         );
-        if ($value && file_exists($value)) {
-            $basename = basename($value);
+        if ($value) {
             $public_uploads = config("paths.public_uploads");
-            $path = sprintf("%s/%s", $public_uploads, $basename);
+            $path = sprintf("%s/%s", $public_uploads, $value);
             $control .=
                 "<div class='d-flex align-items-center control-file py-1'>";
             $control .= sprintf(
                 '<label title="%s" class="truncate file-label flex-grow-1" for="%s">%s</label>',
-                $basename,
+                $value,
                 $name,
-                $basename
+                $value
             );
             $control .= sprintf(
                 '<div class="d-flex ms-2"><a title="View" class="btn btn-sm btn-outline-info file-button" hx-boost="false" href="%s">&#128065;</a></div>',
@@ -157,13 +156,12 @@ class FormControls
     public function image(string $name, ?string $value, ...$attrs): string
     {
         $control = "";
-        if ($value && file_exists($value)) {
-            $basename = basename($value);
-            $public_uploads = config("paths.public_uploads");
-            $path = sprintf("%s/%s", $public_uploads, $basename);
+        $public_uploads = config("paths.public_uploads");
+        if ($value) {
+            $path = sprintf("%s/%s", $public_uploads, $value);
             $control .= sprintf(
                 '<img title="%s" src="%s" class="control-image mb-1 rounded-3 border-1 border-secondary" alt="img" />',
-                $basename,
+                $value,
                 $path
             );
         }

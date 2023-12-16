@@ -144,8 +144,9 @@ trait ModuleForm
                 move_uploaded_file($file["tmp_name"], $target_path)
             ) {
                 $this->deleteColumnFile($column, $id);
+                $base = basename($target_path);
                 $qb = QueryBuilder::update($this->table_name)
-                    ->columns([$column => $target_path])
+                    ->columns([$column => $base])
                     ->where([$this->key_col, $id]);
                 if (is_null(db()->run($qb->build(), $qb->values()))) {
                     return false;
@@ -417,11 +418,17 @@ trait ModuleForm
             ),
             "Create" => moduleRoute("module.create.part", $this->module_name),
         ];
-        // Remember request values
+
+        // Set form default values
         $columns = $this->getTableColumns();
         foreach ($columns as $index => $column) {
-            $this->form_defaults[$column] = request()->$column ?? '';
+            // Try not to clobber the form_defaults that are currently set..
+            if (!isset($this->form_defaults[$column]) || !$this->form_defaults[$column]) {
+                // Remember request values
+                $this->form_defaults[$column] = request()->$column ?? '';
+            }
         }
+
         return [
             ...$this->commonData(),
             "breadcrumbs" => $breadcrumbs,

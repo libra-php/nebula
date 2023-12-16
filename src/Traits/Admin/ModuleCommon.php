@@ -190,6 +190,14 @@ trait ModuleCommon
             $rules[$column] = [$title => $rule];
         }
         $result = Validate::request($rules);
+        if (!$result) {
+            foreach (request()->data() as $column => $datum) {
+                // Unset files / images from the request
+                if (isset($this->form_columns[$column]) && is_array($datum)) {
+                    request()->remove($column);
+                }
+            }
+        }
         return $result;
     }
 
