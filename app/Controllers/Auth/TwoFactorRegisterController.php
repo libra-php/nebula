@@ -31,10 +31,10 @@ final class TwoFactorRegisterController extends Controller
             ["push-url"]
         )
     ]
-    public function index(): string
+    public function index(?string $block = null): string
     {
         $url = Auth::urlQR($this->user);
-        return latte("auth/two-factor-register.latte", ["url" => $url]);
+        return latte("auth/two-factor-register.latte", ["url" => $url], $block);
     }
 
     #[
@@ -46,12 +46,7 @@ final class TwoFactorRegisterController extends Controller
     ]
     public function part(): string
     {
-        $url = Auth::urlQR($this->user);
-        return latte(
-            "auth/two-factor-register.latte",
-            ["url" => $url],
-            block: "body"
-        );
+        return $this->index("body");
     }
 
     #[Post("/two-factor-authentication/register", "two-factor-register.post")]

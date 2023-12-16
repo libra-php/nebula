@@ -23,24 +23,18 @@ final class RegisterController extends Controller
     }
 
     #[Get("/register", "register.index")]
-    public function index(): string
+    public function index(?string $block = null): string
     {
         return latte("auth/register.latte", [
             "two_fa_enabled" => config("auth.two_fa_enabled"),
-        ]);
+            "name" => request()->get("name"),
+        ], $block);
     }
 
     #[Get("/register/part", "register.part", ["push-url"])]
     public function part(): string
     {
-        return latte(
-            "auth/register.latte",
-            [
-                "two_fa_enabled" => config("auth.two_fa_enabled"),
-                "name" => request()->get("name"),
-            ],
-            "body"
-        );
+        return $this->index("body");
     }
 
     #[Post("/register", "register.post", ["rate_limit"])]

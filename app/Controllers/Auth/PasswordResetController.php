@@ -14,14 +14,14 @@ final class PasswordResetController extends Controller
     use NebulaResponse;
 
     #[Get("/password-reset/{uuid}/{token}", "password-reset.index")]
-    public function index($uuid, $token): string
+    public function index(string $uuid, string $token, ?string $block = null): string
     {
         $user = User::search(["uuid", $uuid], ["reset_token", $token]);
         if ($user && time() < $user->reset_expires_at) {
             return latte("auth/password-reset.latte", [
                 "uuid" => $uuid,
                 "token" => $token,
-            ]);
+            ], $block);
         }
         return $this->response(403, "Invalid token");
     }
@@ -31,24 +31,13 @@ final class PasswordResetController extends Controller
             "push-url",
         ])
     ]
-    public function part($uuid, $token): string
+    public function part(string $uuid, string $token): string
     {
-        $user = User::search(["uuid", $uuid], ["reset_token", $token]);
-        if ($user && time() < $user->reset_expires_at) {
-            return latte(
-                "auth/password-reset.latte",
-                [
-                    "uuid" => $uuid,
-                    "token" => $token,
-                ],
-                "body"
-            );
-        }
-        return $this->response(403, "Invalid token");
+        return $this->index($uuid, $token, "body");
     }
 
     #[Post("/password-reset/{uuid}/{token}", "password-reset.post")]
-    public function post($uuid, $token): string
+    public function post(string $uuid, string $token): string
     {
         $user = User::search(["uuid", $uuid], ["reset_token", $token]);
         if (!$user) {

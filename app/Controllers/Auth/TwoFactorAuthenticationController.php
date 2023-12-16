@@ -28,9 +28,9 @@ final class TwoFactorAuthenticationController extends Controller
             "push-url",
         ])
     ]
-    public function index(): string
+    public function index(?string $block = null): string
     {
-        return latte("auth/two-factor-authentication.latte");
+        return latte("auth/two-factor-authentication.latte", [], $block);
     }
 
     #[
@@ -42,7 +42,7 @@ final class TwoFactorAuthenticationController extends Controller
     ]
     public function part(): string
     {
-        return latte("auth/two-factor-authentication.latte", block: "body");
+        return $this->index("body");
     }
 
     #[Post("/two-factor-authentication", "two-factor-authentication.post")]
