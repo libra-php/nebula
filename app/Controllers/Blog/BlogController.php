@@ -28,30 +28,28 @@ class BlogController extends Controller
 
 
     #[Get("/", "blog.index")]
-    public function index(): string
+    public function index(?string $block = null): string
     {
         return latte("blog/index.latte", [
             "posts" => $this->getPosts(),
-        ]);
+        ], $block);
     }
 
     #[Get("/part", "blog.index.part", ["push-url=/blog"])]
     public function indexPart(): string
     {
-        return latte("blog/index.latte", [
-            "posts" => $this->getPosts(),
-        ], "content");
+        return $this->index("content");
     }
 
     #[Get("/{year}/{month}/{slug}", "blog.show")]
-    public function show(string $year, string $month, string $slug): string
+    public function show(string $year, string $month, string $slug, ?string $block = null): string
     {
         $post = $this->getPost($year, $month, $slug);
         if ($post) {
             if (date("Y-m-d H:i:s") >= $post->published_at) {
                 return latte("blog/show.latte", [
                     "post" => $post,
-                ]);
+                ], $block);
             }
         }
         return latte("blog/not-found.latte");
@@ -60,14 +58,6 @@ class BlogController extends Controller
     #[Get("/{year}/{month}/{slug}/part", "blog.show.part", ["push-url"])]
     public function showPart(string $year, string $month, string $slug): string
     {
-        $post = $this->getPost($year, $month, $slug);
-        if ($post) {
-            if (date("Y-m-d H:i:s") >= $post->published_at) {
-                return latte("blog/show.latte", [
-                    "post" => $post,
-                ], "content");
-            }
-        }
-        return latte("blog/not-found.latte", [], "content");
+        return $this->show($year, $month, $slug, "content");
     }
 }
