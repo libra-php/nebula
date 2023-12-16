@@ -8,6 +8,8 @@ use Nebula\Database\QueryBuilder;
 
 trait ModuleTable
 {
+    use ModuleCommon;
+
     // Index  settings
     /** Create record enabled */
     protected bool $table_create = true;

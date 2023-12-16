@@ -4,11 +4,14 @@ namespace Nebula\Traits\Admin;
 
 use Nebula\Alerts\Flash;
 use Nebula\Model\Model;
+use Nebula\Traits\Http\Response;
 use Nebula\Validation\Validate;
 use PDO;
 
 trait ModuleCommon
 {
+    use Response;
+
     // Module settings
     /** The module name (used as the route uri) */
     protected string $module_name = '';
@@ -66,18 +69,37 @@ trait ModuleCommon
     }
 
     /**
+     * Does the current user have edit permission?
+     * This method is overrideable
+     */
+    protected function hasEditPermission(string $id): bool
+    {
+        return $this->table_edit && !empty($this->form_columns);
+    }
+
+    /**
+     * Does the current user have create permission?
+     * This method is overrideable
+     */
+    protected function hasCreatePermission(): bool
+    {
+        return $this->table_create && !empty($this->form_columns);
+    }
+
+    /**
      * Return permission denied response
      */
-    public function permissionDenied(bool $partial = false): never
+    public function permissionDenied(): never
     {
-        Flash::addFlash("error", "Permission denied");
-        $is_part = $partial ? "content" : null;
-        $response = $this->response(
-            403,
-            latte($this->getCustomIndex(), $this->getIndexData(), $is_part)
-        );
-        echo $response->send();
-        exit();
+        redirectRoute("module.permission-denied");
+    }
+
+    /**
+     * Return permission denied response
+     */
+    public function fatalError(): never
+    {
+        redirectRoute("module.fatal-error");
     }
 
     /**

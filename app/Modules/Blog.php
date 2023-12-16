@@ -94,6 +94,6 @@ class Blog extends Module
             $this->addFormAction("preview_post", "Preview", "<i class='bi bi-eye me-1'></i> Preview");
             $this->preview($id);
         }
-        parent::processFormRequest();
+        parent::processFormRequest($id);
     }
 }

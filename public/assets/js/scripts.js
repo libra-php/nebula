@@ -4,13 +4,17 @@ document.body.addEventListener('htmx:beforeSwap', function(evt) {
     if(evt.detail.xhr.status === 401){
 		window.location.href = "/admin/sign-out";
     }
+	// Module not found
+    if(evt.detail.xhr.status === 404){
+		window.location.href = "/admin/home";
+    }
 	// Permission denied
     if(evt.detail.xhr.status === 403){
-        alert("Permission denied");
+		window.location.href = "/admin/home";
     }
 	// Fatal error
     if(evt.detail.xhr.status === 500){
-        alert("Fatal error");
+		window.location.href = "/admin/home";
     }
 });
 

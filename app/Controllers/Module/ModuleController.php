@@ -60,7 +60,8 @@ class ModuleController extends Controller
         $module = Model::search(["module_name", $module_name]);
         // Check if module exists
         if (is_null($module)) {
-            $this->moduleNotFound();
+            // Redirect to some random place that doesn't exist
+            redirect("/module-not-found");
         }
         // Check if user has permission
         if (user()->user_type > $module->user_type) {
@@ -77,21 +78,6 @@ class ModuleController extends Controller
             return null;
         }
         return $module_class;
-    }
-
-    private function showAlert(string $message, int $code = 200)
-    {
-        $m = new Module();
-        Flash::addFlash("warning", $message);
-        $view = latte("admin/errors/alert.latte", [
-            ...$m->getIndexData(),
-            "module_title" => "Error",
-            "module_icon" => "bi bi-exclamation-diamond",
-            "breadcrumbs" => []
-        ]);
-        $response = $this->response($code, $view);
-        echo $response->send();
-        exit;
     }
 
     #[Get("/", "module.admin")]
@@ -178,7 +164,10 @@ class ModuleController extends Controller
     #[Get("/module/not-found", "module.not-found", ["auth"])]
     public function moduleNotFound(): void
     {
-        $this->showAlert("Module not found", 404);
+        Flash::addFlash("warning", "Module not found");
+        $response = $this->response(404, "Module not found");
+        echo $response->send();
+        exit;
     }
 
     /**
@@ -187,6 +176,7 @@ class ModuleController extends Controller
     #[Get("/module/permission-denied", "module.permission-denied", ["auth"])]
     public function permissionDenied(): void
     {
+        Flash::addFlash("warning", "Permission denied");
         $response = $this->response(403, "Permission denied");
         echo $response->send();
         exit;
@@ -198,6 +188,7 @@ class ModuleController extends Controller
     #[Get("/module/fatal-error", "module.fatal-error", ["auth"])]
     public function fatalError(): void
     {
+        Flash::addFlash("warning", "Fatal error");
         $response = $this->response(500, "Fatal error");
         echo $response->send();
         exit;

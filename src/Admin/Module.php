@@ -10,8 +10,6 @@ use Nebula\Traits\Admin\{ModuleCommon, ModuleForm, ModuleTable};
 class Module
 {
     use Response;
-    /** Shared properties / methods */
-    use ModuleCommon;
     /** Table properties / methods */
     use ModuleTable;
     /** Form properties / methods */

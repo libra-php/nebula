@@ -9,6 +9,8 @@ use PDO;
 
 trait ModuleForm
 {
+    use ModuleCommon;
+
     // Form (shared by edit & create)
     /** Form query columns */
     protected array $form_columns = [];
@@ -61,26 +63,10 @@ trait ModuleForm
      */
     protected function processFormRequest(?string $id = null): void
     {
-        $this->handleDeleteFile($id);
+        if ($id) {
+            $this->handleDeleteFile($id);
+        }
         $this->handleSession();
-    }
-
-    /**
-     * Does the current user have edit permission?
-     * This method is overrideable
-     */
-    protected function hasEditPermission(string $id): bool
-    {
-        return $this->table_edit && !empty($this->form_columns);
-    }
-
-    /**
-     * Does the current user have create permission?
-     * This method is overrideable
-     */
-    protected function hasCreatePermission(): bool
-    {
-        return $this->table_create && !empty($this->form_columns);
     }
 
     /**
@@ -102,11 +88,10 @@ trait ModuleForm
     /**
      * Handle deleting an uploaded file
      */
-    protected function handleDeleteFile(?string $id): void
+    protected function handleDeleteFile(string $id): void
     {
         if (request()->has("delete_file")) {
             $column = request()->delete_file;
-            $this->deleteColumnFile($column, $id);
             $qb = QueryBuilder::update($this->table_name)
                 ->columns([$column => null])
                 ->where([$this->key_col, $id]);
@@ -116,6 +101,7 @@ trait ModuleForm
                     "Oops! An unknown issue occurred while deleting file"
                 );
             }
+            $this->deleteColumnFile($column, $id);
             redirectModule("module.edit", $this->module_name, $id);
             exit;
         }
@@ -166,11 +152,12 @@ trait ModuleForm
             "SELECT $column FROM $this->table_name WHERE $this->key_col = ?",
             $id
         );
+        $upload_path = config("paths.uploads") . $row->$column;
         if (
             $row &&
             !is_null($row->$column) &&
             trim($row->$column) != "" &&
-            file_exists($row->$column)
+            file_exists($upload_path)
         ) {
             return unlink($row->$column);
         }
