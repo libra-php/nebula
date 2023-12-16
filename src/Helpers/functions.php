@@ -158,7 +158,7 @@ function hxRedirect($path, $source = null, $target = null)
         );
     }
     header("HX-Location: $path");
-    exit;
+    exit();
 }
 
 function redirectHome()

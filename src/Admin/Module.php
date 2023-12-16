@@ -22,8 +22,8 @@ class Module
         }
         $template =
             !is_null($this->table_name) && trim($this->table_name) != ""
-            ? $this->getIndexTemplate()
-            : $this->getCustomIndex();
+                ? $this->getIndexTemplate()
+                : $this->getCustomIndex();
         return latte($template, $this->getIndexData(), $block);
     }
 
@@ -50,7 +50,11 @@ class Module
         if (!$this->hasCreatePermission()) {
             $this->permissionDenied();
         }
-        return latte($this->getCreateTemplate(), $this->getCreateData(), $block);
+        return latte(
+            $this->getCreateTemplate(),
+            $this->getCreateData(),
+            $block
+        );
     }
 
     public function createPartial(): string
@@ -78,7 +82,7 @@ class Module
                 Flash::addFlash("success", "Record created successfully");
                 // Redirect to edit
                 redirectModule("module.edit", $this->module_name, $id);
-                exit;
+                exit();
             } else {
                 Flash::addFlash(
                     "danger",
@@ -110,7 +114,7 @@ class Module
                 Flash::addFlash("success", "Record updated successfully");
                 // Redirect to edit
                 redirectModule("module.edit", $this->module_name, $id);
-                exit;
+                exit();
             } else {
                 Flash::addFlash(
                     "danger",

@@ -25,10 +25,14 @@ final class RegisterController extends Controller
     #[Get("/register", "register.index")]
     public function index(?string $block = null): string
     {
-        return latte("auth/register.latte", [
-            "two_fa_enabled" => config("auth.two_fa_enabled"),
-            "name" => request()->get("name"),
-        ], $block);
+        return latte(
+            "auth/register.latte",
+            [
+                "two_fa_enabled" => config("auth.two_fa_enabled"),
+                "name" => request()->get("name"),
+            ],
+            $block
+        );
     }
 
     #[Get("/register/part", "register.part", ["push-url"])]

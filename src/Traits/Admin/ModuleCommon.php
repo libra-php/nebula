@@ -14,7 +14,7 @@ trait ModuleCommon
 
     // Module settings
     /** The module name (used as the route uri) */
-    protected string $module_name = '';
+    protected string $module_name = "";
     /** The module table <h1> */
     protected string $module_title = "";
     /** Icon: boostrap-icons */
@@ -247,7 +247,7 @@ trait ModuleCommon
         $memory_total = $this->convert($memory);
         foreach (["Slow DB:" => db()->trace_counts] as $title => $traces) {
             if ($traces) {
-                uasort($traces, fn ($a, $b) => $b["time"] <=> $a["time"]);
+                uasort($traces, fn($a, $b) => $b["time"] <=> $a["time"]);
                 $i = 0;
 
                 foreach ($traces as $key => $value) {
@@ -296,14 +296,14 @@ trait ModuleCommon
         ) {
             return moduleRoute($route_name, $module_name, $id);
         };
-        $gravatar = fn (string $str) => md5(strtolower(trim($str)));
+        $gravatar = fn(string $str) => md5(strtolower(trim($str)));
         $singular = function (string $str) {
             return substr($str, -1) === "s" ? rtrim($str, "s") : $str;
         };
-        $request = fn (string $column) => request()->has($column)
+        $request = fn(string $column) => request()->has($column)
             ? request()->$column
             : "";
-        $session = fn (string $column) => session()->has($column)
+        $session = fn(string $column) => session()->has($column)
             ? session()->get($column)
             : "";
         return [

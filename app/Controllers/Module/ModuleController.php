@@ -167,7 +167,7 @@ class ModuleController extends Controller
         Flash::addFlash("warning", "Module not found");
         $response = $this->response(404, "Module not found");
         echo $response->send();
-        exit;
+        exit();
     }
 
     /**
@@ -179,7 +179,7 @@ class ModuleController extends Controller
         Flash::addFlash("warning", "Permission denied");
         $response = $this->response(403, "Permission denied");
         echo $response->send();
-        exit;
+        exit();
     }
 
     /**
@@ -191,6 +191,6 @@ class ModuleController extends Controller
         Flash::addFlash("warning", "Fatal error");
         $response = $this->response(500, "Fatal error");
         echo $response->send();
-        exit;
+        exit();
     }
 }

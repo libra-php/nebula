@@ -33,7 +33,7 @@ class Validate
         "url" => "%label must be a valid URL",
         "ipv4" => "%label must be a valid IPv4 address",
         "ipv6" => "%label must be a valid IPv6 address",
-        "color" => "%label must be a valid hexadecimal color code"
+        "color" => "%label must be a valid hexadecimal color code",
     ];
     public static $errors = [];
     public static $custom = [];
@@ -76,7 +76,7 @@ class Validate
             } else {
                 $label = null;
             }
-            $is_required = in_array('required', $ruleset);
+            $is_required = in_array("required", $ruleset);
             foreach ($ruleset as $rule_raw) {
                 if (is_callable($rule_raw)) {
                     $rule = $request_item . "_custom";
@@ -93,7 +93,9 @@ class Validate
 
                     // If it isn't required and it is the empty string,
                     // then validation should pass
-                    if (!$is_required && $value === '') continue 2;
+                    if (!$is_required && $value === "") {
+                        continue 2;
+                    }
 
                     $result = match ($rule) {
                         "string" => self::isString($value),
@@ -178,7 +180,7 @@ class Validate
     {
         if (is_array($value)) {
             return !empty($value);
-        } else if (is_string($value)) {
+        } elseif (is_string($value)) {
             $value = trim($value);
             return !is_null($value) &&
                 $value !== "" &&
@@ -270,7 +272,7 @@ class Validate
      */
     public static function noSpaces($value): bool
     {
-        return strpos($value, ' ') === false;
+        return strpos($value, " ") === false;
     }
 
     /**
@@ -307,8 +309,8 @@ class Validate
      */
     public static function url($value): bool
     {
-        if (substr($value, 0, 4) !== 'http') {
-            $value = "https://".$value;
+        if (substr($value, 0, 4) !== "http") {
+            $value = "https://" . $value;
         }
         return filter_var($value, FILTER_VALIDATE_URL);
     }

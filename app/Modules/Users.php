@@ -52,7 +52,11 @@ class Users extends Module
             ),
         ];
 
-        $this->addRowAction("preview_qr", "QR", "<i class='bi bi-qr-code me-1'></i> QR");
+        $this->addRowAction(
+            "preview_qr",
+            "QR",
+            "<i class='bi bi-qr-code me-1'></i> QR"
+        );
     }
 
     protected function getUpdateValidation(): array
@@ -101,26 +105,26 @@ class Users extends Module
     protected function editOverride(array $data): array
     {
         // We don't need a value for password (it is already hashed)
-        unset($data['password']);
+        unset($data["password"]);
         return $data;
     }
 
     protected function storeOverride(array $data): array
     {
-        $data['password'] = Auth::hashPassword($data['password']);
-        $data['two_fa_secret'] = Auth::generateTwoFASecret();
-        unset($data['password_match']);
+        $data["password"] = Auth::hashPassword($data["password"]);
+        $data["two_fa_secret"] = Auth::generateTwoFASecret();
+        unset($data["password_match"]);
         return $data;
     }
 
     protected function updateOverride(array $data): array
     {
-        if (trim($data['password_match']) != '') {
-            $data['password'] = Auth::hashPassword($data['password']);
+        if (trim($data["password_match"]) != "") {
+            $data["password"] = Auth::hashPassword($data["password"]);
         } else {
-            unset($data['password']);
+            unset($data["password"]);
         }
-        unset($data['password_match']);
+        unset($data["password_match"]);
         return $data;
     }
 
@@ -135,7 +139,10 @@ class Users extends Module
             $last_session = is_array($user_sessions)
                 ? array_pop($user_sessions)
                 : $user_sessions;
-            if ($last_session->created_at > date("Y-m-d H:i:s", strtotime("-3 minute"))) {
+            if (
+                $last_session->created_at >
+                date("Y-m-d H:i:s", strtotime("-3 minute"))
+            ) {
                 $bg = "bg-success";
             } else {
                 $bg = "bg-warning";
@@ -155,7 +162,7 @@ class Users extends Module
         if ($user) {
             echo $this->isOnline($user->id);
         }
-        exit;
+        exit();
     }
 
     private function previewQRCode()
@@ -167,7 +174,7 @@ class Users extends Module
             $link = moduleRoute("module.index", $this->module_name);
             echo latte("auth/qr.latte", ["url" => $url, "link" => $link]);
         }
-        exit;
+        exit();
     }
 
     protected function processTableRequest(): void

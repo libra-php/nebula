@@ -42,9 +42,15 @@ class Test extends Module
          */
         $this->table_format = [
             "number" => fn($datum, $column) => $datum->$column > 9000
-                ? sprintf('<span class="text-success">%s</span>', $datum->$column)
-                : sprintf('<span class="text-danger">%s</span>', $datum->$column),
-            "dollar" => "dollar"
+                ? sprintf(
+                    '<span class="text-success">%s</span>',
+                    $datum->$column
+                )
+                : sprintf(
+                    '<span class="text-danger">%s</span>',
+                    $datum->$column
+                ),
+            "dollar" => "dollar",
         ];
 
         /**
@@ -69,7 +75,6 @@ class Test extends Module
             "dropdown" => "Animals",
         ];
 
-
         /**
          * Form columns for Edit & Create views
          * key: column for edit / create query
@@ -85,7 +90,7 @@ class Test extends Module
             "color" => "Colour",
             "checkbox" => "Checkbox",
             "switch" => "Switch",
-            'test' => "Test",
+            "test" => "Test",
         ];
 
         /**
@@ -105,7 +110,7 @@ class Test extends Module
             "image" => "image",
             "checkbox" => "checkbox",
             "switch" => "switch",
-            "test" => fn($column, $value) => 'Hello!',
+            "test" => fn($column, $value) => "Hello!",
         ];
 
         /**
@@ -118,7 +123,10 @@ class Test extends Module
         Validate::$messages["name_custom"] = "%label must not equal 'test'!!!!";
         $this->validation = [
             // note: custom validation here
-            "name" => ["required", fn($value) => trim(strtolower($value)) !== 'test'],
+            "name" => [
+                "required",
+                fn($value) => trim(strtolower($value)) !== "test",
+            ],
             "number" => ["required", "numeric"],
             "color" => ["color"],
         ];

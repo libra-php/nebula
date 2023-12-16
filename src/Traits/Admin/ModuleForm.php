@@ -103,7 +103,7 @@ trait ModuleForm
             }
             $this->deleteColumnFile($column, $id);
             redirectModule("module.edit", $this->module_name, $id);
-            exit;
+            exit();
         }
     }
 
@@ -181,7 +181,7 @@ trait ModuleForm
             "label" => $label,
             "confirm" => $confirm,
             "class" => $class,
-            "attrs" => $attrs
+            "attrs" => $attrs,
         ];
     }
 
@@ -208,18 +208,22 @@ trait ModuleForm
             $alias = explode(" as ", $key);
             return trim(end($alias));
         }, array_keys($this->form_columns));
-        $data = array_filter($data, fn ($key) => in_array($key, $columns), ARRAY_FILTER_USE_KEY);
+        $data = array_filter(
+            $data,
+            fn($key) => in_array($key, $columns),
+            ARRAY_FILTER_USE_KEY
+        );
 
         // Only strings should be stored, etc
-        $data = array_filter($data, fn ($value) => is_string($value));
+        $data = array_filter($data, fn($value) => is_string($value));
 
         // Deal with "null" string
         array_walk(
             $data,
-            fn (&$value, $key) => ($value =
+            fn(&$value, $key) => ($value =
                 is_string($value) && strtolower($value) === "null"
-                ? null
-                : $value)
+                    ? null
+                    : $value)
         );
         return $data;
     }
@@ -235,7 +239,7 @@ trait ModuleForm
         // Build out columns
         foreach ($table_columns as $idx => $column) {
             if (key_exists($column, $this->form_columns)) {
-                $columns[$column] = '';
+                $columns[$column] = "";
             }
         }
         $columns = $this->editOverride($columns);
@@ -297,22 +301,21 @@ trait ModuleForm
     /**
      * Returns an array of all form_columns that are required
      */
-    protected function getRequiredForm(string $type = 'edit'): array
+    protected function getRequiredForm(string $type = "edit"): array
     {
         $validation = $this->validation;
-        if ($type === 'edit') {
+        if ($type === "edit") {
             $validation = $this->getUpdateValidation();
-        } else if ($type === 'create') {
+        } elseif ($type === "create") {
             $validation = $this->getStoreValidation();
         }
         return array_keys(
             array_filter(
                 $validation,
-                fn ($rules) => in_array("required", $rules)
+                fn($rules) => in_array("required", $rules)
             )
         );
     }
-
 
     /**
      * Return a form control closure used edit / create views
@@ -410,9 +413,12 @@ trait ModuleForm
         $columns = $this->getTableColumns();
         foreach ($columns as $index => $column) {
             // Try not to clobber the form_defaults that are currently set..
-            if (!isset($this->form_defaults[$column]) || !$this->form_defaults[$column]) {
+            if (
+                !isset($this->form_defaults[$column]) ||
+                !$this->form_defaults[$column]
+            ) {
                 // Remember request values
-                $this->form_defaults[$column] = request()->$column ?? '';
+                $this->form_defaults[$column] = request()->$column ?? "";
             }
         }
 
@@ -423,7 +429,7 @@ trait ModuleForm
             "form" => [
                 "data" => $this->createOverride(),
                 "defaults" => $this->form_defaults,
-                "required" => $this->getRequiredForm('create'),
+                "required" => $this->getRequiredForm("create"),
                 "columns" => $this->form_columns,
             ],
         ];
@@ -440,8 +446,8 @@ trait ModuleForm
         $data = null;
         $data = !is_null($qb)
             ? db()
-            ->run($qb->build(), $qb->values())
-            ->fetch()
+                ->run($qb->build(), $qb->values())
+                ->fetch()
             : [];
         if (!$data) {
             $this->moduleNotFound();
@@ -469,7 +475,7 @@ trait ModuleForm
             "form" => [
                 "actions" => $this->form_actions,
                 "data" => $data,
-                "required" => $this->getRequiredForm('edit'),
+                "required" => $this->getRequiredForm("edit"),
                 "columns" => $this->form_columns,
             ],
         ];

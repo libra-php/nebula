@@ -81,7 +81,7 @@ class Blog extends Module
                     "post" => $post,
                     "link" => is_null($id)
                         ? moduleRoute("module.index", $this->module_name)
-                        : moduleRoute("module.edit", $this->module_name, $id)
+                        : moduleRoute("module.edit", $this->module_name, $id),
                 ]);
                 exit();
             }
@@ -91,7 +91,11 @@ class Blog extends Module
     protected function processFormRequest(?string $id = null): void
     {
         if (!is_null($id)) {
-            $this->addFormAction("preview_post", "Preview", "<i class='bi bi-eye me-1'></i> Preview");
+            $this->addFormAction(
+                "preview_post",
+                "Preview",
+                "<i class='bi bi-eye me-1'></i> Preview"
+            );
             $this->preview($id);
         }
         parent::processFormRequest($id);

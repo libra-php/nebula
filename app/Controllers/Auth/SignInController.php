@@ -23,12 +23,16 @@ final class SignInController extends Controller
     #[Get("/sign-in", "sign-in.index")]
     public function index(?string $block = null): string
     {
-        return latte("auth/sign-in.latte", [
-            "has_flash" => Flash::hasFlash(),
-            "two_fa_enabled" => config("auth.two_fa_enabled"),
-            "register_enabled" => config("auth.register_enabled"),
-            "email" => request()->get("email"),
-        ], $block);
+        return latte(
+            "auth/sign-in.latte",
+            [
+                "has_flash" => Flash::hasFlash(),
+                "two_fa_enabled" => config("auth.two_fa_enabled"),
+                "register_enabled" => config("auth.register_enabled"),
+                "email" => request()->get("email"),
+            ],
+            $block
+        );
     }
 
     #[Get("/sign-in/part", "sign-in.part", ["push-url"])]

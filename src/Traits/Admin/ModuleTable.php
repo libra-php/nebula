@@ -105,7 +105,7 @@ trait ModuleTable
             "label" => $label,
             "confirm" => $confirm,
             "class" => $class,
-            "attrs" => $attrs
+            "attrs" => $attrs,
         ];
     }
 
@@ -509,7 +509,7 @@ trait ModuleTable
         // Finally, columns with null values shouldn't be rendered
         return array_filter(
             $filtered_table_columns,
-            fn ($value) => !is_null($value)
+            fn($value) => !is_null($value)
         );
     }
 
@@ -552,12 +552,12 @@ trait ModuleTable
             $this->tableFormat($data);
         }
 
-        $has_delete_permission = fn (string $id) => $this->hasDeletePermission(
+        $has_delete_permission = fn(string $id) => $this->hasDeletePermission(
             $id
         );
-        $has_edit_permission = fn (string $id) => $this->hasEditPermission($id);
-        $has_create_permission = fn () => $this->hasCreatePermission();
-        $has_row_action_permission = fn (
+        $has_edit_permission = fn(string $id) => $this->hasEditPermission($id);
+        $has_create_permission = fn() => $this->hasCreatePermission();
+        $has_row_action_permission = fn(
             string $name,
             string $id
         ) => $this->hasRowActionPermission($name, $id);
@@ -628,5 +628,4 @@ trait ModuleTable
             ],
         ];
     }
-
 }

@@ -18,11 +18,17 @@ final class ForgotPasswordController extends Controller
     }
 
     #[Get("/forgot-password", "forgot-password.index")]
-    public function index(bool $show_success_message = false, ?string $block = null): string
-    {
-        return latte("auth/forgot-password.latte", [
-            "show_success_message" => $show_success_message
-        ], $block);
+    public function index(
+        bool $show_success_message = false,
+        ?string $block = null
+    ): string {
+        return latte(
+            "auth/forgot-password.latte",
+            [
+                "show_success_message" => $show_success_message,
+            ],
+            $block
+        );
     }
 
     #[Get("/forgot-password/part", "forgot-password.part", ["push-url"])]

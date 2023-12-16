@@ -12,7 +12,9 @@ class BlogController extends Controller
     private function getPosts(): array
     {
         $posts = Post::search(["status", "Published"]);
-        if ($posts instanceof Post) $posts = [$posts];
+        if ($posts instanceof Post) {
+            $posts = [$posts];
+        }
         return $posts ?? [];
     }
 
@@ -26,13 +28,16 @@ class BlogController extends Controller
         );
     }
 
-
     #[Get("/", "blog.index")]
     public function index(?string $block = null): string
     {
-        return latte("blog/index.latte", [
-            "posts" => $this->getPosts(),
-        ], $block);
+        return latte(
+            "blog/index.latte",
+            [
+                "posts" => $this->getPosts(),
+            ],
+            $block
+        );
     }
 
     #[Get("/part", "blog.index.part", ["push-url=/blog"])]
@@ -42,14 +47,22 @@ class BlogController extends Controller
     }
 
     #[Get("/{year}/{month}/{slug}", "blog.show")]
-    public function show(string $year, string $month, string $slug, ?string $block = null): string
-    {
+    public function show(
+        string $year,
+        string $month,
+        string $slug,
+        ?string $block = null
+    ): string {
         $post = $this->getPost($year, $month, $slug);
         if ($post) {
             if (date("Y-m-d H:i:s") >= $post->published_at) {
-                return latte("blog/show.latte", [
-                    "post" => $post,
-                ], $block);
+                return latte(
+                    "blog/show.latte",
+                    [
+                        "post" => $post,
+                    ],
+                    $block
+                );
             }
         }
         return latte("blog/not-found.latte");
