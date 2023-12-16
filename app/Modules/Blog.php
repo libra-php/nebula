@@ -36,7 +36,7 @@ class Blog extends Module
             "slug" => "Slug",
             "title" => "Title",
             "subtitle" => "Subtitle",
-            "content" => "Post Content",
+            "content" => "Content",
         ];
         $this->validation = [
             "title" => ["required"],

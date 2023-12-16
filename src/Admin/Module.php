@@ -5,7 +5,7 @@ namespace Nebula\Admin;
 use Nebula\Alerts\Flash;
 use Nebula\Database\QueryBuilder;
 use Nebula\Traits\Http\Response;
-use Nebula\Traits\Admin\{ModuleCommon, ModuleForm, ModuleTable};
+use Nebula\Traits\Admin\{ModuleForm, ModuleTable};
 
 class Module
 {
@@ -15,7 +15,7 @@ class Module
     /** Form properties / methods */
     use ModuleForm;
 
-    public function index(): string
+    public function index(?string $block = null): string
     {
         if (!$this->hasIndexPermission()) {
             $this->permissionDenied();
@@ -24,59 +24,38 @@ class Module
             !is_null($this->table_name) && trim($this->table_name) != ""
             ? $this->getIndexTemplate()
             : $this->getCustomIndex();
-        return latte($template, $this->getIndexData());
+        return latte($template, $this->getIndexData(), $block);
     }
 
     public function indexPartial(): string
     {
-        if (!$this->hasIndexPermission()) {
-            $this->permissionDenied();
-        }
-        $template =
-            !is_null($this->table_name) && trim($this->table_name) != ""
-            ? $this->getIndexTemplate()
-            : $this->getCustomIndex();
-        return latte($template, $this->getIndexData(), "content");
+        return $this->index("content");
     }
 
-    public function edit(string $id): string
+    public function edit(string $id, ?string $block = null): string
     {
         if (!$this->hasEditPermission($id)) {
             $this->permissionDenied();
         }
-        return latte($this->getEditTemplate(), $this->getEditData($id));
+        return latte($this->getEditTemplate(), $this->getEditData($id), $block);
     }
 
     public function editPartial(string $id): string
     {
-        if (!$this->hasEditPermission($id)) {
-            $this->permissionDenied();
-        }
-        return latte(
-            $this->getEditTemplate(),
-            $this->getEditData($id),
-            "content"
-        );
+        return $this->edit($id, "content");
     }
 
-    public function create(): string
+    public function create(?string $block = null): string
     {
         if (!$this->hasCreatePermission()) {
             $this->permissionDenied();
         }
-        return latte($this->getCreateTemplate(), $this->getCreateData());
+        return latte($this->getCreateTemplate(), $this->getCreateData(), $block);
     }
 
     public function createPartial(): string
     {
-        if (!$this->hasCreatePermission()) {
-            $this->permissionDenied();
-        }
-        return latte(
-            $this->getCreateTemplate(),
-            $this->getCreateData(),
-            "content"
-        );
+        return $this->create("content");
     }
 
     public function store(): string

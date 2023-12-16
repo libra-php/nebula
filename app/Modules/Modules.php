@@ -26,7 +26,7 @@ class Modules extends Module
             "module_table" => "Table",
             "module_title" => "Title",
             "module_icon" => "Icon",
-            "user_type" => "Permission Level",
+            "user_type" => "Level",
         ];
 
         $this->validation = [
