@@ -2,7 +2,7 @@
 
 namespace App\Controllers\Auth;
 
-use App\Auth;
+use App\System\Auth;
 use App\Models\User;
 use Nebula\Alerts\Flash;
 use Nebula\Controller\Controller;

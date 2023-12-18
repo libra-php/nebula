@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\System;
 
 use App\Models\User;
 use App\Models\Factories\UserFactory;

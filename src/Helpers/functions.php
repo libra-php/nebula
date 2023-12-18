@@ -1,6 +1,6 @@
 <?php
 
-use App\Auth;
+use App\System\Auth;
 use App\Models\User;
 use Idearia\Logger;
 use Nebula\Framework\Application;

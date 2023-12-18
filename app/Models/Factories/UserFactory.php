@@ -4,7 +4,7 @@ namespace App\Models\Factories;
 
 use Nebula\Model\Factory;
 use App\Models\User;
-use App\Auth;
+use App\System\Auth;
 
 class UserFactory extends Factory
 {

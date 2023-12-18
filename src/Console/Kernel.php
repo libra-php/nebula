@@ -2,7 +2,7 @@
 
 namespace Nebula\Console;
 
-use App\Auth;
+use App\System\Auth;
 use App\Models\Factories\UserFactory;
 use Nebula\Interfaces\Framework\Kernel as ConsoleKernel;
 use Nebula\Interfaces\Http\Response;

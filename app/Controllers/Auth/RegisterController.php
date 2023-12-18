@@ -4,7 +4,7 @@ namespace App\Controllers\Auth;
 
 use Nebula\Controller\Controller;
 use Nebula\Validation\Validate;
-use App\Auth;
+use App\System\Auth;
 use StellarRouter\{Get, Post, Group};
 
 #[Group(prefix: "/admin")]
