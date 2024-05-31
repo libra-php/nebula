@@ -1,23 +1,37 @@
-/** Form events */
+/**
+ * Handle form checkboxes
+ */
 const handleCheck = (e) => {
 	const self = e.currentTarget;
 	const hidden = self.previousElementSibling;
 	hidden.value = self.checked ? 1 : 0;
 }
 
+/**
+ * Hide sidebar when link is clicked (mobile)
+ */
+const hideSidebar = () => {
+	const menu = document.querySelector("#sidebar").classList.add("d-none");
+}
+
 (function() {
+	/**
+	 * Focus on sidebar filter when ctrl + / is pressed
+	 */
 	document.addEventListener("keydown", (e) => {
 		const filter = document.querySelector("#sidebar #filter");
 		if (filter !== null && e.ctrlKey) {
 			switch (e.which) {
-				// This is ctrl + / key
 				case 191:
 					filter.focus();
 					break;
 			}
 		}
 	})
-	/**-------------------------- NAVBAR CODE  ------------------------------*/
+
+	/**
+	 * Toggle the sidebar when hamburger menu is clicked
+	 */
 	const menu = document.querySelector("#toggle-sidebar");
 	if (menu !== null) {
 		menu.addEventListener("click", (e) => {
@@ -30,8 +44,9 @@ const handleCheck = (e) => {
 		})
 	}
 
-	/**-------------------------- SIDEBAR CODE ------------------------------*/
-
+	/**
+	* Sidebar code (filtering)
+	*/
 	const sidebarFilter = document.querySelector('#sidebar #filter');
 	if (sidebarFilter !== null) {
 		sidebarFilter.oninput = (e) => {

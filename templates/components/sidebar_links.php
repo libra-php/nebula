@@ -3,6 +3,7 @@
         <li class="sidebar-link"><a href="<?=str_replace(".php", '', $child['link'])?>"
                 <?php if ($child['label'] === "Sign Out"): ?>hx-boost=false<?php endif ?>
                 title="<?=$child['label']?>"
+                onClick="hideSidebar()"
                 data-title="<?=$child['label']?>"
                 data-parent="<?=$parent_link?>"
                 style="padding-left: <?=$depth?>px;"
