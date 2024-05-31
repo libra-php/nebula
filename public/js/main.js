@@ -3,6 +3,10 @@ feather.replace();
 htmx.on("htmx:responseError", function(evt) {
 	console.log("Oh snap! Response error!", evt.detail.xhr.status);
 	switch (evt.detail.xhr.status) {
+		case 401:
+			console.log("Unauthorized");
+			window.location.href = "/sign-in";
+			break;
 		case 404:
 			console.log("Page not found!");
 			window.location.href = "/page-not-found";

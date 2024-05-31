@@ -16,6 +16,10 @@ class ModuleController extends Controller
     protected function bootstrap(): void
     {
         $user = user();
+        if (!$user) {
+            http_response_code(401);
+            exit;
+        }
         $module = $this->init();
         if (is_null($module)) {
             $this->moduleNotFound();

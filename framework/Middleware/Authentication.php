@@ -17,7 +17,12 @@ class Authentication implements Middleware
 
         if ($middleware && in_array("auth", $middleware)) {
             if (!$this->userAuth($request)) {
-                Auth::redirectSignIn();
+                if ($request->headers->get("hx-request")) {
+                    // HTMX redirect to sign in
+                    http_response_code(401);
+                } else {
+                    Auth::redirectSignIn();
+                }
             }
         }
 
