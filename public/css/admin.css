@@ -171,13 +171,13 @@
 }
 
 #sidebar #filter {
+	background-color: #fff;
 	border-left: 0;
 	border-right: 0;
 	border-radius: 0;
 }
-#sidebar #filter:focus {
-	background-color: #c7ffd6;
-}
+/*#sidebar #filter:focus {
+}*/
 
 #sidebar .dropdown-toggle {
 	outline: 0;
@@ -282,4 +282,12 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+
+@media (max-width: 575.98px) {
+	#sidebar {
+		min-width: 100% !important;
+		max-width: 100% !important;
+	}
 }
