@@ -123,12 +123,12 @@ function config(string $name): mixed
 {
     // There could be a warning if $attribute
     // is not set, so let's silence it
-    @[$file, $attribute] = explode(".", $name);
+    @[$file, $key] = explode(".", $name);
     $config_path = __DIR__ . "/../../config/$file.php";
     if (file_exists($config_path)) {
         $config = require $config_path;
-        return $attribute && key_exists($attribute, $config)
-            ? $config[$attribute]
+        return $key && key_exists($key, $config)
+            ? $config[$key]
             : $config;
     }
     return false;
