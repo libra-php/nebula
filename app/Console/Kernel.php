@@ -8,9 +8,8 @@ class Kernel extends ConsoleKernel
 {
     private Adapter $adapter;
 
-    protected function bootstrap(): void
+    public function response(): void
     {
-        parent::bootstrap();
         $this->adapter = new Adapter();
         $this->adapter->run();
     }
