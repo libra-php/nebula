@@ -9,9 +9,8 @@ use App\Application;
 use App\Http\Kernel as HttpKernel;
 use App\Console\Kernel as ConsoleKernel;
 use App\Models\User;
-use Lunar\Connection\MySQL;
-use Lunar\Connection\SQLite;
 use Lunar\Interface\DB;
+use Nebula\Framework\Database\Database;
 use Nebula\Framework\Auth\Auth;
 use Nebula\Framework\Session\Session;
 use Nebula\Framework\Template\Engine;
@@ -58,30 +57,11 @@ function session(): Session
 /**
  * Get application PDO database wrapper
  */
-$database = null;
 function db(): ?DB
 {
-    global $database;
-    if (is_null($database)) {
-        $config = config("database");
-        if (!$config["enabled"]) {
-            return null;
-        }
-        $database = match ($config["type"]) {
-            "mysql" => new MySQL(
-                $config["dbname"],
-                $config["username"],
-                $config["password"],
-                $config["host"],
-                $config["port"],
-                $config["charset"],
-                $config["options"]
-            ),
-            "sqlite" => new SQLite($config["path"], $config["options"]),
-            default => throw new Exception("unknown database driver"),
-        };
-    }
-    return $database;
+    $database = Database::getInstance();
+    $config = config("database");
+    return $database->init($config)?->db();
 }
 
 /**
