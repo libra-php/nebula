@@ -5,6 +5,7 @@ $app = $root . "app/";
 
 return [
 	"root" => $root,
+	"env" => $root,
 	"bin" => $root . "bin",
 	"templates" => $root . "templates",
 	"controllers" => $app . "Controllers",

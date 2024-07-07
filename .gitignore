@@ -1,8 +1,46 @@
-composer.phar
-/vendor/
-/storage/
-.env
-
 # Commit your application's lock file https://getcomposer.org/doc/01-basic-usage.md#commit-your-composer-lock-file-to-version-control
 # You may choose to ignore a library lock file http://getcomposer.org/doc/02-libraries.md#lock-file
 # composer.lock
+
+# Composer directories
+/vendor/
+/composer.lock
+composer.phar
+
+# PHPStorm/IDEA
+.idea
+
+# phpunit
+/phpunit.xml
+/phpunit.xml.dist
+/testdox.html
+
+# vscode
+.vscode
+
+# node modules
+/node_modules/
+
+# NPM package files
+package-lock.json
+npm-debug.log
+
+# Logs and temp files
+*.log
+*.cache
+*.tmp
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Backup files
+*.bak
+*.swp
+
+# Environment variables
+.env
+.env.*.local
+
+# Other
+/storage/

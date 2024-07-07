@@ -9,6 +9,8 @@ use App\Application;
 use App\Http\Kernel as HttpKernel;
 use App\Console\Kernel as ConsoleKernel;
 use App\Models\User;
+use Lunar\Connection\MySQL;
+use Lunar\Connection\SQLite;
 use Lunar\Interface\DB;
 use Nebula\Framework\Auth\Auth;
 use Nebula\Framework\Session\Session;
@@ -17,6 +19,12 @@ use Nebula\Framework\Template\Engine;
 function app(): Application
 {
     $kernel = HttpKernel::getInstance();
+    return Application::getInstance($kernel);
+}
+
+function console(): Application
+{
+    $kernel = ConsoleKernel::getInstance();
     return Application::getInstance($kernel);
 }
 
@@ -42,12 +50,6 @@ function json(mixed $data)
     return json_encode($data, JSON_PRETTY_PRINT);
 }
 
-function console(): Application
-{
-    $kernel = ConsoleKernel::getInstance();
-    return Application::getInstance($kernel);
-}
-
 function session(): Session
 {
     return Session::getInstance();
@@ -56,9 +58,30 @@ function session(): Session
 /**
  * Get application PDO database wrapper
  */
+$database = null;
 function db(): ?DB
 {
-    return app()->database;
+    global $database;
+    if (is_null($database)) {
+        $config = config("database");
+        if (!$config["enabled"]) {
+            return null;
+        }
+        $database = match ($config["type"]) {
+            "mysql" => new MySQL(
+                $config["dbname"],
+                $config["username"],
+                $config["password"],
+                $config["host"],
+                $config["port"],
+                $config["charset"],
+                $config["options"]
+            ),
+            "sqlite" => new SQLite($config["path"], $config["options"]),
+            default => throw new Exception("unknown database driver"),
+        };
+    }
+    return $database;
 }
 
 /**
@@ -124,7 +147,7 @@ function config(string $name): mixed
     // There could be a warning if $attribute
     // is not set, so let's silence it
     @[$file, $key] = explode(".", $name);
-    $config_path = __DIR__ . "/../../config/$file.php";
+    $config_path = __DIR__ . "/../config/$file.php";
     if (file_exists($config_path)) {
         $config = require $config_path;
         return $key && key_exists($key, $config)
