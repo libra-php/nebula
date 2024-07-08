@@ -8,7 +8,7 @@ use Nebula\Framework\Database\Interface\Migration;
 
 return new class implements Migration
 {
-	public function up()
+	public function up(): string
 	{
 		return Schema::create("modules", function (Blueprint $table) {
 			$table->unsignedBigInteger("id")->autoIncrement();
@@ -27,18 +27,20 @@ return new class implements Migration
 		});
 	}
 
-	public function afterUp()
+	public function afterUp(): string
 	{
-		return Schema::insert("modules", [
-			"title",
-			"path",
-			"class_name",
-			"sql_table",
-			"primary_key",
-			"item_order",
-			"max_permission_level",
-			"parent_module_id"
-		], [
+		return Schema::insert(
+			"modules",
+			[
+				"title",
+				"path",
+				"class_name",
+				"sql_table",
+				"primary_key",
+				"item_order",
+				"max_permission_level",
+				"parent_module_id"
+			],
 			["Administration", NULL, NULL, NULL, NULL, 0, NULL, NULL],
 			["Account", NULL, NULL, NULL, NULL, 1, NULL, NULL],
 			["Users", "users", "\\\App\\\Modules\\\Users", "users", "id", 0, 1, 1],
@@ -46,10 +48,10 @@ return new class implements Migration
 			["Modules", "modules", "\\\App\\\Modules\\\Modules", "modules", "id", 1, 0, 1],
 			["Sessions", "sessions", "\\\App\\\Modules\\\Sessions", "sessions", "id", 2, 1, 1],
 			["Profile", "profile", "\\\App\\\Modules\\\Profile", "users", "id", 0, 2, 2],
-		]);
+		);
 	}
 
-	public function down()
+	public function down(): string
 	{
 		return Schema::drop("modules");
 	}

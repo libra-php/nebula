@@ -8,7 +8,7 @@ use Nebula\Framework\Database\Interface\Migration;
 
 return new class implements Migration
 {
-	public function up()
+	public function up(): string
 	{
 		return Schema::create("sessions", function (Blueprint $table) {
 			$table->unsignedBigInteger("id")->autoIncrement();
@@ -21,7 +21,7 @@ return new class implements Migration
 		});
 	}
 
-	public function down()
+	public function down(): string
 	{
 		return Schema::drop("sessions");
 	}
