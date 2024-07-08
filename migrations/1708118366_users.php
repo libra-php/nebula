@@ -27,7 +27,21 @@ return new class implements Migration
 
     public function afterUp(): string
     {
-        return Schema::insert("users", ["user_type_id", "name", "email", "password"], [1, "Administrator", "admin@localhost", Auth::hashPassword("admin2024!")]);
+        return Schema::insert(
+            "users",
+            [
+                "user_type_id",
+                "name",
+                "email",
+                "password"
+            ],
+            [
+                1,
+                "Administrator",
+                "administrator@localhost",
+                Auth::hashPassword("admin2024!")
+            ]
+        );
     }
 
     public function down(): string
