@@ -15,53 +15,48 @@ use Nebula\Framework\Auth\Auth;
 use Nebula\Framework\Session\Session;
 use Nebula\Framework\Template\Engine;
 
+/**
+ * Get the app instance
+ */
 function app(): Application
 {
     $kernel = HttpKernel::getInstance();
     return Application::getInstance($kernel);
 }
 
+/**
+ * Get the console instance
+ */
 function console(): Application
 {
     $kernel = ConsoleKernel::getInstance();
     return Application::getInstance($kernel);
 }
 
-function user(): ?User
-{
-    return Auth::user();
-}
-
-function user_ip()
-{
-    if (!empty($_SERVER["HTTP_CLIENT_IP"])) {
-        $ip = $_SERVER["HTTP_CLIENT_IP"];
-    } elseif (!empty($_SERVER["HTTP_X_FORWARDED_FOR"])) {
-        $ip = $_SERVER["HTTP_X_FORWARDED_FOR"];
-    } else {
-        $ip = $_SERVER["REMOTE_ADDR"];
-    }
-    return $ip;
-}
-
-function json(mixed $data)
-{
-    return json_encode($data, JSON_PRETTY_PRINT);
-}
-
+/**
+ * Get the session instance
+ */
 function session(): Session
 {
     return Session::getInstance();
 }
 
 /**
- * Get application PDO database wrapper
+ * Get database instance
  */
 function db(): ?DB
 {
     $database = Database::getInstance();
     $config = config("database");
     return $database->init($config)?->db();
+}
+
+/**
+ * Get the currently authenticated user model
+ */
+function user(): ?User
+{
+    return Auth::user();
 }
 
 /**
@@ -102,6 +97,8 @@ function dd($data)
 
 /**
  * Get application environment setting
+ * If the env key is not present, then a
+ * default value may be specified and returned
  */
 function env(string $name, $default = "")
 {
