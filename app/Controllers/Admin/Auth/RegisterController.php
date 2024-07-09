@@ -35,7 +35,7 @@ class RegisterController extends Controller
     public function post(): string
     {
         // Override the default request error messages
-        $this->error_messages["unique"] = "Email already in use";
+        //$this->error_messages["unique"] = "Email already in use";
         $data = $this->validateRequest([
             "email" => ["required", "email", "unique|users"],
             "name" => ["required"],

@@ -8,11 +8,11 @@
 	</div>
 	<div>
 		<label>Password</label><br>
-		<input class="form-control" name="password" type="password" value="" />
+		<input class="form-control" name="password" type="password" value="" required />
 		<?= $request_errors('password') ?>
 	</div>
 	<div class="my-2">
-		<input type="checkbox" name="remember_me" value="1" /> <label>Remember me</label>
+		<input type="checkbox" name="remember_me" value="1" /> <label class="ps-1">Remember me</label>
 	</div>
 	<div>
 		<p><a hx-boost="true" href="/register" hx-select="main" hx-target="main">Don't have an account?</a></p>
