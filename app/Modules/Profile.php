@@ -6,7 +6,7 @@ use Nebula\Framework\Admin\Module;
 
 class Profile extends Module
 {
-    public function viewIndex(): string
+    public function customContent(): string
     {
         return template("profile/index.php", ["name" => user()->name]);
     }

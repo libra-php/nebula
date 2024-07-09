@@ -1,1 +1,1 @@
-<p>Hello, <?=$name?></p>
+Hello, <?=$name?>
