@@ -14,7 +14,7 @@
 		</div>
 	<?php endforeach ?>
 	<div class="mt-2">
-		<button hx-post="" hx-swap="outerHTML" hx-target="#view" hx-select="#view" id="create-new" type="submit" class="btn btn-success">Create</button>
-		<button hx-get="/admin/<?= $module ?>/" hx-swap="outerHTML" hx-target="#view" hx-select="#view" class="btn btn-secondary ms-1">Back</button>
+		<button hx-post="" hx-indicator="#request-progress" hx-swap="outerHTML" hx-target="#view" hx-select="#view" id="create-new" type="submit" class="btn btn-success">Create</button>
+		<button hx-get="/admin/<?= $module ?>/" hx-indicator="#request-progress" hx-swap="outerHTML" hx-target="#view" hx-select="#view" class="btn btn-secondary ms-1">Back</button>
 	</div>
 </form>

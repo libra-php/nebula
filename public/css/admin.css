@@ -53,14 +53,14 @@
 /** Navbar */
 #navbar {
 	padding: 0;
-	background-color: #f0f2f5;
+	background-color: #212529;
+	color: #fff;
 }
 #navbar .navbar-brand {
 	font-family: "Oswald", sans-serif;
 	font-size: 1.2rem;
-	opacity: 0.5;
+	color: #fff;
 }
-
 
 /** Breadcrumbs */
 #breadcrumbs {
