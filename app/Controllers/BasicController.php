@@ -17,7 +17,7 @@ class BasicController extends Controller
         return $this->render("layout/base.php", ["main" => $content]);
     }
 
-    #[Get("/test", "basic.answer", ["api"])]
+    #[Get("/api/test", "basic.answer", ["api"])]
     public function answer(): mixed
     {
         return 42;
