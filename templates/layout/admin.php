@@ -6,7 +6,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<?= $meta ?? '' ?>
 	<title>
-		<?= $title . ' [Admin]' ?? 'Nebula [Admin]'  ?>
+		<?= $title ?? 'Nebula [Admin]'  ?>
 	</title>
 	<link href="/css/bootstrap.min.css" rel="stylesheet">
 	<link href="/css/main.css" rel="stylesheet">
