@@ -19,6 +19,7 @@ body {
 	border-top: 1px solid #ddd;
 	height: 100%;
 	overflow: auto;
+	padding-bottom: 10px;
 }
 
 #main-cont {
