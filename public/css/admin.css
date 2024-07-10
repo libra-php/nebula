@@ -26,6 +26,11 @@ body {
 	overflow: auto;
 }
 
+#request-progress .spinner-border {
+	width: 0.8rem;
+	height: 0.8rem;
+}
+
 /** Scrollbar */
 /* Firefox (uncomment to work in Firefox, although other properties will not work!)  */
 /** {
