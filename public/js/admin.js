@@ -1,19 +1,3 @@
-/**
- * Handle form checkboxes
- */
-const handleCheck = (e) => {
-	const self = e.currentTarget;
-	const hidden = self.previousElementSibling;
-	hidden.value = self.checked ? 1 : 0;
-}
-
-/**
- * Hide sidebar when link is clicked (mobile)
- */
-const hideSidebar = () => {
-	const menu = document.querySelector("#sidebar").classList.add("d-none");
-}
-
 (function() {
 	/**
 	 * Focus on sidebar filter when ctrl + / is pressed
