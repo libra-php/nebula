@@ -8,6 +8,9 @@ class Kernel extends ConsoleKernel
 {
     private Adapter $adapter;
 
+    /**
+    * By default, the response will be generated via Adapter
+    */
     public function response(): void
     {
         $this->adapter = new Adapter();
