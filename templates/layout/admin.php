@@ -16,7 +16,7 @@
 
 <body id="body" class="d-flex flex-column bg-light">
 	<?= $navbar ?>
-	<section class="d-flex flex-grow-1">
+	<section class="d-flex flex-grow-1 h-100" id="main-cont">
 		<?= $sidebar ?>
 		<main class="d-flex flex-column flex-grow-1 bg-light" id="view">
 			<section id="top" class="sticky-top bg-light">

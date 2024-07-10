@@ -16,7 +16,7 @@ $storage = config("path.storage");
 $heartbeat_filename = date("Y-m-d") . "_heartbeat.log";
 $scheduler->php($jobs . "/heartbeat.php")
     ->everyMinute()
-    ->output("$storage/$heartbeat_filename", true);
+    ->output("$storage/logs/$heartbeat_filename", true);
 
 // Let the scheduler execute jobs which are due.
 $scheduler->run();
