@@ -31,6 +31,17 @@ body {
 	height: 0.8rem;
 }
 
+/**
+ * Audit
+ */
+.diff-add {
+    background: #d7fcd9
+}
+.diff-remove {
+    background: #fcdcd7
+}
+
+
 /** Scrollbar */
 /* Firefox (uncomment to work in Firefox, although other properties will not work!)  */
 /** {
