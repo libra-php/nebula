@@ -27,7 +27,7 @@
 					</h3>
 				</section>
 			</section>
-			<section class="container" id="flash-messages">
+			<section class="container-fluid" id="flash-messages">
 				<?=$messages?>
 			</section>
 			<section id="content" class="px-3 mt-2">
