@@ -34,7 +34,7 @@
 										<button type="button" hx-get="/admin/<?= $module ?>/<?= $row->$primary_key ?>" hx-indicator="#request-progress" hx-swap="outerHTML" hx-select="#view" hx-target="#view" class="btn btn-sm btn-primary ms-1">Edit</button>
 									<?php endif ?>
 									<?php if ($show_row_delete($row->$primary_key)) : ?>
-										<button type="button" hx-delete="/admin/<?= $module ?>/<?= $row->$primary_key ?>" hx-indicator="#request-progress" hx-swap="outerHTML" hx-select="#view" hx-target="#view" class="btn btn-sm btn-danger ms-1">Delete</button>
+										<button type="button" hx-confirm="Are you sure you want to delete this record?" hx-delete="/admin/<?= $module ?>/<?= $row->$primary_key ?>" hx-indicator="#request-progress" hx-swap="outerHTML" hx-select="#view" hx-target="#view" class="btn btn-sm btn-danger ms-1">Delete</button>
 									<?php endif ?>
 								</div>
 							</td>
