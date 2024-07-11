@@ -8,6 +8,7 @@
 use App\Application;
 use App\Http\Kernel as HttpKernel;
 use App\Console\Kernel as ConsoleKernel;
+use App\Models\Audit;
 use App\Models\User;
 use Lunar\Interface\DB;
 use Nebula\Framework\Database\Database;
@@ -39,6 +40,18 @@ function console(): Application
 function session(): Session
 {
     return Session::getInstance();
+}
+
+function audit(string $table_name, string $table_id, string $field, ?string $old_value = null, ?string $new_value = null, ?string $tag = null): void
+{
+    Audit::new([
+        "table_name" => $table_name,
+        "table_id" => $table_id,
+        "field" => $field,
+        "old_value" => $old_value,
+        "new_value" => $new_value,
+        "tag" => $tag,
+    ]);
 }
 
 /**
