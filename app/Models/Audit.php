@@ -4,10 +4,10 @@ namespace App\Models;
 
 use Nebula\Framework\Model\Model;
 
-class Session extends Model
+class Audit extends Model
 {
     public function __construct(?string $key = null)
     {
-        parent::__construct("sessions", $key);
+        parent::__construct("audit", $key);
     }
 }

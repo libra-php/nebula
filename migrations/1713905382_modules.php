@@ -11,7 +11,7 @@ return new class implements Migration
 	public function up(): string
 	{
 		return Schema::create("modules", function (Blueprint $table) {
-			$table->unsignedBigInteger("id")->autoIncrement();
+            $table->bigIncrements("id");
 			$table->tinyInteger("enabled")->default(1);
 			$table->varchar("title");
 			$table->varchar("path")->nullable();
@@ -47,6 +47,7 @@ return new class implements Migration
 			["User Types", "user-types", "\\\App\\\Modules\\\UserTypes", "user_types", "id", 0, 0, 3],
 			["Modules", "modules", "\\\App\\\Modules\\\Modules", "modules", "id", 1, 0, 1],
 			["Sessions", "sessions", "\\\App\\\Modules\\\Sessions", "sessions", "id", 2, 1, 1],
+			["Audit", "audit", "\\\App\\\Modules\\\Audit", "audit", "id", 3, 0, 1],
 			["Profile", "profile", "\\\App\\\Modules\\\Profile", "users", "id", 0, 2, 2],
 		);
 	}

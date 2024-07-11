@@ -30,7 +30,7 @@ class UserTypes extends Module
         ];
         $this->validation_rules = [
             "name" => ["required"],
-            "permission_level" => ["min|0", "required"],
+            "permission_level" => ["min|0", "max|10", "required"],
         ];
     }
 

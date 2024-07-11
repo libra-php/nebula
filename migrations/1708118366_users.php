@@ -11,7 +11,7 @@ return new class implements Migration
     public function up(): string
     {
         return Schema::create("users", function (Blueprint $table) {
-            $table->unsignedBigInteger("id")->autoIncrement();
+            $table->bigIncrements("id");
             $table->uuid("uuid")->default("(UUID())");
             $table->unsignedBigInteger("user_type_id")->default(3);
             $table->varchar("name");

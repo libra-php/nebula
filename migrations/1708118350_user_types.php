@@ -11,7 +11,7 @@ return new class implements Migration
     public function up(): string
     {
         return Schema::create("user_types", function (Blueprint $table) {
-            $table->unsignedBigInteger("id")->autoIncrement();
+            $table->bigIncrements("id");
             $table->varchar("name");
             $table->tinyInteger("permission_level")->default(2); // default standard user
             $table->timestamps();
