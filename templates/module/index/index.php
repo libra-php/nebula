@@ -1,6 +1,3 @@
-<section id="flash-messages">
-	<?=$messages?>
-</section>
 <section id="actions" class="mb-3">
 	<?php if ($actions['show_create_action']) : ?>
 		<button type="button" hx-get="/admin/<?= $module ?>/create" hx-indicator="#request-progress" hx-swap="outerHTML" hx-select="#view" hx-target="#view" class="btn btn-success btn-sm">Create</button>

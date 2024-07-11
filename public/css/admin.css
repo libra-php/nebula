@@ -274,6 +274,9 @@ body {
 
 
 /** Flash */
+.flash.alert {
+	margin-bottom: 5px;
+}
 .flash.alert svg {
 	width: 18px;
 	height: 18px;
