@@ -5,7 +5,7 @@
 			hx-get="?filter_link=<?=$idx?>" hx-indicator="#request-progress" hx-swap="outerHTML" hx-target="#filters-table" hx-select="#filters-table" hx-trigger="click">
 			<?= $link ?> [<span class="count_<?=$idx?>">...</span>]
 		</span>
-		<span hx-trigger="load" hx-get="?filter_count=<?= $idx ?>" hx-target=".count_<?=$idx?>">
+		<span hx-trigger="load" hx-get="?filter_count=<?= $idx ?>" hx-indicator="#request-progress" hx-target=".count_<?=$idx?>">
 		</span>
 		<?php endforeach ?>
 	</div>
