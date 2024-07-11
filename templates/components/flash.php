@@ -14,11 +14,11 @@
 	<div class="flash alert alert-<?=$type?> d-flex align-items-center" role="alert">
 		<?php
 		echo match($type) {
-			'info' => '<svg class="bi flex-shrink-0 me-2" role="img" aria-label="Info:"><use xlink:href="#info-fill"/></svg>',
-			'success' => '<svg class="bi flex-shrink-0 me-2" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>
+			'info' => '<svg class="bi flex-shrink-0 me-3" role="img" aria-label="Info:"><use xlink:href="#info-fill"/></svg>',
+			'success' => '<svg class="bi flex-shrink-0 me-3" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>
   <div>',
-			'warning' => '<svg class="bi flex-shrink-0 me-2" role="img" aria-label="Warning:"><use xlink:href="#exclamation-triangle-fill"/></svg>',
-			'danger' => '<svg class="bi flex-shrink-0 me-2" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>',
+			'warning' => '<svg class="bi flex-shrink-0 me-3" role="img" aria-label="Warning:"><use xlink:href="#exclamation-triangle-fill"/></svg>',
+			'danger' => '<svg class="bi flex-shrink-0 me-3" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>',
 			default => '',
 		};
 		?>
