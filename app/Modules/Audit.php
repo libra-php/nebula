@@ -27,6 +27,7 @@ class Audit extends Module
         ];
         $this->filter_links = [
             "All" => "1=1",
+            "Register" => "tag = 'REGISTER'",
             "Create" => "tag = 'CREATE'",
             "Update" => "tag = 'UPDATE'",
             "Delete" => "tag = 'DELETE'",
