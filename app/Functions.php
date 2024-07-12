@@ -42,8 +42,15 @@ function session(): Session
     return Session::getInstance();
 }
 
-function audit(string $table_name, string $table_id, string $field, ?User $user, ?string $old_value = null, ?string $new_value = null, ?string $tag = null): void
-{
+function audit(
+    string $table_name,
+    string $table_id,
+    string $field,
+    ?User $user,
+    ?string $old_value = null,
+    ?string $new_value = null,
+    ?string $tag = null
+): void {
     Audit::new([
         "user_id" => $user ? $user->id : null,
         "table_name" => $table_name,

@@ -13,6 +13,7 @@ class Audit extends Module
             "ID" => "id",
             "User" => "(SELECT name FROM users WHERE id = user_id) as user",
             "Table" => "table_name",
+            "Key" => "table_id",
             "Field" => "field",
             "Diff" => "id as diff",
             "Tag" => "tag",
