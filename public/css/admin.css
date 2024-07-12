@@ -314,6 +314,10 @@ body {
 .form-content {
 	max-width: 20rem;
 }
+.checkmark {
+	height: 16px;
+	width: 16px;
+}
 
 /**
  * Utility

@@ -17,7 +17,7 @@ class Users extends Module
             "ID" => "id",
             "UUID" => "uuid",
             "Name" => "name",
-            "Email" => "email",
+            "Type" => "(SELECT name FROM user_types WHERE id = user_type_id) as type",
             "Created" => "created_at",
         ];
         $this->table_format = [
@@ -31,15 +31,24 @@ class Users extends Module
         ];
         $this->form_columns = [
             "Name" => "name",
-            "E-mail" => "email",
+            "Email" => "email",
+            "Type" => "user_type_id",
             "Password" => "password",
             "Password (agian)" => "password_match",
         ];
         $this->form_controls = [
             "password" => "password",
-            "password_match" => "password"
+            "password_match" => "password",
+            "user_type_id" => "select",
+        ];
+        $this->select_options = [
+            "user_type_id" => db()->fetchAll("SELECT id as value, name as label
+                FROM user_types
+                ORDER BY permission_level, name"),
         ];
         $this->validation_rules = [
+            "name" => ["required"],
+            "email" => ["required"],
             "password" => ["minlength|8", "symbol"],
             "password_match" => ["match|password"]
         ];
@@ -48,6 +57,21 @@ class Users extends Module
             $this->validation_rules["password"][] = "required";
             $this->validation_rules["password_match"][] = "required";
         }
+
+        // Special admin case
+        // There must exist at least 1 super admin
+        if ($this->id === "1") {
+            $this->form_disabled[] = "user_type_id";
+        } else {
+            $this->validation_rules["user_type_id"] = ["required"];
+            $this->validation_rules["email"][] = "email";
+        }
+    }
+
+    public function hasDeletePermission(string $id): bool
+    {
+        // Default admin and current user cannot be deleted here
+        return $id !== "1" && user()->id !== $id;
     }
 
     protected function editValueOverride(object &$row): void
