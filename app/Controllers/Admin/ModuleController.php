@@ -89,10 +89,13 @@ class ModuleController extends Controller
     #[Get("/{path}", "module.index")]
     public function index($path): string
     {
-        header("Hx-Push-Url: /admin/$path");
         $response = $this->module->processRequest($_REQUEST);
         if (!is_null($response)) {
             return $response;
+        } else {
+            // We avoid pushing the url for module requests
+            // so that the history isn't messed up
+            header("Hx-Push-Url: /admin/$path");
         }
         $this->module->recordSession();
         return $this->module->render("index");
@@ -114,6 +117,8 @@ class ModuleController extends Controller
     #[Get("/{path}/{id}", "module.edit")]
     public function edit($path, $id): string
     {
+        // TODO: when we process requests like the index
+        // view, we should conditionally push the history
         header("Hx-Push-Url: /admin/$path/$id");
 
         if (!$this->module->hasEditPermission($id)) {
