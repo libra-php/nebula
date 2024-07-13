@@ -6,15 +6,8 @@ use Nebula\Framework\Admin\Module;
 
 class Profile extends Module
 {
-    protected function getIndexTemplate(): string
+    public function viewIndex(): string
     {
-        return "profile/index.php";
-    }
-
-    protected function getIndexData(): array
-    {
-        return [
-            "message" => "Hello, world! " . time()
-        ];
+        return template("profile/index.php", ["message" => "Hello, world ". time()]);
     }
 }
