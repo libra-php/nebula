@@ -2,12 +2,18 @@
 
 namespace App\Modules;
 
-use Nebula\Framework\Admin\Module;
-
-class Profile extends Module
+class Profile extends Users
 {
-    public function viewIndex(): string
+    public function init(): void
     {
-        return template("profile/index.php", ["message" => "Hello, world ". time()]);
+        parent::init();
+        $user = user();
+        $this->create = false;
+        $this->filter_links = ["Me" => "id = {$user->id}"];
+    }
+
+    public function hasDeletePermission(string $id): bool
+    {
+        return true;
     }
 }
