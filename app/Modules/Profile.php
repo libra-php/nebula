@@ -8,8 +8,10 @@ class Profile extends Users
     {
         parent::init();
         $user = user();
+        $this->export_csv = false;
         $this->create = false;
-        $this->filter_links = ["Me" => "id = {$user->id}"];
+        $this->search_columns = [];
+        $this->filter_links = ["Active" => "id = {$user->id}"];
     }
 
     public function hasDeletePermission(string $id): bool

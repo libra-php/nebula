@@ -21,7 +21,7 @@ return new class implements Migration
             $table->varchar("tag")->nullable();
             $table->timestamp("created_at")->default("CURRENT_TIMESTAMP");
             $table->primaryKey("id");
-            $table->foreignKey("user_id")->references("users", "id");
+            $table->foreignKey("user_id")->references("users", "id")->onDelete("SET NULL");
         });
     }
 
