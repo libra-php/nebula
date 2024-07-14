@@ -89,19 +89,12 @@ class Modules extends Module
 
     public function hasDeletePermission(string $id): bool
     {
-        if ($id < 8) {
-            return false;
-        }
-        return parent::hasDeletePermission($id);
+        return $id > 8 && parent::hasDeletePermission($id);
     }
 
     public function hasEditPermission(string $id): bool
     {
         $module = Model::find($id);
-        if ($module->title === "Modules") {
-            return false;
-        }
-
-        return parent::hasEditPermission($id);
+        return $module->title !== "Modules" && parent::hasEditPermission($id);
     }
 }

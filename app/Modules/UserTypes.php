@@ -36,9 +36,6 @@ class UserTypes extends Module
 
     public function hasDeletePermission(string $id): bool
     {
-        if ($id < 4) {
-            return false;
-        }
-        return parent::hasDeletePermission($id);
+        return $id > 3 && parent::hasDeletePermission($id);
     }
 }

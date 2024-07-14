@@ -14,5 +14,6 @@ return [
 	"public" => $root . "public",
 	"storage" => $root . "storage",
 	"modules" => $app . "Modules",
-	"jobs" => $root . "jobs"
+	"jobs" => $root . "jobs",
+	"logs" => $root . "storage/logs",
 ];
