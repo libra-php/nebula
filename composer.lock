@@ -452,7 +452,7 @@
             "dist": {
                 "type": "path",
                 "url": "../nebula-core",
-                "reference": "c548fc2440ab8eb43cfe10336943852cf1eb1115"
+                "reference": "8e4b9d6eebce9c8767effc18ce2668318202f20d"
             },
             "require": {
                 "composer/class-map-generator": "^1.1",
