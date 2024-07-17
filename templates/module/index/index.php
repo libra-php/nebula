@@ -6,17 +6,13 @@
 	<a type="button" href="?export_csv" hx-indicator="#request-progress" class="btn btn-success btn-sm">Export CSV</a>
 	<?php endif ?>
 </section>
-<section id="filters-table">
-	<section id="filters">
-		<?= $filters['search'] ?>
-		<?= $filters['link'] ?>
-	</section>
-	<section id="table-pagination">
-		<section id="table" class="table-responsive">
-			<?= $table ?>
-		</section>
-		<section id="pagination">
-			<?= $pagination ?>
-		</section>
-	</section>
+<section id="filters">
+	<?= $filters['search'] ?>
+	<?= $filters['link'] ?>
+</section>
+<section id="table" class="table-responsive">
+	<?= $table ?>
+</section>
+<section id="pagination">
+	<?= $pagination ?>
 </section>

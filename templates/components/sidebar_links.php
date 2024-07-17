@@ -2,8 +2,7 @@
     <li class="sidebar-link"
         <?php if ($child['label'] === "Sign Out"): ?>hx-boost=false<?php endif ?>
         hx-indicator="#request-progress"
-        hx-sync="this:abort"
-        hx-trigger="click queue:all">
+        hx-sync="this:abort">
         <a href="<?=str_replace(".php", '', $child['link'])?>"
             title="<?=$child['label']?>"
             onClick="hideSidebar();"
