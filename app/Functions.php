@@ -169,3 +169,10 @@ function template(string $path, array $data = [], bool $decode = false): string
         ? html_entity_decode($engine->render("$template/$path", $data))
         : $engine->render("$template/$path", $data);
 }
+
+function route(string $name): string|bool
+{
+    $router = app()->kernel()->router();
+    $route = $router->findRouteByName($name);
+    return $route ? $route->getPath() : false;
+}

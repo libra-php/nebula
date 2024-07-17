@@ -11,7 +11,7 @@ class SignInController extends Controller
     protected function bootstrap(): void
     {
         if (user()) {
-            Auth::redirectProfile();
+            Auth::redirectSuccessfulSignIn();
         }
     }
 

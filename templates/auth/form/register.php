@@ -1,14 +1,14 @@
-<form method="POST" id="form-register" hx-post="<?=$route('register.post')?>" hx-swap="outerHTML">
+<form method="POST" id="form-register" hx-post="<?=route('register.post')?>" hx-swap="outerHTML">
 	<?= $csrf() ?>
 	<h3>Register</h3>
 	<div id="email-input">
 		<label>Email</label><br>
-		<input hx-trigger="keyup changed delay:1s" hx-post="<?=$route('register.post')?>" hx-select="#email-input" hx-target="#email-input" class="form-control" name="email" type="email" value="<?= $escape('email') ?>" />
+		<input hx-trigger="keyup changed delay:1s" hx-post="<?=route('register.post')?>" hx-select="#email-input" hx-target="#email-input" class="form-control" name="email" type="email" value="<?= $escape('email') ?>" />
 		<?= $request_errors("email") ?>
 	</div>
 	<div id="name-input">
 		<label>Name</label><br>
-		<input hx-trigger="keyup changed delay:1s" hx-post="<?=$route('register.post')?>" hx-select="#name-input" hx-target="#name-input" class="form-control" name="name" type="text" value="<?= $escape('name') ?>" />
+		<input hx-trigger="keyup changed delay:1s" hx-post="<?=route('register.post')?>" hx-select="#name-input" hx-target="#name-input" class="form-control" name="name" type="text" value="<?= $escape('name') ?>" />
 		<?= $request_errors("name") ?>
 	</div>
 	<div id="password-input">

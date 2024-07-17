@@ -40,4 +40,12 @@ class Profile extends Users
     {
         return $id === user()->id;
     }
+
+    public function viewIndex(): string
+    {
+        $id = user()->id;
+        header("HX-Location: /admin/profile/$id");
+        header("Location: /admin/profile/$id");
+        return '';
+    }
 }
