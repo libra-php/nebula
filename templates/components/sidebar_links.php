@@ -4,7 +4,7 @@
                 <?php if ($child['label'] === "Sign Out"): ?>hx-boost=false<?php endif ?>
                 hx-indicator="#request-progress"
                 title="<?=$child['label']?>"
-                onClick="hideSidebar()"
+                onClick="hideSidebar(); htmx.trigger('.sidebar-link', 'htmx:xhr:abort');"
                 data-title="<?=$child['label']?>"
                 data-parent="<?=$parent_link?>"
                 style="padding-left: <?=$depth?>px;"

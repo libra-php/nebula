@@ -9,10 +9,11 @@ class Modules extends Module
 {
     public function init(): void
     {
+        $this->link_column = "title";
         $this->table_columns = [
             "ID" => "id",
-            "Enabled" => "enabled",
             "Title" => "title",
+            "Enabled" => "enabled",
             "Parent" => "(SELECT m.title
 				FROM modules m
 				WHERE m.id = modules.parent_module_id) as parent",

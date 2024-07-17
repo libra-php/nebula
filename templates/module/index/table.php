@@ -24,7 +24,13 @@
 					<tr>
 						<?php foreach ($row as $column => $value) : ?>
 							<td class="align-top">
-								<?= $format($column, $value) ?>
+								<?php if ($link_column && $column === $link_column): ?>
+									<a href="/admin/<?= $module ?>/<?= $row->$primary_key ?>">
+										<?= $format($column, $value) ?>
+									</a>
+								<?php else: ?>
+									<?= $format($column, $value) ?>
+								<?php endif ?>
 							</td>
 						<?php endforeach ?>
 						<?php if ($show_row_actions) : ?>

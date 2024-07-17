@@ -10,6 +10,7 @@ class UserTypes extends Module
     {
         $this->create = $this->edit = $this->delete =
             user()->type()->permission_level == 0;
+        $this->link_column = "name";
         $this->table_columns = [
             "ID" => "id",
             "Name" => "name",

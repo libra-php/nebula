@@ -13,6 +13,7 @@ class Users extends Module
     public function init(): void
     {
         $this->user = user();
+        $this->link_column = "uuid";
         $this->table_columns = [
             "ID" => "id",
             "UUID" => "uuid",
