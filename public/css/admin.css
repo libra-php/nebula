@@ -328,6 +328,30 @@ body {
   text-overflow: ellipsis;
 }
 
+/**
+ * Sign In / Register
+ */
+#sign-in, #register, #register-2fa {
+	width: 320px;
+	margin: auto;
+}
+
+#keypad {
+  padding: 4px;
+}
+
+#keypad > .btn {
+  border: 1px solid #ddd;
+  padding: 20px;
+  margin: 3px;
+  flex-basis: 30%;
+}
+
+#keypad > .btn.active {
+  background-color: #DDD;
+}
+
+
 
 @media (max-width: 575.98px) {
 	#sidebar {

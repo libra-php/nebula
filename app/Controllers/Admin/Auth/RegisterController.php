@@ -46,6 +46,9 @@ class RegisterController extends Controller
             unset($data["password_match"]);
             $user = Auth::registerUser($data);
             if ($user) {
+                if (config("security.enable2FA")) {
+                    Auth::redirectRegister2FA($user);
+                }
                 Auth::signIn($user);
             }
         }

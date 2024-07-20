@@ -52,7 +52,3 @@ input[type="color"]:focus,
   box-shadow: none !important;
   outline: none;
 }
-
-#form-sign-in, #form-register {
-	width: 320px;
-}

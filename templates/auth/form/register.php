@@ -1,6 +1,5 @@
 <form method="POST" id="form-register" hx-post="<?=route('register.post')?>" hx-swap="outerHTML">
 	<?= $csrf() ?>
-	<h3>Register</h3>
 	<div id="email-input">
 		<label>Email</label><br>
 		<input hx-trigger="keyup changed delay:1s" hx-post="<?=route('register.post')?>" hx-select="#email-input" hx-target="#email-input" class="form-control" name="email" type="email" value="<?= $escape('email') ?>" />

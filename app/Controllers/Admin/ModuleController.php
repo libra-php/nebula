@@ -64,8 +64,7 @@ class ModuleController extends Controller
 
     private function moduleNotFound(): void
     {
-        header("Location: /page-not-found", response_code: 418);
-        exit();
+        $this->pageNotFound();
     }
 
     private function permissionDenied(): void
