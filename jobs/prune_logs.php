@@ -6,13 +6,16 @@
 require_once __DIR__ . "/../vendor/autoload.php";
 
 $logs_dir = config("path.logs");
-$max_age = 7 * 24 * 60 * 60; // 7 days
+$max_days = 7;
+$max_age = $max_days * 24 * 60 * 60;
 
 foreach (glob($logs_dir."/*.log") as $log) {
     $mod_time = filemtime($log);
     $file_age = time() - $mod_time;
-    if ($file_age > $max_age) {
+    if ($file_age >= $max_age) {
         // Attempt to remove the file
-        unlink($log);
+        if (!unlink($log)) {
+            print("Failed to remove log: $log" . PHP_EOL);
+        }
     }
 }
