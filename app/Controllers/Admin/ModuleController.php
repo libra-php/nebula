@@ -67,12 +67,6 @@ class ModuleController extends Controller
         $this->pageNotFound();
     }
 
-    private function permissionDenied(): void
-    {
-        header("Location: /permission-denied", response_code: 403);
-        exit();
-    }
-
     protected function replaceErrorTitle(string $field, string $message): string
     {
         $columns = $this->module->getFormColumns();

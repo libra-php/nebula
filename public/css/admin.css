@@ -331,8 +331,8 @@ body {
 /**
  * Sign In / Register
  */
-#sign-in, #register, #register-2fa {
-	width: 320px;
+#sign-in, #register, #register-2fa, #sign-in-2fa {
+	width: 330px;
 	margin: auto;
 }
 

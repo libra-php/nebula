@@ -41,7 +41,13 @@ class SignInController extends Controller
         if ($data) {
             $user = Auth::userAuth($data);
             if ($user) {
-                Auth::signIn($user, intval($data["remember_me"] ?? 0) === 1);
+                session()->set("remember_me", intval($data["remember_me"] ?? 0) === 1);
+                // If 2FA is enabled for the user, then do that
+                if (config("security.2FA_enable") && $user->enable_2fa) {
+                    Auth::signIn2FA($user);
+                    exit;
+                }
+                Auth::signIn($user);
             } else {
                 $this->request_errors["password"][] =
                     "bad email and/or password";
