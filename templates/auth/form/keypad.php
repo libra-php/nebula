@@ -1,6 +1,6 @@
 <form method="POST" id="form-register-2fa" hx-post="<?=route('2fa.code')?>" hx-swap="outerHTML">
 	<?= $csrf() ?>
-    <input type="tel" placeholder="Enter your code" name="code" id="code" class="form-control" required />
+    <input type="tel" placeholder="Enter your code" name="code" id="code" class="form-control" maxlength="6" minlength="6" required />
 		<?= $request_errors('code') ?>
     <div class="d-flex flex-wrap justify-content-center mt-2" id="keypad">
       <button class="btn btn-light" type="button" onClick="updateInput(event)" value="1">1</button>
@@ -17,16 +17,4 @@
       <button class="btn btn-light" type="submit">⏎</button>
     </div>
 </form>
-<script>
-const updateInput = (e) => {
-	const input = document.querySelector("#code");
-	input.value = input.value.toString() + e.currentTarget.value.toString();
-}
-
-const deleteChar = (e) => {
-	const input = document.querySelector("#code");
-  const value = input.value;
-  const new_value = value.slice(0, -1);
-  input.value = new_value;
-}
-</script>
+<script src="/js/keypad.js" defer></script>

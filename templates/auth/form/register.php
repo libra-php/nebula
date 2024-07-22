@@ -1,4 +1,5 @@
-<form method="POST" id="form-register" hx-post="<?=route('register.post')?>" hx-swap="outerHTML" hx-target="#form-register" hx-select="#form-register">
+<form method="POST" id="form-register" hx-post="<?=route('register.post')?>" hx-swap="outerHTML">
+	<h3>Register</h3>
 	<?= $csrf() ?>
 	<div id="email-input">
 		<label>Email</label><br>

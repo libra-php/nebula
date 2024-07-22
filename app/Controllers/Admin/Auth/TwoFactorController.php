@@ -54,7 +54,7 @@ class TwoFactorController extends Controller
     public function code()
     {
         $request = $this->validateRequest([
-            "code" => ["required", "minlength|6", "maxlength|6"],
+            "code" => ["required", "minlength|6"],
         ]);
         if ($request) {
             if (Auth::verifyTwoFactor($this->user, $request["code"])) {

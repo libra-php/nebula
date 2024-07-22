@@ -1,3 +1,5 @@
+feather.replace();
+
 (function() {
 	/**
 	 * Focus on sidebar filter when ctrl + / is pressed
@@ -27,6 +29,7 @@
 			}
 		})
 	}
+
 
 	/**
 	* Sidebar code (filtering)

@@ -1,3 +1,4 @@
+var loaded = false;
 feather.replace();
 
 htmx.on("htmx:responseError", function(evt) {
@@ -20,3 +21,4 @@ htmx.on("htmx:responseError", function(evt) {
 			window.location.href = "/server-error";
 	}
 });
+

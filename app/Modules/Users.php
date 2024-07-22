@@ -34,6 +34,7 @@ class Users extends Module
             "Name" => "name",
             "Email" => "email",
             "Type" => "user_type_id",
+            "Enable 2FA" => "enable_2fa",
             "Password" => "password",
             "Password (agian)" => "password_match",
         ];
@@ -41,6 +42,7 @@ class Users extends Module
             "password" => "password",
             "password_match" => "password",
             "user_type_id" => "select",
+            "enable_2fa" => "switch",
         ];
         $this->select_options = [
             "user_type_id" => db()->fetchAll("SELECT id as value, name as label

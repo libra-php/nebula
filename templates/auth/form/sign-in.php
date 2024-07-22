@@ -1,4 +1,5 @@
-<form method="POST" id="form-sign-in" hx-post="<?=route('sign-in.post')?>" hx-swap="outerHTML" hx-select="#form-sign-in" hx-target="#form-sign-in">
+<form method="POST" id="form-sign-in" hx-post="<?=route('sign-in.post')?>" hx-swap="outerHTML">
+	<h3>Sign In</h3>
 	<?= $csrf() ?>
 	<div>
 		<label>Email</label><br>

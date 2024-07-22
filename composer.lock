@@ -556,7 +556,7 @@
             "dist": {
                 "type": "path",
                 "url": "../nebula-core",
-                "reference": "50a694a130352893b8dcbc9c45ea3d4e62979227"
+                "reference": "c01a1a09ccf87076c610d5ed9388b5fda7abeee4"
             },
             "require": {
                 "bacon/bacon-qr-code": "^3.0",
