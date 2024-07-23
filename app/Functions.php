@@ -176,3 +176,13 @@ function route(string $name): string|bool
     $route = $router->findRouteByName($name);
     return $route ? $route->getPath() : false;
 }
+
+/**
+* Creates HX Location header
+*/
+function hx_location(array $options)
+{
+    if (empty($options)) return;
+    $header =  sprintf("HX-Location:%s", json_encode($options));
+    header($header);
+}
