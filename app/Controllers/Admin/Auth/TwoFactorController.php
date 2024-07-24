@@ -44,7 +44,6 @@ class TwoFactorController extends Controller
     {
         $content = template("auth/two-factor-sign-in.php", [
             "form" => $this->form(),
-            "qr" => Auth::generateQRCode($this->user)
         ]);
 
         return $this->render("layout/base.php", ["main" => $content]);

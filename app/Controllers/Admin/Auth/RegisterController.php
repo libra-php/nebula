@@ -11,7 +11,7 @@ class RegisterController extends Controller
     protected function bootstrap(): void
     {
         if (user()) {
-            Auth::redirectSuccessfulSignIn();
+            Auth::redirectAdmin();
         }
     }
 
