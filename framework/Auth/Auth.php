@@ -41,7 +41,6 @@ class Auth
     public static function redirectSignIn(): void
     {
         $route = route("sign-in.index");
-        header("HX-Location: $route");
         header("Location: $route");
         exit();
     }
@@ -50,11 +49,11 @@ class Auth
      * When the user signs in, redirect to sign-in route
      * HTMX redirect
      */
-    public static function redirectAdmin($location = true): void
+    public static function redirectAdmin($add_location = true): void
     {
         $route = config("security.sign_in_route");
         header("HX-Location: $route");
-        if ($location) header("Location: $route");
+        if ($add_location) header("Location: $route");
         exit();
     }
 
@@ -66,7 +65,6 @@ class Auth
         session()->set("2fa_user", $user->id);
         $route = route("2fa.register");
         header("HX-Location: $route");
-        header("Location: $route");
         exit();
     }
 
@@ -78,7 +76,6 @@ class Auth
         session()->set("2fa_user", $user->id);
         $route = route("2fa.sign-in");
         header("HX-Location: $route");
-        header("Location: $route");
         exit();
     }
 
