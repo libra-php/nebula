@@ -12,7 +12,7 @@
 </section>
 <section id="table" class="table-responsive">
 	<?= $table ?>
-</section>
-<section id="pagination">
-	<?= $pagination ?>
+	<section id="pagination">
+		<?= $pagination ?>
+	</section>
 </section>
