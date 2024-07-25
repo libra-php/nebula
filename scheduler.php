@@ -19,8 +19,8 @@ $scheduler->php($jobs . "/heartbeat.php")
     ->everyMinute()
     ->output("$storage/logs/$heartbeat_filename", true);
 
-// Log prune (remove every 7 days)
-$scheduler->php($jobs . "/prune_logs.php")->weekly(0);
+// Rotate logs
+$scheduler->php($jobs . "/rotate_logs.php")->monday();
 
 
 // Let the scheduler execute jobs which are due.
