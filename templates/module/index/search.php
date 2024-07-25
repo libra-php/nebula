@@ -11,8 +11,7 @@
 			class="form-control form-control-sm"
 			placeholder="Search" />
 		 <button type="submit"
-			class="btn btn-outline-secondary"
-			hx-sync="this:abort">OK</button>
+			class="btn btn-success">OK</button>
 	</div>
 </form>
 <?php endif ?>
