@@ -1,16 +1,18 @@
 <?php
+/**
+* Schedule automated tasks here
+* Library: https://github.com/peppeocchi/php-cron-scheduler
+*/
 require_once __DIR__ . '/vendor/autoload.php';
 
 use GO\Scheduler;
 
-// Create a new scheduler
 $scheduler = new Scheduler();
 
-// Jobs path
 $jobs = config("path.jobs");
 $storage = config("path.storage");
 
-// Add scheduled tasks here
+// Add scheduled tasks
 
 
 // Heartbeat
