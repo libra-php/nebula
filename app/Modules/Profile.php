@@ -20,6 +20,7 @@ class Profile extends Users
             "Password (again)" => "password_match",
         ];
         $user_id = user()->id;
+        $this->show_back = false;
         $this->export_csv = false;
         $this->create = false;
         $this->search_columns = [];

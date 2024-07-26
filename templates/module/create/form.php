@@ -15,6 +15,8 @@
 	<?php endforeach ?>
 	<div class="mt-2">
 		<button hx-post="" hx-indicator="#request-progress" hx-swap="outerHTML" hx-target="#view" hx-select="#view" id="create-new" type="submit" class="btn btn-success">Create</button>
+		<?php if ($show_back): ?>
 		<button hx-get="/admin/<?= $module ?>/" hx-indicator="#request-progress" hx-swap="outerHTML" hx-target="#view" hx-select="#view" class="btn btn-secondary ms-1">Back</button>
+		<?php endif ?>
 	</div>
 </form>

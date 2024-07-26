@@ -88,6 +88,9 @@ class Module
     // Select control options
     protected array $select_options = [];
 
+    // Show back button
+    protected bool $show_back = true;
+
     public function __construct(
         private object $config,
         private Controller $controller,
@@ -1488,6 +1491,7 @@ class Module
                 "request_errors" => $request_errors,
                 "has_errors" => $has_errors,
                 "old" => $old,
+                "show_back" => $this->show_back,
             ]),
         ];
     }
@@ -1528,6 +1532,7 @@ class Module
                 "request_errors" => $request_errors,
                 "has_errors" => $has_errors,
                 "old" => $old,
+                "show_back" => $this->show_back,
             ]),
         ];
     }

@@ -17,6 +17,8 @@
 	<?php endif ?>
 	<div class="mt-2">
 		<button hx-patch="" hx-indicator="#request-progress" name="save" hx-swap="outerHTML" hx-target="#view" hx-select="#view" id="edit-save" type="submit" class="btn btn-primary">Save</button>
+		<?php if ($show_back): ?>
 		<button hx-get="/admin/<?= $module ?>/" hx-indicator="#request-progress" hx-swap="outerHTML" hx-target="#view" hx-select="#view" class="btn btn-secondary ms-1">Back</button>
+		<?php endif ?>
 	</div>
 </form>
