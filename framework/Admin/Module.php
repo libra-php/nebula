@@ -427,7 +427,7 @@ class Module
 
     private function mostVisited(): array
     {
-        $most_visited = db()->fetchAll("SELECT modules.path, modules.title, COUNT(sessions.id)  as count
+        $most_visited = db()->fetchAll("SELECT concat('/admin/', modules.path) as path, modules.title, COUNT(sessions.id)  as count
             FROM sessions
             INNER JOIN modules ON module_id = modules.id
             WHERE user_id = ?
