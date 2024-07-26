@@ -38,6 +38,12 @@ feather.replace();
 	if (sidebarFilter !== null) {
 		sidebarFilter.oninput = (e) => {
 			const value = e.currentTarget.value;
+			const most_visited = document.getElementById("most-visited");
+			if (value.trim() !== '') {
+				hide(most_visited);
+			} else {
+				show(most_visited);
+			}
 			resetHighlight();
 			highlightMatches(value);
 		};

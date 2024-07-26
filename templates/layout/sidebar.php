@@ -3,6 +3,19 @@
 		<input type="search" class="form-control" id="filter" placeholder="Filter" tabindex="-1">
 	</div>
 
+	<?php if (!empty($most_visited)):  ?>
+	<div id="most-visited">
+	<h5 class="ps-3 fw-bold">Most visited</h5>
+	<ul class="list-unstyled ps-0">
+	<?php foreach ($most_visited as $link): ?>
+		<li class="nav-link">
+			<a class="link link-dark rounded truncate" href="<?=$link->path?>" alt="link"><?=$link->title?></a>
+		</li>
+	<?php endforeach ?>
+	</ul>
+	</div>
+	<?php endif ?>
+
 	<div class="flex-shrink-0">
 		<ul class="list-unstyled ps-0">
 			<?php foreach ($links as $key => $link): ?>

@@ -12,6 +12,12 @@ use Nebula\Framework\Auth\Auth;
 class ModuleController extends Controller
 {
     private Module $module;
+    private ?int $module_id = null;
+
+    public function moduleID(): ?int
+    {
+        return $this->module_id;
+    }
 
     protected function bootstrap(): void
     {
@@ -56,6 +62,7 @@ class ModuleController extends Controller
                 $module_path
             );
             if ($module) {
+                $this->module_id = $module->id;
                 return $module;
             }
         }

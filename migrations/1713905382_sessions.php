@@ -15,9 +15,11 @@ return new class implements Migration
 			$table->mediumText("request_uri")->nullable();
 			$table->unsignedInteger("ip")->nullable();
 			$table->unsignedBigInteger("user_id")->nullable();
+			$table->unsignedBigInteger("module_id")->nullable();
 			$table->timestamp("created_at")->default("CURRENT_TIMESTAMP");
 			$table->primaryKey("id");
 			$table->foreignKey("user_id")->references("users", "id")->onDelete("SET NULL");
+			$table->foreignKey("module_id")->references("modules", "id")->onDelete("SET NULL");
 		});
 	}
 

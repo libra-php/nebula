@@ -238,6 +238,7 @@ class Module
             "request_uri" => $_SERVER["REQUEST_URI"],
             "ip" => ip2long($this->controller->userIp()),
             "user_id" => user()->id,
+            "module_id" => $this->controller->moduleID(),
         ]);
     }
 
@@ -421,6 +422,18 @@ class Module
         return $sidebar_links;
     }
 
+    private function mostVisited(): array
+    {
+        $most_visited = db()->fetchAll("SELECT modules.path, modules.title, COUNT(sessions.id)  as count
+            FROM sessions
+            INNER JOIN modules ON module_id = modules.id
+            WHERE user_id = ?
+            GROUP BY module_id
+            ORDER BY count DESC
+            LIMIT 10", user()->id);
+        return $most_visited;
+    }
+
     /**
      * Recursively build the breadcrumb links
      */
@@ -482,7 +495,11 @@ class Module
     public function getSidebar(): string
     {
         $links = $this->buildLinks();
-        return template("layout/sidebar.php", ["links" => $links]);
+        $most_visited = $this->mostVisited();
+        return template("layout/sidebar.php", [
+            "most_visited" => $most_visited,
+            "links" => $links
+        ]);
     }
 
     /**

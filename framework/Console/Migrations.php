@@ -63,7 +63,7 @@ class Migrations
         foreach ($iterator as $file) {
             if ($file->isFile() && $file->getExtension() === "php") {
                 $pathname = $file->getPathname();
-                $md5 = md5_file($pathname);
+                $md5 = md5($pathname);
                 $exists = db()->fetch(
                     "SELECT * FROM migrations WHERE hash = ?",
                     $md5
@@ -96,8 +96,8 @@ class Migrations
             fn($path) => [
                 "path" => $path,
                 "name" => basename($path),
-                "hash" => md5_file($path),
-                "status" => $this->getMigrationStatus(md5_file($path)),
+                "hash" => md5($path),
+                "status" => $this->getMigrationStatus(md5($path)),
                 "class" => require $path,
             ],
             $migs

@@ -22,7 +22,7 @@
 			<section id="top" class="sticky-top bg-light">
 				<?= $breadcrumbs ?>
 				<section id="module-title" class="container-fluid">
-					<h3>
+					<h3 class="fw-bold">
 						<?= $module_title ?>
 					</h3>
 				</section>
