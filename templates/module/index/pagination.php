@@ -1,6 +1,6 @@
 <?php if ($show): ?>
 <div class="d-flex">
-	<nav aria-label="Page navigation" hx-boost="true" hx-indicator="#request-progress" hx-target="#table" hx-select="#table" hx-swap="outerHTML show:no-scroll" hx-sync="this:abort">
+	<nav aria-label="Page navigation" hx-boost="true" hx-indicator="#request-progress" hx-target="#table" hx-select="#table" hx-swap="outerHTML show:no-scroll" hx-sync="form:abort">
 		<?php if ($total_pages > 1): ?>
 			<ul class="pagination pagination-sm">
 				<li class="page-item <?=$current_page === 1 ? 'disabled' : ''?>"><a id="page-prev" class="page-link" href="?page=<?=$current_page-1?>">&#706;</a></li>

@@ -9,7 +9,7 @@
 	<ul class="list-unstyled ps-0">
 	<?php foreach ($most_visited as $link): ?>
 		<li class="nav-link">
-			<a class="link link-dark rounded truncate" href="<?=$link->path?>" alt="link"><?=$link->title?></a>
+			<a hx-sync="form:abort" class="link link-dark rounded truncate" href="<?=$link->path?>" alt="link"><?=$link->title?></a>
 		</li>
 	<?php endforeach ?>
 	</ul>
