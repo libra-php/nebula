@@ -9,6 +9,22 @@ class Engine
 {
     use Singleton;
 
+    private array $methods = [];
+
+    public function __construct()
+    {
+    }
+
+    public function addMethod(string $key, callable $fn)
+    {
+        $this->methods[$key] = $fn;
+    }
+
+    public function getMethods()
+    {
+        return $this->methods;
+    }
+
     /**
      * @param string $path template path
      * @param array<string,mixed> $data
@@ -19,11 +35,9 @@ class Engine
             throw new Exception("Template path not found: $path");
         }
 
-        // Adds a csrf token to a hidden input for a form
-        $data["csrf"] = function () {
-            $token = session()->get("csrf_token");
-            return template("components/csrf.php", ["token" => $token]);
-        };
+        foreach ($this->methods as $key => $method) {
+            $data[$key] = $method;
+        }
 
         extract($data);
 

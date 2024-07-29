@@ -3,6 +3,7 @@
 namespace Nebula\Framework\Controller;
 
 use Nebula\Framework\Alerts\Flash;
+use Nebula\Framework\Template\Engine;
 use Symfony\Component\HttpFoundation\Request;
 
 class Controller
@@ -60,14 +61,19 @@ class Controller
      */
     public function render(string $path, array $data = []): string
     {
-        // Template functions
-        $data["request_errors"] = fn (string $field) => $this->getRequestError(
+        $engine = Engine::getInstance();
+        $engine->addMethod("csrf", function() {
+            $token = session()->get("csrf_token");
+            return template("components/csrf.php", ["token" => $token]);
+        });
+        $engine->addMethod("request_errors", fn (string $field) => $this->getRequestError(
             $field
-        );
-        $data["has_error"] = fn (string $field) => $this->hasRequestError(
+        ));
+        $engine->addMethod("has_error", fn (string $field) => $this->hasRequestError(
             $field
-        );
-        $data["escape"] = fn (string $key) => $this->escapeRequest($key);
+        ));
+        $engine->addMethod("escape", fn (string $key) => $this->escapeRequest($key));
+
         $data["messages"] = template("components/flash.php", [
             "flash" => Flash::get(),
         ]);
@@ -139,7 +145,7 @@ class Controller
         $request = $this->getRequest();
         foreach ($ruleset as $column => $rules) {
             $valid = true;
-            $value = isset($request[$column]) ? $request[$column] : null;
+            $value = $this->request($column, null);
             if ($value === "NULL") {
                 $value = null;
             }
